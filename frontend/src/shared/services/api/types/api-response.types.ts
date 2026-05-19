@@ -1,0 +1,19 @@
+export type ApiResponse<T> = {
+  success: boolean;
+
+  message: string;
+
+  data: T;
+};
+
+export type PaginatedResponse<T> = {
+  items: T[];
+
+  total: number;
+
+  page: number;
+
+  limit: number;
+
+  totalPages: number;
+};

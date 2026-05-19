@@ -1,0 +1,328 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* =========================
+     BACKGROUND SYSTEM
+  ========================= */
+
+  --background: #f4f8fc;
+
+  --foreground: #081f4d;
+
+  --card: #ffffff;
+
+  --card-foreground: #081f4d;
+
+  --popover: #ffffff;
+
+  --popover-foreground: #081f4d;
+
+  /* =========================
+     BRAND COLORS
+  ========================= */
+
+  --primary: #0f3d91;
+
+  --primary-foreground: #ffffff;
+
+  --secondary: #1976d2;
+
+  --secondary-foreground: #ffffff;
+
+  --accent: #4da3ff;
+
+  --accent-foreground: #081f4d;
+
+  /* =========================
+     MUTED COLORS
+  ========================= */
+
+  --muted: #eaf3ff;
+
+  --muted-foreground: #4b5b7c;
+
+  /* =========================
+     STATUS COLORS
+  ========================= */
+
+  --success: #16a34a;
+
+  --warning: #f59e0b;
+
+  --destructive: #dc2626;
+
+  --info: #0284c7;
+
+  /* =========================
+     BORDER SYSTEM
+  ========================= */
+
+  --border: #d8e4f3;
+
+  --input: #d8e4f3;
+
+  --ring: #4da3ff;
+
+  /* =========================
+     SIDEBAR SYSTEM
+  ========================= */
+
+  --sidebar: #ffffff;
+
+  --sidebar-foreground: #081f4d;
+
+  --sidebar-primary: #0f3d91;
+
+  --sidebar-primary-foreground: #ffffff;
+
+  --sidebar-accent: rgba(77, 163, 255, 0.12);
+
+  --sidebar-accent-foreground: #0f3d91;
+
+  --sidebar-border: #d8e4f3;
+
+  --sidebar-ring: #4da3ff;
+
+  /* =========================
+     CHART COLORS
+  ========================= */
+
+  --chart-1: #0f3d91;
+
+  --chart-2: #1976d2;
+
+  --chart-3: #4da3ff;
+
+  --chart-4: #16a34a;
+
+  --chart-5: #f59e0b;
+
+  /* =========================
+     RADIUS
+  ========================= */
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* =========================
+     BACKGROUND SYSTEM
+  ========================= */
+
+  --background: #081224;
+
+  --foreground: #f4f8fc;
+
+  --card: #0d1b34;
+
+  --card-foreground: #f4f8fc;
+
+  --popover: #0d1b34;
+
+  --popover-foreground: #f4f8fc;
+
+  /* =========================
+     BRAND COLORS
+  ========================= */
+
+  --primary: #4da3ff;
+
+  --primary-foreground: #081224;
+
+  --secondary: #1976d2;
+
+  --secondary-foreground: #ffffff;
+
+  --accent: #1e4f9c;
+
+  --accent-foreground: #ffffff;
+
+  /* =========================
+     MUTED COLORS
+  ========================= */
+
+  --muted: #11203d;
+
+  --muted-foreground: #a8bddf;
+
+  /* =========================
+     STATUS COLORS
+  ========================= */
+
+  --success: #22c55e;
+
+  --warning: #fbbf24;
+
+  --destructive: #ef4444;
+
+  --info: #38bdf8;
+
+  /* =========================
+     BORDER SYSTEM
+  ========================= */
+
+  --border: rgba(255, 255, 255, 0.08);
+
+  --input: rgba(255, 255, 255, 0.1);
+
+  --ring: #4da3ff;
+
+  /* =========================
+     SIDEBAR SYSTEM
+  ========================= */
+
+  --sidebar: #081f4d;
+
+  --sidebar-foreground: #f4f8fc;
+
+  --sidebar-primary: #4da3ff;
+
+  --sidebar-primary-foreground: #081224;
+
+  --sidebar-accent: rgba(77, 163, 255, 0.15);
+
+  --sidebar-accent-foreground: #ffffff;
+
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+
+  --sidebar-ring: #4da3ff;
+
+  /* =========================
+     CHART COLORS
+  ========================= */
+
+  --chart-1: #4da3ff;
+
+  --chart-2: #1976d2;
+
+  --chart-3: #0f3d91;
+
+  --chart-4: #22c55e;
+
+  --chart-5: #fbbf24;
+}
+
+@theme inline {
+  /* =========================
+     CORE COLORS
+  ========================= */
+
+  --color-background: var(--background);
+
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* =========================
+     BRAND COLORS
+  ========================= */
+
+  --color-primary: var(--primary);
+
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* =========================
+     MUTED
+  ========================= */
+
+  --color-muted: var(--muted);
+
+  --color-muted-foreground: var(--muted-foreground);
+
+  /* =========================
+     STATUS
+  ========================= */
+
+  --color-success: var(--success);
+
+  --color-warning: var(--warning);
+
+  --color-destructive: var(--destructive);
+
+  --color-info: var(--info);
+
+  /* =========================
+     BORDER
+  ========================= */
+
+  --color-border: var(--border);
+
+  --color-input: var(--input);
+
+  --color-ring: var(--ring);
+
+  /* =========================
+     SIDEBAR
+  ========================= */
+
+  --color-sidebar: var(--sidebar);
+
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  --color-sidebar-primary: var(--sidebar-primary);
+
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+  --color-sidebar-accent: var(--sidebar-accent);
+
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+  --color-sidebar-border: var(--sidebar-border);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* =========================
+     CHARTS
+  ========================= */
+
+  --color-chart-1: var(--chart-1);
+
+  --color-chart-2: var(--chart-2);
+
+  --color-chart-3: var(--chart-3);
+
+  --color-chart-4: var(--chart-4);
+
+  --color-chart-5: var(--chart-5);
+
+  /* =========================
+     RADIUS
+  ========================= */
+
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --radius-md: calc(var(--radius) - 2px);
+
+  --radius-lg: var(--radius);
+
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+}
