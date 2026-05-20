@@ -24,9 +24,9 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
-            
+
             $table->index('status');
-            $table->index('name');
+            $table->index(['status', 'price']);
         });
     }
 

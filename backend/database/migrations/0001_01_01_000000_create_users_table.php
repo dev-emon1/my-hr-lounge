@@ -13,30 +13,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->integer('client_id')->nullable();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->foreignId('client_id')->nullable()->constrained('clients')->onDelete('cascade');
+
+            $table->string('user_name');
+            $table->string('email')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->enum('type', ['super admin', 'admin', 'user']);
+
+            $table->enum('type', ['super_admin', 'admin', 'user'])->default('user');
+            $table->boolean('status')->default(true);
+            $table->timestamptz('last_login')->current();
+            // $table->boolean('mfa_enabled')->default(true);
+            // $table->string('mfa_secret')->nullable();
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-        });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
+            $table->index(['client_id', 'status']);
+            $table->index('type');
         });
     }
 

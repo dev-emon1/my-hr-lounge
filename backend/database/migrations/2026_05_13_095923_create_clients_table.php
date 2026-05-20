@@ -13,20 +13,27 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('company_name');
-            $table->string('domain')->nullable()->nullable();  // company.hruniverse.com
-            $table->string('subdomain')->unique()->nullable(); // e.g., 'acme'
-            $table->string('email')->unique();
-            $table->foreignId('package_id')->constrained();
-            $table->json('branding')->nullable(); // logo, colors, etc.
-            $table->json('features')->nullable(); // feature flags override
-            $table->enum('status', ['active','trail','suspended','deactive']);
+            $table->string('domain')->nullable();           // Custom domain
+            $table->string('subdomain')->unique()->nullable();
+
+            $table->foreignId('package_id')->constrained()->onDelete('restrict');
+
+            $table->json('branding')->nullable();
+            $table->json('features')->nullable();           // Feature flag overrides
+            $table->enum('status', ['active', 'trial', 'suspended', 'deactive', 'expired'])
+                ->default('active');
+
             $table->timestamp('suspended_at')->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
             $table->timestamps();
+
+            $table->index('subdomain');
+            $table->index('domain');
+            $table->index('status');
         });
     }
-
     /**
      * Reverse the migrations.
      */
