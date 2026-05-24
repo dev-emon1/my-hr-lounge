@@ -18,13 +18,12 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-        '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-        Sanctum::currentApplicationUrlWithPort(),
-        // Sanctum::currentRequestHost(),
-    ))),
-    // 'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost,127.0.0.1,yourdomain.com')),
+  'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+    '%s%s%s',
+    'localhost,localhost:3000,localhost:5173,127.0.0.1,127.0.0.1:8000',
+    env('APP_URL') ? ','.parse_url(env('APP_URL'), PHP_URL_HOST) : '',
+    env('SANCTUM_STATEFUL_DOMAINS') ? ','.env('SANCTUM_STATEFUL_DOMAINS') : ''
+))),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +37,7 @@ return [
     |
     */
 
-    'guard' => ['web', 'sanctum'],
+    'guard' => ['web'],
 
     /*
     |--------------------------------------------------------------------------
@@ -83,8 +82,6 @@ return [
         'authenticate_session' => AuthenticateSession::class,
         'encrypt_cookies' => EncryptCookies::class,
         'validate_csrf_token' => ValidateCsrfToken::class,
-        // 'verify_csrf_token' => \App\Http\Middleware\VerifyCsrfToken::class,
-        // 'encrypt_cookies'   => \App\Http\Middleware\EncryptCookies::class,
     ],
 
 ];
