@@ -23,7 +23,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "All Clients",
 
-          href: "/clients",
+          href: "/client-management/all-clients",
 
           icon: Building2,
         },
@@ -31,7 +31,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Create Client",
 
-          href: "/clients/create",
+          href: "/client-management/create",
 
           icon: Building2,
         },
@@ -39,7 +39,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Client Onboarding",
 
-          href: "/clients/onboarding",
+          href: "/client-management/onboarding",
 
           icon: Building2,
         },
@@ -47,7 +47,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Branches",
 
-          href: "/clients/branches",
+          href: "/client-management/branches",
 
           icon: Building2,
         },
@@ -55,7 +55,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Subscription Info",
 
-          href: "/clients/subscriptions",
+          href: "/client-management/subscriptions",
 
           icon: CreditCard,
         },
@@ -63,7 +63,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Package Assignment",
 
-          href: "/clients/packages",
+          href: "/client-management/packages",
 
           icon: Package,
         },
@@ -71,7 +71,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Module Access",
 
-          href: "/clients/modules",
+          href: "/client-management/modules",
 
           icon: Blocks,
         },
@@ -79,7 +79,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Storage Usage",
 
-          href: "/clients/storage",
+          href: "/client-management/storage",
 
           icon: Activity,
         },
@@ -87,7 +87,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Branding",
 
-          href: "/clients/branding",
+          href: "/client-management/branding",
 
           icon: Sparkles,
         },
@@ -95,7 +95,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Activity Logs",
 
-          href: "/clients/logs",
+          href: "/client-management/logs",
 
           icon: FileClock,
         },

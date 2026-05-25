@@ -2,16 +2,16 @@ import type { ReactNode } from "react";
 
 import { Navigate } from "react-router-dom";
 
-import { tokenStorage } from "@/modules/auth/utils/token-storage";
+import { useAppSelector } from "@/shared/hooks/redux";
 
 type Props = {
   children: ReactNode;
 };
 
 function ProtectedRoute({ children }: Props) {
-  const token = tokenStorage.getAccessToken();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
-  if (!token) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
@@ -19,4 +19,3 @@ function ProtectedRoute({ children }: Props) {
 }
 
 export default ProtectedRoute;
-  
