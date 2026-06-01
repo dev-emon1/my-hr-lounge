@@ -1,12 +1,4 @@
-import {
-  Activity,
-  Blocks,
-  Building2,
-  CreditCard,
-  FileClock,
-  Package,
-  Sparkles,
-} from "lucide-react";
+import { Building2, FileClock, Package, UserX, Archive } from "lucide-react";
 
 import type { NavigationGroup } from "@/shared/types/navigation.types";
 
@@ -29,35 +21,11 @@ export const clientNavigation: NavigationGroup = {
         },
 
         {
-          title: "Create Client",
-
-          href: "/client-management/create",
-
-          icon: Building2,
-        },
-
-        {
           title: "Client Onboarding",
 
           href: "/client-management/onboarding",
 
           icon: Building2,
-        },
-
-        {
-          title: "Branches",
-
-          href: "/client-management/branches",
-
-          icon: Building2,
-        },
-
-        {
-          title: "Subscription Info",
-
-          href: "/client-management/subscriptions",
-
-          icon: CreditCard,
         },
 
         {
@@ -69,35 +37,27 @@ export const clientNavigation: NavigationGroup = {
         },
 
         {
-          title: "Module Access",
+          title: "Client Activity Logs",
 
-          href: "/client-management/modules",
-
-          icon: Blocks,
-        },
-
-        {
-          title: "Storage Usage",
-
-          href: "/client-management/storage",
-
-          icon: Activity,
-        },
-
-        {
-          title: "Branding",
-
-          href: "/client-management/branding",
-
-          icon: Sparkles,
-        },
-
-        {
-          title: "Activity Logs",
-
-          href: "/client-management/logs",
+          href: "/client-management/activity-logs",
 
           icon: FileClock,
+        },
+
+        {
+          title: "Suspended Clients",
+
+          href: "/client-management/suspended",
+
+          icon: UserX,
+        },
+
+        {
+          title: "Archived Clients",
+
+          href: "/client-management/archived",
+
+          icon: Archive,
         },
       ],
     },

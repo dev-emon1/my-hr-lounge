@@ -64,7 +64,7 @@ function ClientTable({ clients }: Props) {
                 <td className="px-6 py-5">{client.createdAt}</td>
 
                 <td className="px-6 py-5 text-right">
-                  <ClientTableRowActions />
+                  <ClientTableRowActions clientId={client.id} />
                 </td>
               </tr>
             ))}

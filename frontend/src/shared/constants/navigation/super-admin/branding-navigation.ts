@@ -13,9 +13,9 @@ export const brandingNavigation: NavigationGroup = {
 
       children: [
         {
-          title: "Tenant Branding",
+          title: "Client Branding",
 
-          href: "/branding/tenant",
+          href: "/branding/client",
 
           icon: Sparkles,
         },

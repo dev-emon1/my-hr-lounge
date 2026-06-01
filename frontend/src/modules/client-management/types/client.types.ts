@@ -21,3 +21,19 @@ export type Client = {
 
   createdAt: string;
 };
+
+export interface EditClientFormData {
+  companyName: string;
+
+  email: string;
+
+  phone: string;
+
+  workspaceName: string;
+
+  workspaceSlug: string;
+
+  status: "active" | "suspended" | "trial";
+
+  notes: string;
+}

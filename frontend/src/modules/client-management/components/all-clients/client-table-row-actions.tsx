@@ -9,7 +9,15 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 
-function ClientTableRowActions() {
+import { useNavigate } from "react-router-dom";
+
+type Props = {
+  clientId: string;
+};
+
+function ClientTableRowActions({ clientId }: Props) {
+  const navigate = useNavigate();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,7 +30,10 @@ function ClientTableRowActions() {
         align="end"
         className="w-52 rounded-2xl border-border bg-popover/95 backdrop-blur-xl"
       >
-        <DropdownMenuItem className="cursor-pointer rounded-xl">
+        <DropdownMenuItem
+          className="cursor-pointer rounded-xl"
+          onClick={() => navigate(`/client-management/clients/${clientId}`)}
+        >
           <Eye size={16} />
 
           <span>View Details</span>

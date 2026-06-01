@@ -1,22 +1,46 @@
-export const packageData = [
+export type PackageType = {
+  id: string;
+
+  name: string;
+
+  description: string;
+
+  monthlyPrice: number;
+
+  yearlyPrice: number;
+
+  employees: number | "Unlimited";
+
+  admins: number | "Unlimited";
+
+  storage: string;
+
+  modules: string[];
+
+  discount?: number;
+
+  setupFee?: number;
+};
+
+export const packageData: PackageType[] = [
   {
     id: "starter",
 
     name: "Starter",
 
-    description: "Perfect for small businesses and startups.",
+    description: "Perfect for small businesses",
 
-    monthlyPrice: 999,
+    monthlyPrice: 49,
 
-    yearlyPrice: 9999,
-
-    storage: "5 GB",
+    yearlyPrice: 499,
 
     employees: 50,
 
-    admins: 2,
+    admins: 3,
 
-    modules: ["Employee", "Attendance", "Leave", "Announcement", "Company"],
+    storage: "10 GB",
+
+    modules: ["Attendance", "Leave", "Employee Management"],
   },
 
   {
@@ -24,30 +48,19 @@ export const packageData = [
 
     name: "Growth",
 
-    description: "Best for scaling companies and HR teams.",
+    description: "For growing organizations",
 
-    monthlyPrice: 2999,
+    monthlyPrice: 149,
 
-    yearlyPrice: 29999,
-
-    storage: "25 GB",
+    yearlyPrice: 1499,
 
     employees: 250,
 
     admins: 10,
 
-    modules: [
-      "Employee",
-      "Attendance",
-      "Leave",
-      "Payroll",
-      "Recruitment",
-      "Performance",
-      "Training",
-      "Announcement",
-      "Role",
-      "Company",
-    ],
+    storage: "100 GB",
+
+    modules: ["Attendance", "Leave", "Payroll", "Recruitment", "Reports"],
   },
 
   {
@@ -55,59 +68,38 @@ export const packageData = [
 
     name: "Enterprise",
 
-    description: "Advanced enterprise infrastructure and unlimited scaling.",
+    description: "Enterprise-grade solution",
 
-    monthlyPrice: 9999,
+    monthlyPrice: 499,
 
-    yearlyPrice: 99999,
+    yearlyPrice: 4999,
 
-    storage: "100 GB",
+    employees: "Unlimited",
 
-    employees: 99999,
+    admins: "Unlimited",
 
-    admins: 999,
+    storage: "1 TB",
 
-    modules: [
-      "Employee",
-      "Attendance",
-      "Leave",
-      "Payroll",
-      "Recruitment",
-      "Performance",
-      "Training",
-      "Asset",
-      "Expense",
-      "Loan",
-      "Document",
-      "Workflow",
-      "Audit",
-      "Integration",
-      "Role",
-      "Company",
-    ],
+    modules: ["All Modules"],
   },
+
   {
     id: "custom",
 
     name: "Custom",
 
-    description:
-      "Fully customizable enterprise workspace with flexible modules and infrastructure.",
+    description: "Fully customizable package",
 
     monthlyPrice: 0,
 
     yearlyPrice: 0,
 
+    employees: "Unlimited",
+
+    admins: "Unlimited",
+
     storage: "Custom",
 
-    employees: 0,
-
-    admins: 0,
-
     modules: [],
-
-    discount: 0,
-
-    setupFee: 0,
   },
 ];

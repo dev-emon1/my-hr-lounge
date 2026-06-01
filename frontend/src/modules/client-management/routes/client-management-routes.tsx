@@ -1,8 +1,8 @@
 import type { RouteObject } from "react-router-dom";
 
 import AllClientsPage from "../pages/all-clients-page";
-
-import CreateClientPage from "../pages/create-client-page";
+import ClientOnboardingPage from "../pages/client-onboarding-page";
+import ClientDetailsPage from "../pages/client-details-page";
 
 export const clientManagementRoutes: RouteObject[] = [
   {
@@ -12,14 +12,14 @@ export const clientManagementRoutes: RouteObject[] = [
   },
 
   {
-    path: "client-management/create",
+    path: "client-management/onboarding",
 
-    element: <CreateClientPage />,
+    element: <ClientOnboardingPage />,
   },
 
   {
-    path: "client-management/onboarding",
+    path: "client-management/clients/:clientId",
 
-    element: <CreateClientPage />,
+    element: <ClientDetailsPage />,
   },
 ];
