@@ -54,6 +54,14 @@ export const packageNavigation: NavigationGroup = {
         },
 
         {
+          title: "Module Assignment",
+
+          href: "/packages/modules",
+
+          icon: Blocks,
+        },
+
+        {
           title: "Employee Limits",
 
           href: "/packages/employees",
@@ -67,14 +75,6 @@ export const packageNavigation: NavigationGroup = {
           href: "/packages/storage",
 
           icon: Activity,
-        },
-
-        {
-          title: "Module Assignment",
-
-          href: "/packages/modules",
-
-          icon: Blocks,
         },
 
         {

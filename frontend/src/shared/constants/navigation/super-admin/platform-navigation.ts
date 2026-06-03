@@ -88,37 +88,37 @@ export const platformNavigation: NavigationGroup = {
       ],
     },
 
-    {
-      title: "Integrations & APIs",
+    // {
+    //   title: "Integrations & APIs",
 
-      icon: Wrench,
+    //   icon: Wrench,
 
-      children: [
-        {
-          title: "Payment Gateways",
+    //   children: [
+    //     {
+    //       title: "Payment Gateways",
 
-          href: "/integrations/payment",
+    //       href: "/integrations/payment",
 
-          icon: CreditCard,
-        },
+    //       icon: CreditCard,
+    //     },
 
-        {
-          title: "API Keys",
+    //     {
+    //       title: "API Keys",
 
-          href: "/integrations/api",
+    //       href: "/integrations/api",
 
-          icon: ShieldCheck,
-        },
+    //       icon: ShieldCheck,
+    //     },
 
-        {
-          title: "Biometric Devices",
+    //     {
+    //       title: "Biometric Devices",
 
-          href: "/integrations/biometric",
+    //       href: "/integrations/biometric",
 
-          icon: MonitorCog,
-        },
-      ],
-    },
+    //       icon: MonitorCog,
+    //     },
+    //   ],
+    // },
 
     {
       title: "Platform Settings",

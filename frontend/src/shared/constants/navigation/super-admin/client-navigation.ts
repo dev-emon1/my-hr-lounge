@@ -1,12 +1,4 @@
-import {
-  Activity,
-  Blocks,
-  Building2,
-  CreditCard,
-  FileClock,
-  Package,
-  Sparkles,
-} from "lucide-react";
+import { Building2, FileClock, Package, UserX, Archive } from "lucide-react";
 
 import type { NavigationGroup } from "@/shared/types/navigation.types";
 
@@ -23,15 +15,7 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "All Clients",
 
-          href: "/clients",
-
-          icon: Building2,
-        },
-
-        {
-          title: "Create Client",
-
-          href: "/clients/create",
+          href: "/client-management/all-clients",
 
           icon: Building2,
         },
@@ -39,65 +23,41 @@ export const clientNavigation: NavigationGroup = {
         {
           title: "Client Onboarding",
 
-          href: "/clients/onboarding",
+          href: "/client-management/onboarding",
 
           icon: Building2,
-        },
-
-        {
-          title: "Branches",
-
-          href: "/clients/branches",
-
-          icon: Building2,
-        },
-
-        {
-          title: "Subscription Info",
-
-          href: "/clients/subscriptions",
-
-          icon: CreditCard,
         },
 
         {
           title: "Package Assignment",
 
-          href: "/clients/packages",
+          href: "/client-management/packages",
 
           icon: Package,
         },
 
         {
-          title: "Module Access",
+          title: "Client Activity Logs",
 
-          href: "/clients/modules",
-
-          icon: Blocks,
-        },
-
-        {
-          title: "Storage Usage",
-
-          href: "/clients/storage",
-
-          icon: Activity,
-        },
-
-        {
-          title: "Branding",
-
-          href: "/clients/branding",
-
-          icon: Sparkles,
-        },
-
-        {
-          title: "Activity Logs",
-
-          href: "/clients/logs",
+          href: "/client-management/activity-logs",
 
           icon: FileClock,
+        },
+
+        {
+          title: "Suspended Clients",
+
+          href: "/client-management/suspended",
+
+          icon: UserX,
+        },
+
+        {
+          title: "Archived Clients",
+
+          href: "/client-management/archived",
+
+          icon: Archive,
         },
       ],
     },

@@ -41,10 +41,10 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver'   => 'sanctum',
-            'provider' => 'users',
-        ],
+        'super_admin' => [
+        'driver'   => 'sanctum',
+        'provider' => 'super_admins',
+    ],
     ],
 
     /*
@@ -65,15 +65,15 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
-
         // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
+        //     'driver' => 'eloquent',
+        //     'model' => env('AUTH_MODEL', App\Models\User::class),
         // ],
+
+       'super_admins' => [
+        'driver' => 'eloquent',
+        'model'  => App\Models\Central\SuperAdmin::class,
+    ],
     ],
 
     /*

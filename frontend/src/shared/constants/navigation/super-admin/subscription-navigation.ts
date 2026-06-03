@@ -37,25 +37,9 @@ export const subscriptionNavigation: NavigationGroup = {
         },
 
         {
-          title: "Manual Payments",
-
-          href: "/billing/payments",
-
-          icon: Wallet,
-        },
-
-        {
           title: "Invoices",
 
           href: "/billing/invoices",
-
-          icon: FileText,
-        },
-
-        {
-          title: "Quotations",
-
-          href: "/billing/quotations",
 
           icon: FileText,
         },
@@ -69,11 +53,27 @@ export const subscriptionNavigation: NavigationGroup = {
         },
 
         {
+          title: "Manual Payments",
+
+          href: "/billing/payments",
+
+          icon: Wallet,
+        },
+
+        {
           title: "Addons",
 
           href: "/billing/addons",
 
           icon: Package,
+        },
+
+        {
+          title: "Quotations",
+
+          href: "/billing/quotations",
+
+          icon: FileText,
         },
       ],
     },

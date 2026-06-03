@@ -19,17 +19,17 @@ export const adminNavigation: NavigationGroup = {
 
       children: [
         {
-          title: "HR Admins",
+          title: "Platform Admins",
 
-          href: "/hr-admins",
+          href: "/admins",
 
           icon: Users,
         },
 
         {
-          title: "Create Admin",
+          title: "Create Platform Admin",
 
-          href: "/hr-admins/create",
+          href: "/admins/create",
 
           icon: Users,
         },

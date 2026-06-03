@@ -1,9 +1,3 @@
-export type UserRole =
-  | "super-admin"
-  | "company-admin"
-  | "hr-admin"
-  | "employee";
-
 export type AuthUser = {
   id: string;
 
@@ -11,15 +5,37 @@ export type AuthUser = {
 
   email: string;
 
-  role: UserRole;
+  status: string;
 
-  companyId?: string;
+  role?: string;
+
+  two_factor_enabled: boolean;
+
+  last_login_at: string;
 };
 
-export type AuthState = {
-  user: AuthUser | null;
+export type LoginPayload = {
+  email: string;
 
-  accessToken: string | null;
+  password: string;
+};
 
-  isAuthenticated: boolean;
+export type LoginResponse = {
+  success: boolean;
+
+  message: string;
+
+  data: {
+    user: AuthUser;
+
+    tokens: {
+      access_token: string;
+
+      refresh_token: string;
+
+      token_type: string;
+
+      expires_in: number;
+    };
+  };
 };

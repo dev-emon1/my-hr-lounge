@@ -12,13 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->statefulApi();   // Best way in Laravel 11+
-
-    $middleware->alias([
-        'tenant'          => \App\Http\Middleware\SetTenant::class,
-        'tenant.active'   => \App\Http\Middleware\EnsureTenantIsActive::class,
-        'superadmin'      => \App\Http\Middleware\SuperAdminOnly::class,
-    ]);
+        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

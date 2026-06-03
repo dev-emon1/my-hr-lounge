@@ -1,21 +1,45 @@
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: "/auth/login",
+    LOGIN: "/sa/auth/login",
 
-    REFRESH: "/auth/refresh",
-  },
+    REFRESH: "/sa/auth/refresh",
 
-  COMPANIES: {
-    LIST: "/companies",
+    ME: "/sa/auth/me",
 
-    CREATE: "/companies",
+    LOGOUT: "/sa/auth/logout",
 
-    UPDATE: (id: string) => `/companies/${id}`,
+    LOGOUT_ALL: "/sa/auth/logout-all",
 
-    DELETE: (id: string) => `/companies/${id}`,
+    SESSIONS: "/sa/auth/sessions",
   },
 
   DASHBOARD: {
-    STATS: "/dashboard/stats",
+    STATS: "/sa/dashboard",
+  },
+
+  PACKAGES: {
+    LIST: "/sa/packages",
+
+    CREATE: "/sa/packages",
+
+    DETAILS: (id: string) => `/sa/packages/${id}`,
+
+    UPDATE: (id: string) => `/sa/packages/${id}`,
+
+    DELETE: (id: string) => `/sa/packages/${id}`,
+  },
+
+  TENANTS: {
+    LIST: "/sa/tenants",
+
+    CREATE: "/sa/tenants",
+
+    DETAILS: (id: string) => `/sa/tenants/${id}`,
+
+    UPDATE: (id: string) => `/sa/tenants/${id}`,
+
+    SUSPEND: (id: string) => `/sa/tenants/${id}/suspend`,
+
+    ACTIVATE: (id: string) => `/sa/tenants/${id}/activate`,
   },
 };

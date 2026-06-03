@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
 
-  "style": "radix-nova",
+  "style": "new-york",
 
   "rsc": false,
 
@@ -9,9 +9,13 @@
 
   "tailwind": {
     "config": "",
+
     "css": "src/index.css",
+
     "baseColor": "slate",
+
     "cssVariables": true,
+
     "prefix": ""
   },
 
@@ -21,15 +25,15 @@
 
   "aliases": {
     "components": "@/shared/components",
+
     "ui": "@/shared/ui",
+
     "utils": "@/shared/lib/utils",
+
     "lib": "@/shared/lib",
+
     "hooks": "@/shared/hooks"
   },
-
-  "menuColor": "default",
-
-  "menuAccent": "subtle",
 
   "registries": {}
 }
