@@ -1,4 +1,12 @@
-import { CreditCard, FileClock, FileText, Package, Wallet } from "lucide-react";
+import {
+  CreditCard,
+  FileClock,
+  FileText,
+  Package,
+  Wallet,
+  ArrowUpDown,
+  RefreshCw,
+} from "lucide-react";
 
 import type { NavigationGroup } from "@/shared/types/navigation.types";
 
@@ -15,7 +23,7 @@ export const subscriptionNavigation: NavigationGroup = {
         {
           title: "Active Subscriptions",
 
-          href: "/subscriptions",
+          href: "/subscriptions/active-subscriptions",
 
           icon: CreditCard,
         },
@@ -25,7 +33,7 @@ export const subscriptionNavigation: NavigationGroup = {
 
           href: "/subscriptions/renewals",
 
-          icon: FileClock,
+          icon: RefreshCw,
         },
 
         {
@@ -33,7 +41,7 @@ export const subscriptionNavigation: NavigationGroup = {
 
           href: "/subscriptions/expired",
 
-          icon: CreditCard,
+          icon: FileClock,
         },
 
         {
@@ -45,17 +53,17 @@ export const subscriptionNavigation: NavigationGroup = {
         },
 
         {
-          title: "Billing History",
+          title: "Transactions",
 
-          href: "/billing/history",
+          href: "/billing/transactions",
 
-          icon: FileClock,
+          icon: ArrowUpDown,
         },
 
         {
           title: "Manual Payments",
 
-          href: "/billing/payments",
+          href: "/billing/manual-payments",
 
           icon: Wallet,
         },
@@ -74,6 +82,14 @@ export const subscriptionNavigation: NavigationGroup = {
           href: "/billing/quotations",
 
           icon: FileText,
+        },
+
+        {
+          title: "Subscription Changes",
+
+          href: "/billing/subscription-changes",
+
+          icon: RefreshCw,
         },
       ],
     },
