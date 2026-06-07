@@ -2,6 +2,8 @@ import type { RouteObject } from "react-router-dom";
 
 import ActiveSubscriptionsPage from "../pages/active-subscriptions-page";
 import SubscriptionDetailsPage from "../pages/subscription-details-page";
+import PendingRenewalsPage from "../pages/pending-renewals-page";
+import ExpiredPlansPage from "../pages/expired-plans-page";
 // import PendingRenewalsPage from "../pages/pending-renewals-page";
 // import ExpiredPlansPage from "../pages/expired-plans-page";
 // import InvoicesPage from "../pages/invoices-page";
@@ -25,15 +27,15 @@ export const subscriptionBillingRoutes: RouteObject[] = [
   },
 
   {
-    path: "subscription-billing/pending-renewals",
+    path: "/subscriptions/renewals",
 
-    element: "<PendingRenewalsPage />",
+    element: <PendingRenewalsPage />,
   },
 
   {
-    path: "subscription-billing/expired-plans",
+    path: "subscriptions/expired-plans",
 
-    element: "<ExpiredPlansPage />",
+    element: <ExpiredPlansPage />,
   },
 
   {

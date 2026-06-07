@@ -33,15 +33,15 @@ type Props = {
   renewal: Renewal | null;
 };
 
-function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
+function SendReminderDialog({ open, onOpenChange, renewal }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Renew Subscription</DialogTitle>
+          <DialogTitle>Send Renewal Reminder</DialogTitle>
 
           <DialogDescription>
-            Process subscription renewal immediately.
+            Notify the client about upcoming renewal.
           </DialogDescription>
         </DialogHeader>
 
@@ -55,38 +55,34 @@ function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
               </div>
 
               <div className="space-y-2">
-                <Label>Package</Label>
+                <Label>Email</Label>
 
-                <Input value={renewal?.packageName ?? ""} disabled />
+                <Input value={renewal?.email ?? ""} disabled />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Cycle</Label>
+              <Label>Reminder Type</Label>
 
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select cycle" />
+                  <SelectValue placeholder="Select reminder type" />
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="renewal">Renewal Reminder</SelectItem>
 
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="warning">Final Warning</SelectItem>
+
+                  <SelectItem value="expired">Expired Notice</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Amount</Label>
+              <Label>Message</Label>
 
-              <Input defaultValue={renewal?.amount ?? ""} />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Notes</Label>
-
-              <Textarea rows={4} placeholder="Internal renewal notes..." />
+              <Textarea rows={6} placeholder="Reminder message..." />
             </div>
           </div>
         </div>
@@ -96,11 +92,11 @@ function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
             Cancel
           </Button>
 
-          <Button>Renew Subscription</Button>
+          <Button>Send Reminder</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default RenewNowDialog;
+export default SendReminderDialog;

@@ -1,8 +1,8 @@
-import { Download, Search } from "lucide-react";
+import { Download } from "lucide-react";
+
+import SearchFilter from "@/shared/components/data-table/search-filter";
 
 import { Button } from "@/shared/ui/button";
-
-import { Input } from "@/shared/ui/input";
 
 import {
   Select,
@@ -11,13 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import SearchFilter from "@/shared/components/data-table/search-filter";
 
-function ActiveSubscriptionsToolbar() {
+function ExpiredPlansToolbar() {
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
       <div className="flex flex-1 flex-col gap-4 lg:flex-row">
-        <SearchFilter placeholder="Search subscriptions..." />
+        <SearchFilter placeholder="Search expired subscriptions..." />
 
         <Select>
           <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[180px]">
@@ -26,22 +25,8 @@ function ActiveSubscriptionsToolbar() {
 
           <SelectContent>
             <SelectItem value="starter">Starter</SelectItem>
-
             <SelectItem value="growth">Growth</SelectItem>
-
             <SelectItem value="enterprise">Enterprise</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[180px]">
-            <SelectValue placeholder="Billing Cycle" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="monthly">Monthly</SelectItem>
-
-            <SelectItem value="yearly">Yearly</SelectItem>
           </SelectContent>
         </Select>
 
@@ -51,11 +36,9 @@ function ActiveSubscriptionsToolbar() {
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="active">Active</SelectItem>
-
-            <SelectItem value="trial">Trial</SelectItem>
-
-            <SelectItem value="paused">Paused</SelectItem>
+            <SelectItem value="expired">Expired</SelectItem>
+            <SelectItem value="suspended">Suspended</SelectItem>
+            <SelectItem value="grace-period">Grace Period</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -68,4 +51,4 @@ function ActiveSubscriptionsToolbar() {
   );
 }
 
-export default ActiveSubscriptionsToolbar;
+export default ExpiredPlansToolbar;
