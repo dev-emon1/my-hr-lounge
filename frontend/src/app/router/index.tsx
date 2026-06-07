@@ -14,6 +14,8 @@ import { dashboardRoutes } from "@/modules/dashboard/routes/dashboard-routes";
 
 import { clientManagementRoutes } from "@/modules/client-management/routes/client-management-routes";
 
+import { subscriptionBillingRoutes } from "@/modules/subscription-billing/routes/subscription-billing-routes";
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -36,7 +38,11 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
 
-    children: [...dashboardRoutes, ...clientManagementRoutes],
+    children: [
+      ...dashboardRoutes,
+      ...clientManagementRoutes,
+      ...subscriptionBillingRoutes,
+    ],
   },
 ]);
 

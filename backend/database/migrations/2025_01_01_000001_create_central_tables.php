@@ -21,7 +21,11 @@ return new class extends Migration
             $table->decimal('price_yearly', 10, 2)->nullable();
             $table->integer('max_employees')->default(50);
             $table->integer('max_admins')->default(2);
-            $table->jsonb('features')->default('{}');
+            $table->integer('device_limit')->default(5);
+            $table->integer('max_branches')->default(1);
+            $table->integer('department_limit')->default(10);
+            $table->integer('storage_limit_gb')->default(10); // Storage limit in GB
+            $table->jsonb('modules')->default('{}');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
