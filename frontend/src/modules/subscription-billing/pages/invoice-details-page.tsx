@@ -1,4 +1,14 @@
+import { useState } from "react";
+
 import { useParams } from "react-router-dom";
+
+import type { Invoice } from "../types/invoice.types";
+
+import MarkAsPaidDialog from "../components/invoices/dialogs/mark-as-paid-dialog";
+
+import SendInvoiceReminderDialog from "../components/invoices/dialogs/send-invoice-reminder-dialog";
+
+import CancelInvoiceDialog from "../components/invoices/dialogs/cancel-invoice-dialog";
 
 import InvoiceHeroSection from "../components/invoice-details/invoice-hero-section";
 
@@ -23,34 +33,75 @@ function InvoiceDetailsPage() {
 
   console.log(invoiceId);
 
+  const [markPaidOpen, setMarkPaidOpen] = useState(false);
+
+  const [reminderOpen, setReminderOpen] = useState(false);
+
+  const [cancelOpen, setCancelOpen] = useState(false);
+
+  const invoice: Invoice = {
+    id: "1",
+    invoiceNumber: "INV-2026-001",
+    client: "Acme Corporation",
+    email: "admin@acme.com",
+    amount: "৳ 50,000",
+    status: "Pending",
+    type: "Renewal",
+    issueDate: "01 Jun 2026",
+    dueDate: "10 Jun 2026",
+  };
+
   return (
-    <div className="space-y-8">
-      <InvoiceHeroSection />
+    <>
+      <div className="space-y-8">
+        <InvoiceHeroSection />
 
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="space-y-8">
-          <InvoiceInformationCard />
+        <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="space-y-8">
+            <InvoiceInformationCard />
 
-          <ClientInformationCard />
+            <ClientInformationCard />
 
-          <BillingBreakdownCard />
+            <BillingBreakdownCard />
 
-          <PaymentInformationCard />
+            <PaymentInformationCard />
 
-          <PaymentTimelineCard />
-        </div>
+            <PaymentTimelineCard />
+          </div>
 
-        <div>
-          <div className="sticky top-6 space-y-6">
-            <InvoiceHealthCard />
+          <div>
+            <div className="sticky top-6 space-y-6">
+              <InvoiceHealthCard />
 
-            <QuickActionsCard />
+              <QuickActionsCard
+                onMarkPaid={() => setMarkPaidOpen(true)}
+                onSendReminder={() => setReminderOpen(true)}
+                onCancelInvoice={() => setCancelOpen(true)}
+              />
 
-            <ActivityTimelineCard />
+              <ActivityTimelineCard />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <MarkAsPaidDialog
+        open={markPaidOpen}
+        onOpenChange={setMarkPaidOpen}
+        invoice={invoice}
+      />
+
+      <SendInvoiceReminderDialog
+        open={reminderOpen}
+        onOpenChange={setReminderOpen}
+        invoice={invoice}
+      />
+
+      <CancelInvoiceDialog
+        open={cancelOpen}
+        onOpenChange={setCancelOpen}
+        invoice={invoice}
+      />
+    </>
   );
 }
 

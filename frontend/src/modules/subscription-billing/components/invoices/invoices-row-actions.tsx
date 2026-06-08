@@ -48,9 +48,7 @@ function InvoicesRowActions({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() =>
-            navigate(`/subscription-billing/invoices/${invoice.id}`)
-          }
+          onClick={() => navigate(`/billing/invoices/${invoice.id}`)}
         >
           <Eye size={16} />
           View Invoice
