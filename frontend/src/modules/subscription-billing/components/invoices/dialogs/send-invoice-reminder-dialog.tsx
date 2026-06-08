@@ -8,11 +8,8 @@ import {
 } from "@/shared/ui/dialog";
 
 import { Button } from "@/shared/ui/button";
-
 import { Input } from "@/shared/ui/input";
-
 import { Label } from "@/shared/ui/label";
-
 import { Textarea } from "@/shared/ui/textarea";
 
 import {
@@ -23,70 +20,66 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 
-import type { Renewal } from "../../../types/renewal.types";
+import type { Invoice } from "../../../types/invoice.types";
 
 type Props = {
   open: boolean;
 
   onOpenChange: (open: boolean) => void;
 
-  renewal: Renewal | null;
+  invoice: Invoice | null;
 };
 
-function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
+function SendInvoiceReminderDialog({ open, onOpenChange, invoice }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl overflow-hidden p-0">
         <DialogHeader>
-          <DialogTitle>Renew Subscription</DialogTitle>
+          <DialogTitle>Send Invoice Reminder</DialogTitle>
 
           <DialogDescription>
-            Process subscription renewal immediately.
+            Notify client about outstanding invoice.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto p-8">
+        <div className="max-h-[calc(90vh-180px)] overflow-y-auto p-8">
           <div className="space-y-6">
             <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2">
                 <Label>Client</Label>
 
-                <Input value={renewal?.client ?? ""} disabled />
+                <Input value={invoice?.client ?? ""} disabled />
               </div>
 
               <div className="space-y-2">
-                <Label>Package</Label>
+                <Label>Email</Label>
 
-                <Input value={renewal?.packageName ?? ""} disabled />
+                <Input value={invoice?.email ?? ""} disabled />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Cycle</Label>
+              <Label>Reminder Type</Label>
 
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select cycle" />
+                  <SelectValue placeholder="Select reminder type" />
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="gentle">Gentle Reminder</SelectItem>
 
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="due">Due Reminder</SelectItem>
+
+                  <SelectItem value="overdue">Overdue Reminder</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Amount</Label>
+              <Label>Message</Label>
 
-              <Input defaultValue={renewal?.amount ?? ""} />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Notes</Label>
-
-              <Textarea rows={4} placeholder="Internal renewal notes..." />
+              <Textarea rows={6} placeholder="Reminder message..." />
             </div>
           </div>
         </div>
@@ -96,11 +89,11 @@ function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
             Cancel
           </Button>
 
-          <Button>Renew Subscription</Button>
+          <Button>Send Reminder</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default RenewNowDialog;
+export default SendInvoiceReminderDialog;

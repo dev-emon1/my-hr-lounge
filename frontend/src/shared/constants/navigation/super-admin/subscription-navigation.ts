@@ -39,7 +39,7 @@ export const subscriptionNavigation: NavigationGroup = {
         {
           title: "Expired Plans",
 
-          href: "/subscriptions/expired",
+          href: "/subscriptions/expired-plans",
 
           icon: FileClock,
         },

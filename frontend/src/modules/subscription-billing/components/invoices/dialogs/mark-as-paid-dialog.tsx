@@ -8,11 +8,8 @@ import {
 } from "@/shared/ui/dialog";
 
 import { Button } from "@/shared/ui/button";
-
 import { Input } from "@/shared/ui/input";
-
 import { Label } from "@/shared/ui/label";
-
 import { Textarea } from "@/shared/ui/textarea";
 
 import {
@@ -23,70 +20,84 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 
-import type { Renewal } from "../../../types/renewal.types";
+import type { Invoice } from "../../../types/invoice.types";
 
 type Props = {
   open: boolean;
 
   onOpenChange: (open: boolean) => void;
 
-  renewal: Renewal | null;
+  invoice: Invoice | null;
 };
 
-function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
+function MarkAsPaidDialog({ open, onOpenChange, invoice }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl overflow-hidden p-0">
         <DialogHeader>
-          <DialogTitle>Renew Subscription</DialogTitle>
+          <DialogTitle>Mark Invoice As Paid</DialogTitle>
 
           <DialogDescription>
-            Process subscription renewal immediately.
+            Record payment and close the invoice.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto p-8">
+        <div className="max-h-[calc(90vh-180px)] overflow-y-auto p-8">
           <div className="space-y-6">
             <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>Client</Label>
+                <Label>Invoice Number</Label>
 
-                <Input value={renewal?.client ?? ""} disabled />
+                <Input value={invoice?.invoiceNumber ?? ""} disabled />
               </div>
 
               <div className="space-y-2">
-                <Label>Package</Label>
+                <Label>Client</Label>
 
-                <Input value={renewal?.packageName ?? ""} disabled />
+                <Input value={invoice?.client ?? ""} disabled />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Cycle</Label>
+              <Label>Amount</Label>
+
+              <Input value={invoice?.amount ?? ""} disabled />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Payment Method</Label>
 
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select cycle" />
+                  <SelectValue placeholder="Select payment method" />
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="bank">Bank Transfer</SelectItem>
 
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="card">Card Payment</SelectItem>
+
+                  <SelectItem value="cash">Cash</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>Renewal Amount</Label>
+              <Label>Transaction Reference</Label>
 
-              <Input defaultValue={renewal?.amount ?? ""} />
+              <Input placeholder="TRX-123456" />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Payment Date</Label>
+
+              <Input type="date" />
             </div>
 
             <div className="space-y-2">
               <Label>Notes</Label>
 
-              <Textarea rows={4} placeholder="Internal renewal notes..." />
+              <Textarea rows={4} placeholder="Internal notes..." />
             </div>
           </div>
         </div>
@@ -96,11 +107,11 @@ function RenewNowDialog({ open, onOpenChange, renewal }: Props) {
             Cancel
           </Button>
 
-          <Button>Renew Subscription</Button>
+          <Button>Mark As Paid</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default RenewNowDialog;
+export default MarkAsPaidDialog;
