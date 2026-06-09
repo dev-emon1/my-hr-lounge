@@ -27,6 +27,7 @@ import QuickActionsCard from "../components/invoice-details/quick-actions-card";
 import ActivityTimelineCard from "../components/invoice-details/activity-timeline-card";
 
 import PaymentInformationCard from "../components/invoice-details/payment-information-card";
+import ResendInvoiceDialog from "../components/invoices/dialogs/resend-invoice-dialog";
 
 function InvoiceDetailsPage() {
   const { invoiceId } = useParams();
@@ -34,9 +35,8 @@ function InvoiceDetailsPage() {
   console.log(invoiceId);
 
   const [markPaidOpen, setMarkPaidOpen] = useState(false);
-
   const [reminderOpen, setReminderOpen] = useState(false);
-
+  const [resendOpen, setResendOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
 
   const invoice: Invoice = {
@@ -76,6 +76,7 @@ function InvoiceDetailsPage() {
               <QuickActionsCard
                 onMarkPaid={() => setMarkPaidOpen(true)}
                 onSendReminder={() => setReminderOpen(true)}
+                onResendInvoice={() => setResendOpen(true)}
                 onCancelInvoice={() => setCancelOpen(true)}
               />
 
@@ -93,6 +94,12 @@ function InvoiceDetailsPage() {
       <SendInvoiceReminderDialog
         open={reminderOpen}
         onOpenChange={setReminderOpen}
+        invoice={invoice}
+      />
+
+      <ResendInvoiceDialog
+        open={resendOpen}
+        onOpenChange={setResendOpen}
         invoice={invoice}
       />
 

@@ -7,6 +7,7 @@ import {
   Mail,
   Ban,
   MoreHorizontal,
+  Send,
 } from "lucide-react";
 
 import { Button } from "@/shared/ui/button";
@@ -28,12 +29,15 @@ type Props = {
   onReminder: (invoice: Invoice) => void;
 
   onCancel: (invoice: Invoice) => void;
+
+  onResend: (invoice: Invoice) => void;
 };
 
 function InvoicesRowActions({
   invoice,
   onMarkPaid,
   onReminder,
+  onResend,
   onCancel,
 }: Props) {
   const navigate = useNavigate();
@@ -67,6 +71,11 @@ function InvoicesRowActions({
         <DropdownMenuItem onClick={() => onReminder(invoice)}>
           <Mail size={16} />
           Send Reminder
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={() => onResend(invoice)}>
+          <Send size={16} />
+          Resend Invoice
         </DropdownMenuItem>
 
         <DropdownMenuItem

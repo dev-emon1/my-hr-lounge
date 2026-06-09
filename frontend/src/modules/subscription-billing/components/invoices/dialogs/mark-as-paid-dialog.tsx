@@ -59,12 +59,6 @@ function MarkAsPaidDialog({ open, onOpenChange, invoice }: Props) {
             </div>
 
             <div className="space-y-2">
-              <Label>Amount</Label>
-
-              <Input value={invoice?.amount ?? ""} disabled />
-            </div>
-
-            <div className="space-y-2">
               <Label>Payment Method</Label>
 
               <Select>
@@ -75,29 +69,39 @@ function MarkAsPaidDialog({ open, onOpenChange, invoice }: Props) {
                 <SelectContent>
                   <SelectItem value="bank">Bank Transfer</SelectItem>
 
-                  <SelectItem value="card">Card Payment</SelectItem>
-
                   <SelectItem value="cash">Cash</SelectItem>
+
+                  <SelectItem value="cheque">Cheque</SelectItem>
+
+                  <SelectItem value="mobile-banking">Mobile Banking</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Transaction Reference</Label>
+            <div className="grid gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Reference Number</Label>
 
-              <Input placeholder="TRX-123456" />
+                <Input placeholder="TXN-123456" />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Payment Date</Label>
+
+                <Input type="date" />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Payment Date</Label>
+              <Label>Received Amount</Label>
 
-              <Input type="date" />
+              <Input defaultValue={invoice?.amount ?? ""} />
             </div>
 
             <div className="space-y-2">
-              <Label>Notes</Label>
+              <Label>Internal Notes</Label>
 
-              <Textarea rows={4} placeholder="Internal notes..." />
+              <Textarea rows={5} placeholder="Optional finance notes..." />
             </div>
           </div>
         </div>

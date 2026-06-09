@@ -6,6 +6,7 @@ import { Invoice } from "../types/invoice.types";
 import MarkAsPaidDialog from "../components/invoices/dialogs/mark-as-paid-dialog";
 import SendInvoiceReminderDialog from "../components/invoices/dialogs/send-invoice-reminder-dialog";
 import CancelInvoiceDialog from "../components/invoices/dialogs/cancel-invoice-dialog";
+import ResendInvoiceDialog from "../components/invoices/dialogs/resend-invoice-dialog";
 
 function InvoicesPage() {
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
@@ -13,6 +14,8 @@ function InvoicesPage() {
   const [markPaidOpen, setMarkPaidOpen] = useState(false);
 
   const [reminderOpen, setReminderOpen] = useState(false);
+
+  const [resendOpen, setResendOpen] = useState(false);
 
   const [cancelOpen, setCancelOpen] = useState(false);
 
@@ -82,6 +85,11 @@ function InvoicesPage() {
 
                 setReminderOpen(true);
               }}
+              onResend={(invoice) => {
+                setSelectedInvoice(invoice);
+
+                setResendOpen(true);
+              }}
               onCancel={(invoice) => {
                 setSelectedInvoice(invoice);
 
@@ -101,6 +109,12 @@ function InvoicesPage() {
       <SendInvoiceReminderDialog
         open={reminderOpen}
         onOpenChange={setReminderOpen}
+        invoice={selectedInvoice}
+      />
+
+      <ResendInvoiceDialog
+        open={resendOpen}
+        onOpenChange={setResendOpen}
         invoice={selectedInvoice}
       />
 

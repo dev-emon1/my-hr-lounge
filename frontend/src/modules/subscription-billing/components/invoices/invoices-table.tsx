@@ -6,15 +6,19 @@ import InvoicesRowActions from "./invoices-row-actions";
 
 type Props = {
   invoices: Invoice[];
-
   onMarkPaid: (invoice: Invoice) => void;
-
   onReminder: (invoice: Invoice) => void;
-
   onCancel: (invoice: Invoice) => void;
+  onResend: (invoice: Invoice) => void;
 };
 
-function InvoicesTable({ invoices, onMarkPaid, onReminder, onCancel }: Props) {
+function InvoicesTable({
+  invoices,
+  onMarkPaid,
+  onReminder,
+  onResend,
+  onCancel,
+}: Props) {
   return (
     <div className="overflow-hidden rounded-[28px] border border-border">
       <div className="overflow-x-auto">
@@ -68,6 +72,7 @@ function InvoicesTable({ invoices, onMarkPaid, onReminder, onCancel }: Props) {
                     invoice={invoice}
                     onMarkPaid={onMarkPaid}
                     onReminder={onReminder}
+                    onResend={onResend}
                     onCancel={onCancel}
                   />
                 </td>

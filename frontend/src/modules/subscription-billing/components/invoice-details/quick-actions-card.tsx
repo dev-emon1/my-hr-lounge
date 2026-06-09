@@ -1,4 +1,4 @@
-import { CreditCard, Mail, Download, Ban } from "lucide-react";
+import { CreditCard, Mail, Download, Ban, Send } from "lucide-react";
 
 import { Button } from "@/shared/ui/button";
 
@@ -7,12 +7,15 @@ type Props = {
 
   onSendReminder: () => void;
 
+  onResendInvoice: () => void;
+
   onCancelInvoice: () => void;
 };
 
 function QuickActionsCard({
   onMarkPaid,
   onSendReminder,
+  onResendInvoice,
   onCancelInvoice,
 }: Props) {
   return (
@@ -36,6 +39,15 @@ function QuickActionsCard({
         >
           <Mail size={16} />
           Send Reminder
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full justify-start"
+          onClick={onResendInvoice}
+        >
+          <Send size={16} />
+          Resend Invoice
         </Button>
 
         <Button variant="outline" className="w-full justify-start">
