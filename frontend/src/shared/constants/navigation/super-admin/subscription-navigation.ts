@@ -61,14 +61,6 @@ export const subscriptionNavigation: NavigationGroup = {
         },
 
         {
-          title: "Manual Payments",
-
-          href: "/billing/manual-payments",
-
-          icon: Wallet,
-        },
-
-        {
           title: "Addons",
 
           href: "/billing/addons",

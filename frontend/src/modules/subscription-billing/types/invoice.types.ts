@@ -5,7 +5,7 @@ export interface Invoice {
 
   client: string;
 
-  type: string;
+  email: string;
 
   amount: string;
 
@@ -15,5 +15,5 @@ export interface Invoice {
 
   status: string;
 
-  email: string;
+  type: string;
 }

@@ -1,39 +1,33 @@
-function ActivityTimelineCard() {
+function ApprovalTimelineCard() {
   const activities = [
     {
       id: 1,
-      title: "Invoice Generated",
+      title: "Quotation Draft Created",
       date: "01 Jun 2026",
     },
 
     {
       id: 2,
-      title: "Invoice Sent",
-      date: "01 Jun 2026",
+      title: "Quotation Sent To Client",
+      date: "02 Jun 2026",
     },
 
     {
       id: 3,
-      title: "Reminder Sent",
+      title: "Client Approved Quotation",
       date: "05 Jun 2026",
     },
 
     {
       id: 4,
-      title: "Reminder Sent",
-      date: "10 Jun 2026",
-    },
-
-    {
-      id: 5,
-      title: "Viewed By Client",
-      date: "11 Jun 2026",
+      title: "Client Onboarding Pending",
+      date: "05 Jun 2026",
     },
   ];
 
   return (
     <div className="rounded-[28px] border border-border p-6">
-      <h3 className="text-xl font-black">Activity Timeline</h3>
+      <h3 className="text-xl font-black">Approval Timeline</h3>
 
       <div className="mt-6 space-y-5">
         {activities.map((item) => (
@@ -48,4 +42,4 @@ function ActivityTimelineCard() {
   );
 }
 
-export default ActivityTimelineCard;
+export default ApprovalTimelineCard;
