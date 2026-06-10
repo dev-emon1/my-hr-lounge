@@ -6,6 +6,10 @@ import PendingRenewalsPage from "../pages/pending-renewals-page";
 import ExpiredPlansPage from "../pages/expired-plans-page";
 import InvoicesPage from "../pages/invoices-page";
 import InvoiceDetailsPage from "../pages/invoice-details-page";
+import TransactionsPage from "../pages/transactions-page";
+import TransactionDetailsPage from "../pages/transaction-details-page";
+import QuotationsPage from "../pages/quotations-page";
+import QuotationDetailsPage from "../pages/quotations-details-page";
 // import PendingRenewalsPage from "../pages/pending-renewals-page";
 // import ExpiredPlansPage from "../pages/expired-plans-page";
 // import InvoicesPage from "../pages/invoices-page";
@@ -53,15 +57,15 @@ export const subscriptionBillingRoutes: RouteObject[] = [
   },
 
   {
-    path: "subscription-billing/transactions",
+    path: "/billing/transactions",
 
-    element: "<TransactionsPage />",
+    element: <TransactionsPage />,
   },
 
   {
-    path: "subscription-billing/manual-payments",
+    path: "subscription-billing/transactions/:transactionId",
 
-    element: "<ManualPaymentsPage />",
+    element: <TransactionDetailsPage />,
   },
 
   {
@@ -71,9 +75,15 @@ export const subscriptionBillingRoutes: RouteObject[] = [
   },
 
   {
-    path: "subscription-billing/quotations",
+    path: "billing/quotations",
 
-    element: "<QuotationsPage />",
+    element: <QuotationsPage />,
+  },
+
+  {
+    path: "billing/quotations/:quotationId",
+
+    element: <QuotationDetailsPage />,
   },
 
   {

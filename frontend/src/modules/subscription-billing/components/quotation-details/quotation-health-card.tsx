@@ -1,33 +1,31 @@
-function InvoiceHealthCard() {
+function QuotationHealthCard() {
   return (
     <div className="rounded-[28px] border border-border p-6">
-      <h3 className="text-xl font-black">Invoice Health</h3>
+      <h3 className="text-xl font-black">Quotation Health</h3>
 
       <div className="mt-6 space-y-4">
         <HealthRow
-          label="Payment Status"
+          label="Quotation Status"
+          value="Approved"
+          color="text-green-600"
+        />
+
+        <HealthRow
+          label="Approval Status"
+          value="Completed"
+          color="text-green-600"
+        />
+
+        <HealthRow
+          label="Onboarding Status"
           value="Pending"
           color="text-amber-600"
         />
 
         <HealthRow
-          label="Collection Risk"
-          value="Medium"
-          color="text-amber-600"
-        />
-
-        <HealthRow
-          label="Days Until Due"
-          value="5 Days"
+          label="Conversion Status"
+          value="Not Converted"
           color="text-blue-600"
-        />
-
-        <HealthRow label="Reminder Count" value="3" color="text-blue-600" />
-
-        <HealthRow
-          label="Last Reminder"
-          value="12 Jun 2026"
-          color="text-muted-foreground"
         />
       </div>
     </div>
@@ -52,4 +50,4 @@ function HealthRow({
   );
 }
 
-export default InvoiceHealthCard;
+export default QuotationHealthCard;
