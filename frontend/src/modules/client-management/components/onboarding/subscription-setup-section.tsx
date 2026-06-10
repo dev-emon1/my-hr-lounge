@@ -1,21 +1,33 @@
 import { useMemo, useState } from "react";
-
 import { CreditCard } from "lucide-react";
 
 import { packageData } from "../../constants/package-data";
 
 import PackageSelectionCard from "./subscription/package-selection-card";
-
 import CustomPackageBuilder from "./subscription/custom-package-builder";
-
 import PricingSummaryCard from "./subscription/pricing-summary-card";
 
-function SubscriptionSetupSection() {
+import { Quotation } from "@/modules/subscription-billing/types/quotation.types";
+
+type Props = {
+  quotation?: Quotation;
+};
+
+function SubscriptionSetupSection({ quotation }: Props) {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
-    "monthly",
+    quotation?.billingCycle?.toLowerCase() === "yearly" ? "yearly" : "monthly",
   );
 
-  const [selectedPackageId, setSelectedPackageId] = useState("growth");
+  const [selectedPackageId, setSelectedPackageId] = useState(() => {
+    const packageMap: Record<string, string> = {
+      Starter: "starter",
+      Growth: "growth",
+      Enterprise: "enterprise",
+      Custom: "custom",
+    };
+
+    return packageMap[quotation?.packageName ?? ""] || "growth";
+  });
 
   const selectedPackage =
     useMemo(
