@@ -35,9 +35,9 @@ return new class extends Migration
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('database')->unique();
+            // $table->string('database')->unique();
             $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
-            $table->string('status')->default('trial');
+            $table->enum('status', ['trial','active','suspended','cancelled','expired'])->default('trial');
             $table->timestamp('trial_ends_at')->nullable();
             $table->jsonb('settings')->default('{}');
             $table->string('timezone')->default('Asia/Dhaka');
@@ -130,7 +130,8 @@ return new class extends Migration
         // ── Sanctum Personal Access Tokens ───────────────────
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('tokenable');
+            // $table->uuidMorphs('tokenable');
+            $table->morphs('tokenable');
             $table->string('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();

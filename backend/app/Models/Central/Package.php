@@ -20,12 +20,16 @@ class Package extends Model
         'price_yearly',
         'max_employees',
         'max_admins',
-        'features',
+        'device_limit',
+        'max_branches',
+        'department_limit',
+        'storage_limit_gb',
+        'modules',
         'is_active',
     ];
 
     protected $casts = [
-        'features'      => 'array',
+        'modules'      => 'array',
         'is_active'     => 'boolean',
         'price_monthly' => 'decimal:2',
         'price_yearly'  => 'decimal:2',
@@ -33,7 +37,7 @@ class Package extends Model
 
     public function getModules(): array
     {
-        return $this->features['modules'] ?? [];
+        return $this->modules ?? [];
     }
 
     public function hasModule(string $moduleKey): bool
