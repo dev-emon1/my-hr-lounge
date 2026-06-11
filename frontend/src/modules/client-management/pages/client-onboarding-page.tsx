@@ -17,10 +17,17 @@ import IntegrationsSection from "../components/onboarding/integrations-section";
 import ActivationReviewSection from "../components/onboarding/activation-section";
 import { useLocation } from "react-router-dom";
 
+import type { Quotation } from "@/modules/subscription-billing/types/quotation.types";
+
+type LocationState = {
+  quotation?: Quotation;
+};
+
 function ClientOnboardingPage() {
   const location = useLocation();
 
-  const quotation = location.state?.quotation;
+  // const quotation = location.state?.quotation;
+  const { quotation } = (location.state as LocationState) || {};
 
   return (
     <div className="space-y-8">
@@ -37,13 +44,13 @@ function ClientOnboardingPage() {
         </div>
       )}
 
-      <ClientInformationSection />
+      <ClientInformationSection quotation={quotation} />
 
       <WorkspaceIdentitySection />
 
-      <SubscriptionSetupSection />
+      <SubscriptionSetupSection quotation={quotation} />
 
-      <WorkspaceOwnerSection />
+      <WorkspaceOwnerSection quotation={quotation} />
 
       <OrganizationStructureSection />
 
