@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('department_limit')->default(10);
             $table->integer('storage_limit_gb')->default(10); // Storage limit in GB
             $table->jsonb('modules')->default('{}');
+            $table->jsonb('limits')->default('{}');
+            $table->jsonb('integrations')->default('{}');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -36,7 +38,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             // $table->string('database')->unique();
-            $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
+            // $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
             $table->enum('status', ['trial','active','suspended','cancelled','expired'])->default('trial');
             $table->timestamp('trial_ends_at')->nullable();
             $table->jsonb('settings')->default('{}');
@@ -130,8 +132,8 @@ return new class extends Migration
         // ── Sanctum Personal Access Tokens ───────────────────
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            // $table->uuidMorphs('tokenable');
-            $table->morphs('tokenable');
+            $table->uuidMorphs('tokenable');
+            // $table->morphs('tokenable');
             $table->string('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();

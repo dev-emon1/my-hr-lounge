@@ -25,11 +25,15 @@ class Package extends Model
         'department_limit',
         'storage_limit_gb',
         'modules',
+        'limits',
+        'integrations',
         'is_active',
     ];
 
     protected $casts = [
         'modules'      => 'array',
+        'limits'       => 'array',
+        'integrations' => 'array',
         'is_active'     => 'boolean',
         'price_monthly' => 'decimal:2',
         'price_yearly'  => 'decimal:2',

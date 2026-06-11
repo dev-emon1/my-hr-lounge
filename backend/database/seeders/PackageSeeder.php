@@ -27,12 +27,25 @@ class PackageSeeder extends Seeder
                 'storage_limit_gb' => 5,
 
                 'modules' => [
-                    'employee_management' => true,
-                    'attendance' => true,
-                    'leave_management' => true,
-                    'payroll' => false,
-                    'recruitment' => false,
-                    'performance_management' => false,
+                    'Employee_management' => true,
+                    'Attendance' => true,
+                    'Leave_management' => true,
+                    'Payroll' => false,
+                    'Recruitment' => false,
+                    'Performance_management' => false,
+                ],
+
+                'limits' => [
+                    'employees' => 15,
+                    'admins' => 2,
+                    'branches' => 1,
+                    'storage_gb' => 50,
+                ],
+
+                'integrations' => [
+                    'zkteco' => true,
+                    'api_access' => false,
+                    'whatsapp' => false,
                 ],
 
                 'is_active' => true,
@@ -54,12 +67,25 @@ class PackageSeeder extends Seeder
                 'storage_limit_gb' => 50,
 
                 'modules' => [
-                    'employee_management' => true,
-                    'attendance' => true,
-                    'leave_management' => true,
-                    'payroll' => true,
-                    'recruitment' => true,
-                    'performance_management' => false,
+                    'Employee_management' => true,
+                    'Attendance' => true,
+                    'Leave_management' => true,
+                    'Payroll' => true,
+                    'Recruitment' => true,
+                    'Performance_management' => false,
+                ],
+
+                'limits' => [
+                    'employees' => 100,
+                    'admins' => 5,
+                    'branches' => 5,
+                    'storage_gb' => 100,
+                ],
+
+                'integrations' => [
+                    'zkteco' => true,
+                    'api_access' => true,
+                    'whatsapp' => false,
                 ],
 
                 'is_active' => true,
@@ -81,12 +107,25 @@ class PackageSeeder extends Seeder
                 'storage_limit_gb' => 500,
 
                 'modules' => [
-                    'employee_management' => true,
-                    'attendance' => true,
-                    'leave_management' => true,
-                    'payroll' => true,
-                    'recruitment' => true,
-                    'performance_management' => true,
+                    'Employee_management' => true,
+                    'Attendance' => true,
+                    'Leave_management' => true,
+                    'Payroll' => true,
+                    'Recruitment' => true,
+                    'Performance_management' => true,
+                ],
+
+                'limits' => [
+                    'employees' => 1000,
+                    'admins' => 50,
+                    'branches' => 50,
+                    'storage_gb' => 500,
+                ],
+
+                'integrations' => [
+                    'zkteco' => true,
+                    'api_access' => true,
+                    'whatsapp' => true,
                 ],
 
                 'is_active' => true,

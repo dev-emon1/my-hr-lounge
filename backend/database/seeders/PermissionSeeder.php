@@ -38,6 +38,74 @@ class PermissionSeeder extends Seeder
                     'approve permissions',
                 ],
 
+                'Audit & Logs' => [
+                    'view audit logs',
+                    'view login history',
+                ],
+
+            ],
+
+            'System Management' => [
+
+                'System Settings' => [
+                    'view system settings',
+                    'edit system settings',
+                ],
+
+                'Integrations' => [
+                    'view integrations',
+                    'manage integrations',
+                ],
+
+            ],
+
+            'Reporting & Analytics' => [
+
+                'Reports' => [
+                    'view reports',
+                    'generate reports',
+                ],
+
+            ],
+
+            'Support & Maintenance' => [
+
+                'Support Tickets' => [
+                    'view support tickets',
+                    'manage support tickets',
+                ],
+
+                'System Health' => [
+                    'view system health',
+                ],
+
+            ],
+
+            'Security & Compliance' => [
+
+                'Security Settings' => [
+                    'view security settings',
+                    'edit security settings',
+                ],
+
+                'Compliance' => [
+                    'view compliance reports',
+                ],
+
+            ],
+
+            'Developer & API Access' => [
+
+                'API Access' => [
+                    'view API access',
+                    'manage API access',
+                ],
+
+                'Developer Tools' => [
+                    'view developer tools',
+                    'manage developer tools',
+                ],
+
             ],
 
             'Tenant Management' => [
@@ -67,6 +135,36 @@ class PermissionSeeder extends Seeder
                 ],
 
             ],
+
+            'Companay Management' => [
+
+                'Company Settings' => [
+                    'view company settings',
+                    'edit company settings',
+                ],
+
+                'Branches' => [
+                    'view branches',
+                    'manage branches',
+                ],
+
+            ],
+
+            'Employee Management' => [
+
+                'Employees' => [
+                    'view employees',
+                    'manage employees',
+                ],
+
+                'Departments' => [
+                    'view departments',
+                    'manage departments',
+                ],
+
+            ],
+
+            // ''
 
         ];
 
