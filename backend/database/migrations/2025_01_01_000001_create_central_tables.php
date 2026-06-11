@@ -19,12 +19,12 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price_monthly', 10, 2)->nullable();
             $table->decimal('price_yearly', 10, 2)->nullable();
-            $table->integer('max_employees')->default(50);
-            $table->integer('max_admins')->default(2);
-            $table->integer('device_limit')->default(5);
-            $table->integer('max_branches')->default(1);
-            $table->integer('department_limit')->default(10);
-            $table->integer('storage_limit_gb')->default(10); // Storage limit in GB
+            // $table->integer('max_employees')->default(50);
+            // $table->integer('max_admins')->default(2);
+            // $table->integer('device_limit')->default(5);
+            // $table->integer('max_branches')->default(1);
+            // $table->integer('department_limit')->default(10);
+            // $table->integer('storage_limit_gb')->default(10); // Storage limit in GB
             $table->jsonb('modules')->default('{}');
             $table->jsonb('limits')->default('{}');
             $table->jsonb('integrations')->default('{}');
@@ -35,10 +35,16 @@ return new class extends Migration
         // ── Tenants ───────────────────────────────────────────
         Schema::create('tenants', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
-            $table->string('name');
+            $table->string('company_name');
             $table->string('slug')->unique();
+            $table->string('owner_name');
+            $table->enum('client_type', ['demo','trail','internal_testing','individual', 'company'])->default('company');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('total_employees')->default(0);
+            $table->integer('employee_count')->default(0);
             // $table->string('database')->unique();
-            // $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
             $table->enum('status', ['trial','active','suspended','cancelled','expired'])->default('trial');
             $table->timestamp('trial_ends_at')->nullable();
             $table->jsonb('settings')->default('{}');

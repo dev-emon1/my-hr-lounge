@@ -18,14 +18,7 @@ class PackageSeeder extends Seeder
 
                 'price_monthly' => 9.99,
                 'price_yearly'  => 99.99,
-
-                'max_employees' => 25,
-                'max_admins' => 1,
-                'device_limit' => 2,
-                'max_branches' => 1,
-                'department_limit' => 5,
-                'storage_limit_gb' => 5,
-
+                
                 'modules' => [
                     'Employee_management' => true,
                     'Attendance' => true,
@@ -33,13 +26,15 @@ class PackageSeeder extends Seeder
                     'Payroll' => false,
                     'Recruitment' => false,
                     'Performance_management' => false,
-                ],
+                    ],
 
-                'limits' => [
-                    'employees' => 15,
-                    'admins' => 2,
-                    'branches' => 1,
-                    'storage_gb' => 50,
+                    'limits' => [
+                        'employees' => 15,
+                        'admins' => 2,
+                        'department_limit' => 4,
+                        'branches' => 1,
+                        'storage_gb' => 50,
+                        'device_limit' => 2,
                 ],
 
                 'integrations' => [
@@ -58,14 +53,7 @@ class PackageSeeder extends Seeder
 
                 'price_monthly' => 29.99,
                 'price_yearly'  => 299.99,
-
-                'max_employees' => 100,
-                'max_admins' => 5,
-                'device_limit' => 10,
-                'max_branches' => 5,
-                'department_limit' => 20,
-                'storage_limit_gb' => 50,
-
+                
                 'modules' => [
                     'Employee_management' => true,
                     'Attendance' => true,
@@ -74,12 +62,14 @@ class PackageSeeder extends Seeder
                     'Recruitment' => true,
                     'Performance_management' => false,
                 ],
-
+                
                 'limits' => [
                     'employees' => 100,
                     'admins' => 5,
+                    'department_limit' => 10,
                     'branches' => 5,
                     'storage_gb' => 100,
+                    'device_limit' => 10,
                 ],
 
                 'integrations' => [
@@ -99,13 +89,6 @@ class PackageSeeder extends Seeder
                 'price_monthly' => 99.99,
                 'price_yearly'  => 999.99,
 
-                'max_employees' => 1000,
-                'max_admins' => 50,
-                'device_limit' => 100,
-                'max_branches' => 50,
-                'department_limit' => 100,
-                'storage_limit_gb' => 500,
-
                 'modules' => [
                     'Employee_management' => true,
                     'Attendance' => true,
@@ -118,8 +101,10 @@ class PackageSeeder extends Seeder
                 'limits' => [
                     'employees' => 1000,
                     'admins' => 50,
+                    'department_limit' => 30,
                     'branches' => 50,
                     'storage_gb' => 500,
+                    'device_limit' => 100,
                 ],
 
                 'integrations' => [
