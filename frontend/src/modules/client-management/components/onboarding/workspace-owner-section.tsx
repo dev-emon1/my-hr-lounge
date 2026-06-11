@@ -1,12 +1,17 @@
 import { useState } from "react";
-
 import { KeyRound, Mail, Phone, ShieldCheck, UserRound } from "lucide-react";
 
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 
-function WorkspaceOwnerSection() {
+import type { Quotation } from "@/modules/subscription-billing/types/quotation.types";
+
+type Props = {
+  quotation?: Quotation;
+};
+
+function WorkspaceOwnerSection({ quotation }: Props) {
   const [requirePasswordReset, setRequirePasswordReset] = useState(true);
 
   const [requireMfa, setRequireMfa] = useState(true);
@@ -57,7 +62,11 @@ function WorkspaceOwnerSection() {
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
                   />
 
-                  <Input className="h-12 pl-11" placeholder="John Doe" />
+                  <Input
+                    defaultValue={quotation?.contactPerson ?? ""}
+                    className="h-12 pl-11"
+                    placeholder="John Doe"
+                  />
                 </div>
               </div>
 
@@ -79,6 +88,7 @@ function WorkspaceOwnerSection() {
                   />
 
                   <Input
+                    defaultValue={quotation?.email ?? ""}
                     className="h-12 pl-11"
                     placeholder="admin@company.com"
                   />
@@ -95,7 +105,11 @@ function WorkspaceOwnerSection() {
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
                   />
 
-                  <Input className="h-12 pl-11" placeholder="+8801712345678" />
+                  <Input
+                    defaultValue={quotation?.phone ?? ""}
+                    className="h-12 pl-11"
+                    placeholder="+8801712345678"
+                  />
                 </div>
               </div>
             </div>

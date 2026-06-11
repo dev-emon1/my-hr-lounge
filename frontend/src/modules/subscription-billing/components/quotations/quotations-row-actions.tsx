@@ -48,6 +48,8 @@ function QuotationsRowActions({
 
   const isApproved = quotation.status === "Approved";
 
+  const canEdit = quotation.status === "Draft" || quotation.status === "Sent";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,24 +60,30 @@ function QuotationsRowActions({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => navigate(`/billing/quotations/${quotation.id}`)}
+          onClick={() =>
+            navigate(`/billing/quotations/${quotation.quotationNumber}`)
+          }
         >
           <Eye size={16} />
           View Details
         </DropdownMenuItem>
 
-        {isDraft && (
-          <>
-            <DropdownMenuItem>
-              <Pencil size={16} />
-              Edit Quotation
-            </DropdownMenuItem>
+        {canEdit && (
+          <DropdownMenuItem
+            onClick={() =>
+              navigate(`/billing/quotations/${quotation.quotationNumber}/edit`)
+            }
+          >
+            <Pencil size={16} />
+            Edit Quotation
+          </DropdownMenuItem>
+        )}
 
-            <DropdownMenuItem onClick={() => onSend(quotation)}>
-              <Send size={16} />
-              Send Quotation
-            </DropdownMenuItem>
-          </>
+        {isDraft && (
+          <DropdownMenuItem onClick={() => onSend(quotation)}>
+            <Send size={16} />
+            Send Quotation
+          </DropdownMenuItem>
         )}
 
         {isSent && (

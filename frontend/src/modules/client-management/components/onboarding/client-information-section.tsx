@@ -19,7 +19,13 @@ import {
 } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 
-function ClientInformationSection() {
+import type { Quotation } from "@/modules/subscription-billing/types/quotation.types";
+
+type Props = {
+  quotation?: Quotation;
+};
+
+function ClientInformationSection({ quotation }: Props) {
   return (
     <div className="overflow-hidden rounded-[28px] border border-border bg-card shadow-xl">
       {/* HEADER */}
@@ -65,6 +71,7 @@ function ClientInformationSection() {
                 />
 
                 <Input
+                  defaultValue={quotation?.client ?? ""}
                   placeholder="ABC Corporation Ltd."
                   className="h-12 pl-11"
                 />
@@ -141,7 +148,14 @@ function ClientInformationSection() {
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
                 />
 
+                {/* <Input
+                  type="email"
+                  placeholder="contact@company.com"
+                  className="h-12 pl-11"
+                /> */}
+
                 <Input
+                  defaultValue={quotation?.email ?? ""}
                   type="email"
                   placeholder="contact@company.com"
                   className="h-12 pl-11"
@@ -159,7 +173,11 @@ function ClientInformationSection() {
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
                 />
 
-                <Input placeholder="+8801712345678" className="h-12 pl-11" />
+                <Input
+                  defaultValue={quotation?.phone ?? ""}
+                  placeholder="+8801712345678"
+                  className="h-12 pl-11"
+                />
               </div>
             </div>
           </div>
