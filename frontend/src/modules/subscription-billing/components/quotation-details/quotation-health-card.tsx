@@ -1,4 +1,10 @@
-function QuotationHealthCard() {
+import { Quotation } from "../../types/quotation.types";
+
+type Props = {
+  quotation: Quotation;
+};
+
+function QuotationHealthCard({ quotation }: Props) {
   return (
     <div className="rounded-[28px] border border-border p-6">
       <h3 className="text-xl font-black">Quotation Health</h3>
@@ -6,25 +12,25 @@ function QuotationHealthCard() {
       <div className="mt-6 space-y-4">
         <HealthRow
           label="Quotation Status"
-          value="Approved"
+          value={quotation.status}
           color="text-green-600"
         />
 
         <HealthRow
           label="Approval Status"
-          value="Completed"
+          value={quotation.approvalStatus ?? "-"}
           color="text-green-600"
         />
 
         <HealthRow
           label="Onboarding Status"
-          value="Pending"
+          value={quotation.onboardingStatus ?? "-"}
           color="text-amber-600"
         />
 
         <HealthRow
           label="Conversion Status"
-          value="Not Converted"
+          value={quotation.conversionStatus ?? "-"}
           color="text-blue-600"
         />
       </div>

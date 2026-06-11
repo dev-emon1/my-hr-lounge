@@ -74,14 +74,13 @@ function QuotationPreviewPage() {
 
           <div className="space-y-2 text-sm">
             <div>
-              <span className="font-semibold">Issue Date:</span> 10 Jun 2026
+              <span className="font-semibold">Issue Date:</span>{" "}
+              {new Date().toLocaleDateString()}
             </div>
 
             <div>
               <span className="font-semibold">Valid Until:</span>{" "}
-              {quotation.validityDays
-                ? `${quotation.validityDays} Days`
-                : "Not Defined"}
+              {quotation.validityDate || "Not Defined"}
             </div>
           </div>
         </div>
@@ -119,17 +118,30 @@ function QuotationPreviewPage() {
 
             <InfoItem
               label="Billing Cycle"
-              value={quotation.billingCycle || "Not Selected"}
+              value={
+                quotation.billingCycle
+                  ? quotation.billingCycle.charAt(0).toUpperCase() +
+                    quotation.billingCycle.slice(1)
+                  : "Not Selected"
+              }
             />
 
             <InfoItem
               label="Employees"
-              value={quotation.employeeCapacity || "Not Selected"}
+              value={
+                quotation.employeeCapacity
+                  ? `${quotation.employeeCapacity} Employees`
+                  : "Not Selected"
+              }
             />
 
             <InfoItem
               label="Storage"
-              value={quotation.storageAllocation || "Not Selected"}
+              value={
+                quotation.storageAllocation
+                  ? `${quotation.storageAllocation} GB`
+                  : "Not Selected"
+              }
             />
           </div>
         </div>
@@ -176,19 +188,11 @@ function QuotationPreviewPage() {
           <h3 className="text-xl font-black">Terms & Conditions</h3>
 
           <div className="mt-6 rounded-2xl border border-border p-6">
-            <p className="leading-8 text-muted-foreground whitespace-pre-line">
-              {quotation.termsAndConditions || "No terms configured."}
-            </p>
-            <p className="leading-8 text-muted-foreground">
-              1. Subscription fees are billed according to the selected billing
-              cycle.
-              <br />
-              <br />
-              2. Client onboarding begins after payment confirmation.
-              <br />
-              <br />
-              3. Additional modules may incur additional charges.
-            </p>
+            <div className="mt-6 rounded-2xl border border-border p-6">
+              <p className="leading-8 whitespace-pre-line text-muted-foreground">
+                {quotation.termsAndConditions || "No terms configured."}
+              </p>
+            </div>
           </div>
         </div>
 

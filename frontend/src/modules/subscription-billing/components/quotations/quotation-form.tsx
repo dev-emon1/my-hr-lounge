@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import QuotationClientSection from "./sections/quotation-client-section";
@@ -5,16 +6,17 @@ import QuotationPackageSection from "./sections/quotation-package-section";
 import QuotationPricingSection from "./sections/quotation-pricing-section";
 import QuotationTermsSection from "./sections/quotation-terms-section";
 import QuotationSummarySidebar from "./sections/quotation-summary-sidebar";
+
 import { QuotationFormValues } from "../../types/quotation-form.types";
 import { useQuotationStore } from "../../store/quotation-store";
-import { useEffect } from "react";
-
+import type { Quotation } from "../../types/quotation.types";
 type Props = {
   mode: "create" | "edit";
   quotationId?: string;
+  initialData?: Quotation;
 };
 
-function QuotationForm({ mode, quotationId }: Props) {
+function QuotationForm({ mode, quotationId, initialData }: Props) {
   const isCreate = mode === "create";
 
   const methods = useForm<QuotationFormValues>({
@@ -41,6 +43,7 @@ function QuotationForm({ mode, quotationId }: Props) {
   });
 
   const { watch } = methods;
+  const { reset } = methods;
   const setQuotation = useQuotationStore((state) => state.setQuotation);
 
   useEffect(() => {
@@ -50,6 +53,42 @@ function QuotationForm({ mode, quotationId }: Props) {
 
     return () => subscription.unsubscribe();
   }, [watch, setQuotation]);
+
+  useEffect(() => {
+    if (!initialData) return;
+
+    console.log(watch("validityDate"));
+
+    reset({
+      companyName: initialData.client,
+      contactPerson: initialData.contactPerson,
+      email: initialData.email,
+      phone: initialData.phone,
+      industry: initialData.industry ?? "",
+      validityDate: initialData.expiryDate,
+
+      packageName: initialData.packageName,
+      billingCycle:
+        initialData.billingCycle?.toLowerCase() === "yearly"
+          ? "yearly"
+          : "monthly",
+
+      employeeCapacity: initialData.employeeCapacity ?? "",
+      storageAllocation: initialData.storageAllocation ?? "",
+
+      basePrice: initialData.basePrice ?? 0,
+      discount: initialData.discount ?? 0,
+      tax: initialData.tax ?? 0,
+      additionalCharges: initialData.additionalCharges ?? 0,
+
+      commercialNotes: initialData.commercialNotes ?? "",
+      paymentTerms: initialData.paymentTerms ?? "",
+      termsAndConditions: initialData.termsAndConditions ?? "",
+      internalNotes: initialData.internalNotes ?? "",
+
+      validityDays: initialData.validityDays ?? 30,
+    });
+  }, [initialData, reset]);
   return (
     <FormProvider {...methods}>
       <div className="space-y-8">

@@ -1,17 +1,35 @@
-function PricingBreakdownCard() {
+import type { Quotation } from "../../types/quotation.types";
+type Props = {
+  quotation: Quotation;
+};
+
+function PricingBreakdownCard({ quotation }: Props) {
   return (
     <div className="rounded-[28px] border border-border p-6">
       <h3 className="text-xl font-black">Pricing Breakdown</h3>
 
       <div className="mt-6 space-y-4">
-        <Row label="Base Package" value="৳ 80,000" />
+        <Row
+          label="Base Package"
+          value={`৳ ${quotation.basePrice?.toLocaleString() ?? 0}`}
+        />
 
-        <Row label="Addon Cost" value="৳ 10,000" />
+        <Row
+          label="Addon Cost"
+          value={`৳ ${quotation.addonCost?.toLocaleString() ?? 0}`}
+        />
 
-        <Row label="Discount" value="- ৳ 5,000" />
+        <Row
+          label="Discount"
+          value={`- ৳ ${quotation.discount?.toLocaleString() ?? 0}`}
+        />
 
         <div className="border-t border-border pt-4">
-          <Row label="Final Price" value="৳ 85,000" strong />
+          <Row
+            label="Final Price"
+            value={`৳ ${quotation.finalPrice?.toLocaleString() ?? 0}`}
+            strong
+          />
         </div>
       </div>
     </div>

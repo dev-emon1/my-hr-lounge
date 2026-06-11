@@ -5,6 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
 
 import type { QuotationFormValues } from "../../../types/quotation-form.types";
+import { packageLabels } from "@/modules/subscription-billing/constants/package-labels";
 
 type Props = {
   mode: "create" | "edit";
@@ -36,7 +37,13 @@ function QuotationSummarySidebar({ mode, quotationId }: Props) {
         <div className="mt-6 space-y-4">
           <Item label="Client" value={company || "Not Selected"} />
 
-          <Item label="Package" value={packageName || "Not Selected"} />
+          <Item
+            label="Package"
+            value={
+              packageLabels[packageName as keyof typeof packageLabels] ||
+              "Not Selected"
+            }
+          />
 
           <Item
             label="Billing"
@@ -118,7 +125,7 @@ function QuotationSummarySidebar({ mode, quotationId }: Props) {
           <Button
             variant="outline"
             className="w-full justify-start"
-            disabled={!quotationId}
+            // disabled={!quotationId}
             onClick={() =>
               navigate(`/billing/quotations/${quotationId}/preview`)
             }

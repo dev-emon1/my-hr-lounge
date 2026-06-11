@@ -53,7 +53,11 @@ function QuotationClientSection() {
               className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
 
-            <Input placeholder="Software Company" className="h-12 pl-11" />
+            <Input
+              placeholder="Software Company"
+              className="h-12 pl-11"
+              {...register("industry")}
+            />
           </div>
         </div>
 

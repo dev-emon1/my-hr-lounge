@@ -11,7 +11,7 @@ import TransactionDetailsPage from "../pages/transaction-details-page";
 import QuotationsPage from "../pages/quotations-page";
 import QuotationDetailsPage from "../pages/quotations-details-page";
 import CreateQuotationPage from "../pages/create-quotation-page";
-import EditQuotationPage from "../pages/edit-quotation-page";
+import EditQuotationPage from "../pages/quotation-edit-page";
 import QuotationPreviewPage from "../pages/quotation-preview-page";
 // import PendingRenewalsPage from "../pages/pending-renewals-page";
 // import ExpiredPlansPage from "../pages/expired-plans-page";

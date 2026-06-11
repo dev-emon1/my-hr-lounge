@@ -1,23 +1,31 @@
 import { Badge } from "@/shared/ui/badge";
 
-function QuotationHeroSection() {
+import type { Quotation } from "../../types/quotation.types";
+import { packageLabels } from "../../constants/package-labels";
+
+type Props = {
+  quotation: Quotation;
+};
+
+function QuotationHeroSection({ quotation }: Props) {
   return (
     <div className="rounded-[32px] border border-border bg-card/60 p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-4xl font-black">QT-2026-001</h1>
+          <h1 className="text-4xl font-black">{quotation.quotationNumber}</h1>
 
-          <p className="mt-3 text-muted-foreground">Acme Corporation</p>
+          <p className="mt-3 text-muted-foreground">{quotation.client}</p>
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Badge className="bg-green-500/10 text-green-600">Approved</Badge>
+          <Badge>{quotation.status}</Badge>
 
-          <Badge className="bg-blue-500/10 text-blue-600">Enterprise</Badge>
+          <Badge>
+            {" "}
+            {packageLabels[quotation.packageName as keyof typeof packageLabels]}
+          </Badge>
 
-          <Badge className="bg-green-500/10 text-green-600">৳ 80,000</Badge>
-
-          <Badge className="bg-blue-500/10 text-blue-600">Converted</Badge>
+          <Badge>{quotation.amount}</Badge>
         </div>
       </div>
     </div>
