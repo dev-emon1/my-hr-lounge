@@ -1,31 +1,17 @@
 import { useState } from "react";
-
 import { useParams } from "react-router-dom";
-
 import type { Invoice } from "../types/invoice.types";
-
 import MarkAsPaidDialog from "../components/invoices/dialogs/mark-as-paid-dialog";
-
 import SendInvoiceReminderDialog from "../components/invoices/dialogs/send-invoice-reminder-dialog";
-
 import CancelInvoiceDialog from "../components/invoices/dialogs/cancel-invoice-dialog";
-
 import InvoiceHeroSection from "../components/invoice-details/invoice-hero-section";
-
 import InvoiceInformationCard from "../components/invoice-details/invoice-information-card";
-
 import ClientInformationCard from "../components/invoice-details/client-information-card";
-
 import BillingBreakdownCard from "../components/invoice-details/billing-breakdown-card";
-
 import PaymentTimelineCard from "../components/invoice-details/payment-timeline-card";
-
 import InvoiceHealthCard from "../components/invoice-details/invoice-health-card";
-
 import QuickActionsCard from "../components/invoice-details/quick-actions-card";
-
 import ActivityTimelineCard from "../components/invoice-details/activity-timeline-card";
-
 import PaymentInformationCard from "../components/invoice-details/payment-information-card";
 import ResendInvoiceDialog from "../components/invoices/dialogs/resend-invoice-dialog";
 

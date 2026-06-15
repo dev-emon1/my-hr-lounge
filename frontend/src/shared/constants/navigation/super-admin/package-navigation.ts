@@ -30,14 +30,6 @@ export const packageNavigation: NavigationGroup = {
         },
 
         {
-          title: "Create Package",
-
-          href: "/packages/create",
-
-          icon: Package,
-        },
-
-        {
           title: "Package Builder",
 
           href: "/packages/builder",
@@ -59,22 +51,6 @@ export const packageNavigation: NavigationGroup = {
           href: "/packages/modules",
 
           icon: Blocks,
-        },
-
-        {
-          title: "Employee Limits",
-
-          href: "/packages/employees",
-
-          icon: Users,
-        },
-
-        {
-          title: "Storage Limits",
-
-          href: "/packages/storage",
-
-          icon: Activity,
         },
 
         {

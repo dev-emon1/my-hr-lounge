@@ -1,6 +1,7 @@
-import { Download } from "lucide-react";
+import { Search, Download } from "lucide-react";
 
 import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 
 import {
   Select,
@@ -9,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-
 import SearchFilter from "@/shared/components/data-table/search-filter";
 
 function SubscriptionChangesToolbar() {
@@ -19,27 +19,31 @@ function SubscriptionChangesToolbar() {
         <SearchFilter placeholder="Search requests..." />
 
         <Select>
-          <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[180px]">
-            <SelectValue placeholder="Status" />
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="All Status" />
           </SelectTrigger>
 
           <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+
             <SelectItem value="pending">Pending</SelectItem>
 
             <SelectItem value="approved">Approved</SelectItem>
 
-            <SelectItem value="completed">Completed</SelectItem>
-
             <SelectItem value="rejected">Rejected</SelectItem>
+
+            <SelectItem value="completed">Completed</SelectItem>
           </SelectContent>
         </Select>
 
         <Select>
-          <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[220px]">
-            <SelectValue placeholder="Change Type" />
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="All Types" />
           </SelectTrigger>
 
           <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+
             <SelectItem value="upgrade">Upgrade</SelectItem>
 
             <SelectItem value="downgrade">Downgrade</SelectItem>
@@ -50,7 +54,6 @@ function SubscriptionChangesToolbar() {
           </SelectContent>
         </Select>
       </div>
-
       <Button variant="outline" className="h-12 rounded-2xl">
         <Download size={18} />
         Export
