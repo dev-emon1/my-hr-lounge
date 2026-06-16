@@ -16,10 +16,15 @@ class Tenant extends SpatieTenant
     protected $connection = 'pgsql';
 
     protected $fillable = [
-        'name',
+        'company_name',
         'slug',
-        'database',
-        'package_id',
+        'owner_name',
+        'client_type',
+        'address',
+        'phone',
+        'email',
+        'total_employees',
+        'employee_count',
         'status',
         'trial_ends_at',
         'settings',
@@ -50,7 +55,7 @@ class Tenant extends SpatieTenant
     public function getModulesWithAccess(): array
     {
         $allModules     = config('hr-lounge.modules');
-        $packageModules = $this->package?->features['modules'] ?? [];
+        $packageModules = $this->package?->modules ?? [];
 
         return collect($allModules)->map(function ($module) use ($packageModules) {
             return [
@@ -65,9 +70,9 @@ class Tenant extends SpatieTenant
     // ── Relationships ──────────────────────────────────────────
     public function package(): BelongsTo
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(Package::class, 'activeSubscription.package_id');
+        // $tenant->load(['activeSubscription.package']);
     }
-
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);

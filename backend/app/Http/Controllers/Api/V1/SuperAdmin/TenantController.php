@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TenantRequest;
 use App\Models\Central\Package;
+use App\Models\Central\Subscription;
 use App\Models\Central\Tenant;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class TenantController extends Controller
@@ -29,26 +35,61 @@ class TenantController extends Controller
     /**
      * POST /api/v1/sa/tenants
      */
-    public function store(Request $request): JsonResponse
+    public function store(TenantRequest $request)
     {
-        $validated = $request->validate([
-            'name'       => 'required|string|max:255',
-            'slug'       => 'required|string|unique:tenants,slug|max:100|regex:/^[a-z0-9\-]+$/',
-            'package_id' => 'required|uuid|exists:packages,id',
-            'timezone'   => 'nullable|string',
-            'country'    => 'nullable|string|max:10',
-        ]);
+        $validated = $request->validated();
+        DB::transaction(function () use ($validated) {
 
-        // Database schema name তৈরি করো
-        $validated['database'] = 'tenant_' . $validated['slug'];
-        $validated['status']   = 'trial';
-        $validated['trial_ends_at'] = now()->addDays(14);
+            // Database schema name তৈরি করো
+            // $validated['database'] = 'tenant_' . $validated['slug'];
+            // $validated['status']   = 'trial';
+            // $validated['trial_ends_at'] = now()->addDays(14);
+            if ($validated['status'] === 'trial') {
+                $validated['trial_ends_at'] = now()->addDays(14);
+            }
+            $tenantData = Arr::only($validated, [
+                'company_name',
+                'owner_name',
+                'client_type',
+                'address',
+                'phone',
+                'email',
+                'total_employees',
+                'employee_count',
+                'timezone',
+                'country',
+            ]);
 
-        $tenant = Tenant::create($validated);
+            $tenantData['slug'] = Str::slug($validated['company_name']) . '-' . Str::lower(Str::random(5));
+            $tenantData['status'] = $validated['status'];
+            $tenantData['trial_ends_at'] = $validated['status'] === 'trial'
+                ? now()->addDays(14)
+                : null;
 
-        return $this->created([
-            'tenant' => $tenant->load('package'),
-        ], 'Tenant created successfully');
+            $tenant = Tenant::create($tenantData);
+
+            Subscription::create([
+                'tenant_id' => $tenant->id,
+                'package_id' => $validated['package_id'],
+                'billing_cycle' => $validated['billing_cycle'],
+                'amount' => Package::find($validated['package_id'])->price_monthly ?? 0,
+                'status' => $validated['status'] === 'trial' ? 'trial' : 'active',
+                'current_period_start' => now(),
+                'current_period_end' => now()->addDays(14),
+            ]);
+
+            User::create([
+                'tenant_id' => $tenant->id,
+                'name' => $validated['company_name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password'] ?? 'password'),
+                'is_owner' => true,
+            ]);
+
+            return $this->created([
+                'tenant' => $tenant->load('package'),
+            ], 'Tenant created successfully');
+        });
     }
 
     /**

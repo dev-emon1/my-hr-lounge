@@ -36,12 +36,12 @@ class Subscription extends Model
     }
 
     // ── Relationships ──────────────────────────────────────────
-    public function tenant(): BelongsTo
+    public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
 
-    public function package(): BelongsTo
+    public function package()
     {
         return $this->belongsTo(Package::class);
     }

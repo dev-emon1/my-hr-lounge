@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Central\Subscription;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -12,7 +13,8 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        //
+        $sbcriptions = Subscription::with('tenant', 'package')->orderBy('created_at', 'desc')->get();
+        return response()->json($sbcriptions);
     }
 
     /**

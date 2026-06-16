@@ -23,9 +23,9 @@ class PackageResource extends JsonResource
             'description' => $this->description,
             'price_monthly' => $this->price_monthly,
             'price_yearly' => $this->price_yearly,
-            'max_employees' => $this->max_employees,
-            'max_admins' => $this->max_admins,
-            'modules' => $this->features,
+            'modules' => $this->modules,
+            'limits' => $this->limits,
+            'integrations' => $this->integrations,
             'is_active' => $this->is_active,
         ];
     }

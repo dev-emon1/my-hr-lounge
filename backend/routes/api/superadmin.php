@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Auth\SuperAdminAuthController;
 use App\Http\Controllers\Api\V1\SuperAdmin\PackageController;
 use App\Http\Controllers\Api\V1\SuperAdmin\SubscriptionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\TenantController;
+use App\Http\Controllers\Api\V1\SuperAdmin\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,7 @@ Route::middleware('auth:super_admin')->group(function () {
     // Tenant management
     Route::apiResource('packages', PackageController::class)->except(['index', 'show']);
     Route::apiResource('subscriptions', SubscriptionController::class)->only(['index', 'show']);
+    Route::get('permissions', [PermissionController::class, 'index'])->name('sa.permissions.index');
     Route::apiResource('tenants', TenantController::class)->except(['destroy']);
     Route::post('tenants/{id}/suspend',  [TenantController::class, 'suspend']);
     Route::post('tenants/{id}/activate', [TenantController::class, 'activate']);
