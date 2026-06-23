@@ -15,6 +15,7 @@ type Props = {
 };
 
 function QuickActionsCard({
+  status,
   onSend,
   onApprove,
   onReject,
@@ -41,19 +42,27 @@ function QuickActionsCard({
           </Button>
         )}
 
-        <Button
-          variant="outline"
-          className="w-full justify-start"
-          onClick={onReject}
-        >
-          <XCircle size={16} />
-          Reject
-        </Button>
+        {status === "Sent" && (
+          <>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={onApprove}
+            >
+              <CheckCircle2 size={16} />
+              Approve
+            </Button>
 
-        <Button className="w-full justify-start">
-          <UserPlus size={16} />
-          Start Client Onboarding
-        </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={onReject}
+            >
+              <XCircle size={16} />
+              Reject
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

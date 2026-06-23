@@ -11,6 +11,8 @@ import QuotationsStats from "../components/quotations/quotations-stats";
 import QuotationsToolbar from "../components/quotations/quotations-toolbar";
 import QuotationsTable from "../components/quotations/quotations-table";
 
+import { mockQuotations } from "../constants/mock-quotations";
+
 function QuotationsPage() {
   const navigate = useNavigate();
 
@@ -21,59 +23,6 @@ function QuotationsPage() {
   const [approveOpen, setApproveOpen] = useState(false);
   const [rejectOpen, setRejectOpen] = useState(false);
 
-  const quotations: Quotation[] = [
-    {
-      id: "1",
-
-      quotationNumber: "QT-2026-001",
-
-      client: "Acme Corporation",
-
-      contactPerson: "John Smith",
-
-      email: "john.smith@acme.com",
-
-      phone: "+8801712345678",
-
-      packageName: "Enterprise",
-
-      billingCycle: "Yearly",
-
-      amount: "৳ 80,000",
-
-      issueDate: "01 Jun 2026",
-
-      expiryDate: "30 Jun 2026",
-
-      status: "Approved",
-    },
-
-    {
-      id: "2",
-
-      quotationNumber: "QT-2026-002",
-
-      client: "NextGen Solutions",
-
-      contactPerson: "Sarah Ahmed",
-
-      email: "sarah@nextgen.com",
-
-      phone: "+8801812345678",
-
-      packageName: "Growth",
-
-      billingCycle: "Monthly",
-
-      amount: "৳ 40,000",
-
-      issueDate: "05 Jun 2026",
-
-      expiryDate: "05 Jul 2026",
-
-      status: "Sent",
-    },
-  ];
   return (
     <>
       <div className="space-y-8">
@@ -103,7 +52,7 @@ function QuotationsPage() {
 
           <div className="mt-8">
             <QuotationsTable
-              quotations={quotations}
+              quotations={mockQuotations}
               onSend={(quotation) => {
                 setSelectedQuotation(quotation);
 

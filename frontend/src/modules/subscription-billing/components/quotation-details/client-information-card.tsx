@@ -1,16 +1,22 @@
-function ClientInformationCard() {
+import type { Quotation } from "../../types/quotation.types";
+
+type Props = {
+  quotation: Quotation;
+};
+
+function ClientInformationCard({ quotation }: Props) {
   return (
     <div className="rounded-[28px] border border-border p-6">
       <h3 className="text-xl font-black">Client Information</h3>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <InfoItem label="Company" value="Acme Corporation" />
+        <InfoItem label="Company" value={quotation.client} />
 
-        <InfoItem label="Contact Person" value="John Smith" />
+        <InfoItem label="Contact Person" value={quotation.contactPerson} />
 
-        <InfoItem label="Email" value="admin@acme.com" />
+        <InfoItem label="Email" value={quotation.email} />
 
-        <InfoItem label="Phone" value="+8801XXXXXXXXX" />
+        <InfoItem label="Phone" value={quotation.phone} />
       </div>
     </div>
   );

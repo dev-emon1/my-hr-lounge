@@ -11,8 +11,10 @@ import TransactionDetailsPage from "../pages/transaction-details-page";
 import QuotationsPage from "../pages/quotations-page";
 import QuotationDetailsPage from "../pages/quotations-details-page";
 import CreateQuotationPage from "../pages/create-quotation-page";
-import EditQuotationPage from "../pages/edit-quotation-page";
+import EditQuotationPage from "../pages/quotation-edit-page";
 import QuotationPreviewPage from "../pages/quotation-preview-page";
+import AddonsPage from "../pages/addon-page";
+import AddonDetailsPage from "../pages/addon-details-page";
 // import PendingRenewalsPage from "../pages/pending-renewals-page";
 // import ExpiredPlansPage from "../pages/expired-plans-page";
 // import InvoicesPage from "../pages/invoices-page";
@@ -20,7 +22,8 @@ import QuotationPreviewPage from "../pages/quotation-preview-page";
 // import ManualPaymentsPage from "../pages/manual-payments-page";
 // import AddonsPage from "../pages/addons-page";
 // import QuotationsPage from "../pages/quotations-page";
-// import SubscriptionChangesPage from "../pages/subscription-changes-page";
+import SubscriptionChangesPage from "../pages/subscription-changes-page";
+import SubscriptionChangesDetailsPage from "../pages/subscription-changes-details-page";
 
 export const subscriptionBillingRoutes: RouteObject[] = [
   {
@@ -72,9 +75,15 @@ export const subscriptionBillingRoutes: RouteObject[] = [
   },
 
   {
-    path: "subscription-billing/addons",
+    path: "billing/addons",
 
-    element: "<AddonsPage />",
+    element: <AddonsPage />,
+  },
+
+  {
+    path: "billing/addons/:addonId",
+
+    element: <AddonDetailsPage />,
   },
 
   {
@@ -108,8 +117,14 @@ export const subscriptionBillingRoutes: RouteObject[] = [
   },
 
   {
-    path: "subscription-billing/subscription-changes",
+    path: "billing/subscription-changes",
 
-    element: "<SubscriptionChangesPage />",
+    element: <SubscriptionChangesPage />,
+  },
+
+  {
+    path: "billing/subscription-changes/:changeId",
+
+    element: <SubscriptionChangesDetailsPage />,
   },
 ];

@@ -12,17 +12,11 @@ function QuotationPricingSection() {
   const { register, watch } = useFormContext<QuotationFormValues>();
 
   const basePrice = watch("basePrice") || 0;
-
   const discount = watch("discount") || 0;
-
   const tax = watch("tax") || 0;
-
   const additional = watch("additionalCharges") || 0;
-
   const subtotal = Math.max(0, basePrice - discount + additional);
-
   const taxAmount = (subtotal * tax) / 100;
-
   const finalAmount = subtotal + taxAmount;
   return (
     <div className="rounded-[28px] border border-border bg-card p-6 shadow-xl lg:p-8">

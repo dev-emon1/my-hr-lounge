@@ -60,9 +60,28 @@ function SendQuotationDialog({ open, onOpenChange, quotation }: Props) {
             </div>
 
             <div className="space-y-2">
+              <Label>Subject</Label>
+
+              <Input
+                defaultValue={`Quotation ${quotation?.quotationNumber ?? ""}`}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Message</Label>
 
-              <Textarea rows={6} placeholder="Quotation message..." />
+              <Textarea
+                rows={8}
+                defaultValue={`Dear ${quotation?.client ?? "Client"},
+
+Please find the attached quotation for your review.
+
+If you have any questions or require any adjustments, please let us know.
+
+Thank you.
+
+Best Regards`}
+              />
             </div>
           </div>
         </div>

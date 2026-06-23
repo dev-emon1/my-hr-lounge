@@ -16,6 +16,7 @@ import ApproveQuotationDialog from "../components/quotations/dialogs/approve-quo
 import RejectQuotationDialog from "../components/quotations/dialogs/reject-quotation-dialog";
 
 import type { Quotation } from "../types/quotation.types";
+import { mockQuotations } from "../constants/mock-quotations";
 
 function QuotationDetailsPage() {
   const { quotationId } = useParams();
@@ -25,71 +26,53 @@ function QuotationDetailsPage() {
   const [approveOpen, setApproveOpen] = useState(false);
   const [rejectOpen, setRejectOpen] = useState(false);
 
-  const mockQuotation: Quotation = {
-    id: "1",
+  const quotation = mockQuotations.find(
+    (item) => item.quotationNumber === quotationId,
+  );
 
-    quotationNumber: "QT-2026-001",
-
-    client: "Acme Corporation",
-
-    contactPerson: "John Smith",
-
-    email: "john.smith@acme.com",
-
-    phone: "+8801712345678",
-
-    packageName: "Enterprise",
-
-    billingCycle: "Yearly",
-
-    amount: "৳ 80,000",
-
-    issueDate: "01 Jun 2026",
-
-    expiryDate: "30 Jun 2026",
-
-    status: "Approved",
-  };
+  if (!quotation) {
+    return <div>Quotation Not Found</div>;
+  }
 
   console.log(quotationId);
 
   return (
     <>
       <div className="space-y-8">
-        <QuotationHeroSection />
+        <QuotationHeroSection quotation={quotation} />
 
         <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="space-y-8">
-            <QuotationInformationCard />
+            <QuotationInformationCard quotation={quotation} />
 
-            <ClientInformationCard />
+            <ClientInformationCard quotation={quotation} />
 
-            <PackageBreakdownCard />
+            <PackageBreakdownCard quotation={quotation} />
 
-            <PricingBreakdownCard />
+            <PricingBreakdownCard quotation={quotation} />
 
-            <IncludedModulesCard />
+            <IncludedModulesCard quotation={quotation} />
           </div>
 
           <div>
             <div className="sticky top-6 space-y-6">
-              <QuotationHealthCard />
+              <QuotationHealthCard quotation={quotation} />
 
               <QuickActionsCard
-                status={mockQuotation.status}
+                status={quotation.status}
                 onSend={() => setSendOpen(true)}
                 onApprove={() => setApproveOpen(true)}
                 onReject={() => setRejectOpen(true)}
                 onStartOnboarding={() =>
                   navigate("/client-management/onboarding", {
                     state: {
-                      quotation: mockQuotation,
+                      quotation: quotation,
                     },
                   })
                 }
               />
 
-              <ApprovalTimelineCard />
+              <ApprovalTimelineCard quotation={quotation} />
             </div>
           </div>
         </div>
@@ -98,19 +81,19 @@ function QuotationDetailsPage() {
       <SendQuotationDialog
         open={sendOpen}
         onOpenChange={setSendOpen}
-        quotation={mockQuotation}
+        quotation={quotation}
       />
 
       <ApproveQuotationDialog
         open={approveOpen}
         onOpenChange={setApproveOpen}
-        quotation={mockQuotation}
+        quotation={quotation}
       />
 
       <RejectQuotationDialog
         open={rejectOpen}
         onOpenChange={setRejectOpen}
-        quotation={mockQuotation}
+        quotation={quotation}
       />
     </>
   );

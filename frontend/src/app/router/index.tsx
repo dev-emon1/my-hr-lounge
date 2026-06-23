@@ -11,10 +11,9 @@ import ProtectedRoute from "../guard/protected-route";
 import AuthInitializer from "@/modules/auth/components/auth-initializer";
 
 import { dashboardRoutes } from "@/modules/dashboard/routes/dashboard-routes";
-
 import { clientManagementRoutes } from "@/modules/client-management/routes/client-management-routes";
-
 import { subscriptionBillingRoutes } from "@/modules/subscription-billing/routes/subscription-billing-routes";
+import { packagesPlansRoutes } from "@/modules/packages-plans/routes/packages-plans-routes";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +41,7 @@ const router = createBrowserRouter([
       ...dashboardRoutes,
       ...clientManagementRoutes,
       ...subscriptionBillingRoutes,
+      ...packagesPlansRoutes,
     ],
   },
 ]);
