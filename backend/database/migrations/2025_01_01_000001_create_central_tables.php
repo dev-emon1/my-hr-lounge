@@ -19,13 +19,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price_monthly', 10, 2)->nullable();
             $table->decimal('price_yearly', 10, 2)->nullable();
-            $table->integer('max_employees')->default(50);
-            $table->integer('max_admins')->default(2);
-            $table->integer('device_limit')->default(5);
-            $table->integer('max_branches')->default(1);
-            $table->integer('department_limit')->default(10);
-            $table->integer('storage_limit_gb')->default(10); // Storage limit in GB
             $table->jsonb('modules')->default('{}');
+            $table->jsonb('limits')->default('{}');
+            $table->jsonb('integrations')->default('{}');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -33,11 +29,17 @@ return new class extends Migration
         // ── Tenants ───────────────────────────────────────────
         Schema::create('tenants', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
-            $table->string('name');
+            $table->string('company_name');
             $table->string('slug')->unique();
-            $table->string('database')->unique();
-            $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
-            $table->string('status')->default('trial');
+            $table->string('owner_name');
+            $table->enum('client_type', ['demo', 'trail', 'internal_testing', 'individual', 'company'])->default('company');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('total_employees')->default(0);
+            $table->integer('employee_count')->default(0);
+            // $table->string('database')->unique();
+            $table->enum('status', ['pending','trial', 'active', 'suspended', 'cancelled', 'expired'])->default('trial');
             $table->timestamp('trial_ends_at')->nullable();
             $table->jsonb('settings')->default('{}');
             $table->string('timezone')->default('Asia/Dhaka');
@@ -50,10 +52,10 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
             $table->foreignUuid('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->foreignUuid('package_id')->constrained('packages');
+            $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
             $table->string('billing_cycle')->default('monthly');
             $table->decimal('amount', 10, 2);
-            $table->string('status')->default('active');
+            $table->enum('status', ['pending','trial','active','suspended','cancelled','expired'])->default('trial');
             $table->timestamp('current_period_start')->nullable();
             $table->timestamp('current_period_end')->nullable();
             $table->timestamp('cancelled_at')->nullable();
@@ -131,6 +133,7 @@ return new class extends Migration
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->uuidMorphs('tokenable');
+            // $table->morphs('tokenable');
             $table->string('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();

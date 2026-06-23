@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\V1\Auth\SuperAdminAuthController;
 use App\Http\Controllers\Api\V1\SuperAdmin\PackageController;
+use App\Http\Controllers\Api\V1\SuperAdmin\SubscriptionController;
 use App\Http\Controllers\Api\V1\SuperAdmin\TenantController;
+use App\Http\Controllers\Api\V1\SuperAdmin\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,11 @@ Route::prefix('auth')->group(function () {
         ->name('sa.auth.refresh');
 });
 
+// Public — other
+Route::prefix('public')->group(function () {
+    Route::get('packages', [PackageController::class, 'index'])->name('sa.public.packages');
+});
+
 // Protected — login 
 Route::prefix('auth')->middleware('auth:super_admin')->group(function () {
     Route::get('me',                        [SuperAdminAuthController::class, 'me'])->name('sa.auth.me');
@@ -31,14 +38,16 @@ Route::prefix('auth')->middleware('auth:super_admin')->group(function () {
 });
 
 // Package management
-Route::middleware('auth:super_admin')->group(function () {
-    Route::apiResource('packages', PackageController::class);
-});
+// Route::middleware('auth:super_admin')->group(function () {
+//     Route::apiResource('packages', PackageController::class);
+// });
 
 Route::middleware('auth:super_admin')->group(function () {
-    Route::apiResource('packages', PackageController::class);
-
+    
     // Tenant management
+    Route::apiResource('packages', PackageController::class)->except(['index', 'show']);
+    Route::apiResource('subscriptions', SubscriptionController::class)->only(['index', 'show']);
+    Route::get('permissions', [PermissionController::class, 'index'])->name('sa.permissions.index');
     Route::apiResource('tenants', TenantController::class)->except(['destroy']);
     Route::post('tenants/{id}/suspend',  [TenantController::class, 'suspend']);
     Route::post('tenants/{id}/activate', [TenantController::class, 'activate']);

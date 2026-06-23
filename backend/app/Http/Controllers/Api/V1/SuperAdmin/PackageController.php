@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api\V1\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PackageRequest;
+use App\Http\Resources\PackageResource;
 use App\Models\Central\Package;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PackageController extends Controller
 {
@@ -24,24 +28,36 @@ class PackageController extends Controller
     /**
      * POST /api/v1/sa/packages
      */
-    public function store(Request $request): JsonResponse
+    public function store(PackageRequest $request)
     {
-        $validated = $request->validate([
-            'name'           => 'required|string|max:100',
-            'slug'           => 'required|string|unique:packages,slug|max:50',
-            'description'    => 'nullable|string',
-            'price_monthly'  => 'nullable|numeric|min:0',
-            'price_yearly'   => 'nullable|numeric|min:0',
-            'max_employees'  => 'required|integer|min:1',
-            'max_admins'     => 'required|integer|min:1',
-            'features'       => 'required|array',
-            'features.modules' => 'required|array',
-            'is_active'      => 'boolean',
-        ]);
+        // Log::info('package received', $request->all());
 
-        $package = Package::create($validated);
+        $validated = $request->validated();
 
-        return $this->created($package, 'Package created successfully');
+        $packages = [
+            [
+                'name' => $validated['name'],
+                'slug' => Str::slug($validated['name']),
+                'description' => $validated['description'] ?? null,
+                'price_monthly' => $validated['price_monthly'] ?? 0,
+                'price_yearly' => $validated['price_yearly'] ?? 0,
+                'modules' => $validated['modules'] ?? [],
+                'limits' => $validated['limits'] ?? [],
+                'integrations' => $validated['integrations'] ?? [],
+                'is_active' => $validated['is_active'] ?? true,
+            ]
+        ];
+
+        foreach ($packages as $package) {
+            // Log::info('Creating package', $package);
+            Package::create($package);
+        }
+
+        return (new PackageResource($package))
+            ->additional([
+                'success' => true,
+                'message' => 'Package created successfully.'
+            ]);
     }
 
     /**
@@ -70,15 +86,15 @@ class PackageController extends Controller
         }
 
         $validated = $request->validate([
-            'name'             => 'sometimes|string|max:100',
-            'description'      => 'nullable|string',
-            'price_monthly'    => 'nullable|numeric|min:0',
-            'price_yearly'     => 'nullable|numeric|min:0',
-            'max_employees'    => 'sometimes|integer|min:1',
-            'max_admins'       => 'sometimes|integer|min:1',
-            'features'         => 'sometimes|array',
-            'features.modules' => 'sometimes|array',
-            'is_active'        => 'boolean',
+            'name'           => 'required|string|max:100',
+            'slug'           => 'nullable|string|max:100|unique:packages,slug,' . $id,
+            'description'    => 'nullable|string',
+            'price_monthly'  => 'required|numeric|min:0',
+            'price_yearly'   => 'required|numeric|min:0',
+            'modules'        => 'nullable|array',
+            'limits'         => 'nullable|array',
+            'integrations'   => 'nullable|array',
+            'is_active'      => 'boolean',
         ]);
 
         $package->update($validated);
