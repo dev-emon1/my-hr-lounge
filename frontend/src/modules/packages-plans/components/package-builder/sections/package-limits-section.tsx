@@ -9,8 +9,12 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import type { PackageBuilderFormValues } from "../../../types/package-builder.types";
 
 function PackageLimitsSection() {
-  const { watch, setValue, register } =
-    useFormContext<PackageBuilderFormValues>();
+  const {
+    watch,
+    setValue,
+    register,
+    formState: { errors },
+  } = useFormContext<PackageBuilderFormValues>();
 
   const employeeLimit = watch("employeeLimit");
 
@@ -82,6 +86,11 @@ function PackageLimitsSection() {
         <Label>Storage Limit</Label>
 
         <Input placeholder="100 GB" {...register("storageLimit")} />
+        {errors.storageLimit && (
+          <p className="text-sm text-destructive">
+            {errors.storageLimit.message}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
 
     CREATE: "/sa/packages",
 
-    DETAILS: (id: string) => `/sa/packages/${id}`,
+    DETAILS: (packageCode: string) => `/sa/packages/${packageCode}`,
 
     UPDATE: (id: string) => `/sa/packages/${id}`,
 

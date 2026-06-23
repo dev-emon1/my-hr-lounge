@@ -11,7 +11,7 @@ export interface PackageBuilder {
 
   description?: string;
 
-  modules: string[];
+  modules: PackageModuleAccess[];
 
   monthlyPrice: number;
 
@@ -36,14 +36,6 @@ export interface PackageBuilder {
 
 export type PackageBuilderStatus = "Draft" | "Published";
 
-export interface PackageModuleAccess {
-  code: string;
-
-  name: string;
-
-  enabled: boolean;
-}
-
 export interface PackageFeatureAccess {
   code: string;
 
@@ -52,8 +44,19 @@ export interface PackageFeatureAccess {
   enabled: boolean;
 }
 
+export interface PackageModuleAccess {
+  code: string;
+
+  name: string;
+
+  enabled: boolean;
+
+  features: PackageFeatureAccess[];
+}
+
 export interface PackageBuilderFormValues {
   // BASIC INFO
+
   packageName: string;
 
   packageCode: string;
@@ -63,11 +66,13 @@ export interface PackageBuilderFormValues {
   status: PackageBuilderStatus;
 
   // PRICING
+
   monthlyPrice: number;
 
   yearlyPrice: number;
 
   // LIMITS
+
   employeeLimit: number | null;
 
   branchLimit: number | null;
@@ -75,12 +80,12 @@ export interface PackageBuilderFormValues {
   storageLimit: string;
 
   // TRIAL
+
   trialEnabled: boolean;
 
   trialDays: number;
 
-  // ACCESS CONTROL
-  modules: PackageModuleAccess[];
+  // MODULES
 
-  features: PackageFeatureAccess[];
+  modules: PackageModuleAccess[];
 }

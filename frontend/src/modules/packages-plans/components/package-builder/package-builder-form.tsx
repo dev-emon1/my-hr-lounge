@@ -1,15 +1,15 @@
+import { useEffect } from "react";
+
 import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { packageBuilderSchema } from "../../schemas/package-builder.schema";
 
-import type { PackageBuilderFormValues } from "../../types/package-builder.types";
+import { toast } from "sonner";
 
-import {
-  mockPackageFeatures,
-  mockPackageModules,
-} from "../../constants/mock-package-builder";
+import { mockPackageModules } from "../../constants/mock-package-builder";
 
 import PackageBasicInformationSection from "./sections/package-basic-information-section";
 import PackagePricingSection from "./sections/package-pricing-section";
@@ -18,22 +18,37 @@ import PackageModuleAccessSection from "./sections/package-module-access-section
 import PackageTrialSection from "./sections/package-trial-section";
 import PackageBuilderSummarySidebar from "./package-builder-summary-sidebar";
 
+import { transformPackagePayload } from "../../utils/package-builder-transformer";
+
+import type {
+  PackageBuilder,
+  PackageBuilderFormValues,
+} from "../../types/package-builder.types";
+import { PackagePayload } from "../../types/package-builder-api.types";
+
+import {
+  useCreatePackageMutation,
+  useUpdatePackageMutation,
+} from "../../api/package-builder-api";
+
 type Props = {
   mode: "create" | "edit";
-
-  packageCode?: string;
-
   defaultValues?: Partial<PackageBuilderFormValues>;
-
-  onSubmit?: (data: PackageBuilderFormValues) => void;
+  initialData?: PackageBuilder;
+  onSubmit?: (data: PackagePayload) => void;
 };
 
 function PackageBuilderForm({
   mode,
-  packageCode,
   defaultValues,
+  initialData,
   onSubmit,
 }: Props) {
+  const [createPackage, { isLoading: isCreating }] = useCreatePackageMutation();
+  const [updatePackage, { isLoading: isUpdating }] = useUpdatePackageMutation();
+
+  const navigate = useNavigate();
+
   const isCreate = mode === "create";
 
   const methods = useForm<PackageBuilderFormValues>({
@@ -41,39 +56,79 @@ function PackageBuilderForm({
 
     defaultValues: {
       packageName: "",
-
       packageCode: "",
-
       description: "",
-
       status: "Draft",
-
       monthlyPrice: 0,
-
       yearlyPrice: 0,
-
       employeeLimit: null,
-
       branchLimit: null,
-
       storageLimit: "",
-
       trialEnabled: false,
-
       trialDays: 0,
-
-      modules: mockPackageModules,
-
-      features: mockPackageFeatures,
-
+      modules: initialData?.modules ?? mockPackageModules,
       ...defaultValues,
     },
   });
 
-  const handleSubmit = (data: PackageBuilderFormValues) => {
-    onSubmit?.(data);
+  const { reset } = methods;
 
-    console.log(data);
+  useEffect(() => {
+    if (!initialData) return;
+
+    reset({
+      packageName: initialData.packageName,
+      packageCode: initialData.packageCode,
+      description: initialData.description ?? "",
+      monthlyPrice: initialData.monthlyPrice,
+      yearlyPrice: initialData.yearlyPrice,
+      employeeLimit: initialData.employeeLimit,
+      branchLimit: initialData.branchLimit,
+      storageLimit: initialData.storageLimit,
+      trialEnabled: initialData.trialEnabled ?? false,
+      trialDays: initialData.trialDays ?? 0,
+      status: initialData.status === "Archived" ? "Draft" : initialData.status,
+      modules: initialData.modules,
+    });
+  }, [initialData, reset]);
+
+  const submitPackage = async (status: "Draft" | "Published") => {
+    try {
+      const values = methods.getValues();
+
+      const payload = transformPackagePayload({
+        ...values,
+        status,
+      });
+
+      let response;
+
+      if (mode === "create") {
+        response = await createPackage(payload).unwrap();
+      } else {
+        response = await updatePackage({
+          packageCode: initialData?.packageCode ?? "",
+
+          payload,
+        }).unwrap();
+      }
+
+      toast.success(response.message);
+
+      navigate("/packages-plans/all-packages");
+    } catch (error: any) {
+      toast.error(error?.data?.message ?? "Something went wrong");
+
+      console.error(error);
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    await submitPackage("Draft");
+  };
+
+  const handlePublish = async () => {
+    await submitPackage("Published");
   };
 
   return (
@@ -83,7 +138,9 @@ function PackageBuilderForm({
 
         <div>
           <h1 className="text-4xl font-black tracking-tight">
-            {isCreate ? "Create Package" : "Edit Package"}
+            {isCreate
+              ? "Create Package"
+              : `Edit ${initialData?.packageName ?? "Package"}`}
           </h1>
 
           <p className="mt-2 text-muted-foreground">
@@ -109,13 +166,15 @@ function PackageBuilderForm({
             <PackageTrialSection />
           </div>
 
-          {/* RIGHT SIDEBAR */}
+          {/* RIGHT */}
 
           <div>
             <div className="sticky top-6">
               <PackageBuilderSummarySidebar
                 mode={mode}
-                packageCode={packageCode}
+                isLoading={isCreating || isUpdating}
+                onSaveDraft={methods.handleSubmit(handleSaveDraft)}
+                onPublish={methods.handleSubmit(handlePublish)}
               />
             </div>
           </div>

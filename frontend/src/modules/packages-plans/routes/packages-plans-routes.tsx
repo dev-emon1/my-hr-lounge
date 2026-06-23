@@ -3,6 +3,7 @@ import type { RouteObject } from "react-router-dom";
 import AllPackagesPage from "../pages/all-packages-page";
 import PackageDetailsPage from "../pages/package-details-page";
 import PackageBuilderPage from "../pages/package-builder-page";
+import AllTrialPlansPage from "../pages/all-trial-plans-page";
 
 // import PackageBuilderPage from "../pages/package-builder-page";
 // import FeatureMatrixPage from "../pages/feature-matrix-page";
@@ -31,6 +32,12 @@ export const packagesPlansRoutes: RouteObject[] = [
   },
 
   {
+    path: "packages-plans/package-builder/:packageCode",
+
+    element: <PackageBuilderPage />,
+  },
+
+  {
     path: "packages-plans/feature-matrix",
 
     //  element: <FeatureMatrixPage />,
@@ -52,6 +59,23 @@ export const packagesPlansRoutes: RouteObject[] = [
     path: "packages-plans/trial-plans",
 
     //  element: <TrialPlansPage />,
+  },
+
+  {
+    path: "packages/trials",
+    element: <AllTrialPlansPage />,
+  },
+  {
+    path: "trial-plans/create",
+    element: "<TrialPlanBuilderPage />",
+  },
+  {
+    path: "trial-plans/:trialCode",
+    element: "<TrialPlanDetailsPage />",
+  },
+  {
+    path: "trial-plans/:trialCode/edit",
+    element: "<TrialPlanBuilderPage />",
   },
 
   {

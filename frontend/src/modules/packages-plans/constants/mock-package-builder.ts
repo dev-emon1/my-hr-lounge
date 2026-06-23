@@ -1,6 +1,5 @@
-import type { PackageBuilder } from "../types/package-builder.types";
 import type {
-  PackageFeatureAccess,
+  PackageBuilder,
   PackageModuleAccess,
 } from "../types/package-builder.types";
 
@@ -16,7 +15,61 @@ export const mockPackageBuilders: PackageBuilder[] = [
 
     description: "Starter package for small organizations.",
 
-    modules: ["Core HR", "Attendance", "Leave"],
+    modules: [
+      {
+        code: "core-hr",
+
+        name: "Core HR",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "employee-directory",
+
+            name: "Employee Directory",
+
+            enabled: true,
+          },
+
+          {
+            code: "departments",
+
+            name: "Departments",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "attendance",
+
+        name: "Attendance",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "check-in-out",
+
+            name: "Check In / Out",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "payroll",
+
+        name: "Payroll",
+
+        enabled: false,
+
+        features: [],
+      },
+    ],
 
     monthlyPrice: 5000,
 
@@ -50,7 +103,61 @@ export const mockPackageBuilders: PackageBuilder[] = [
 
     description: "Growth package for expanding businesses.",
 
-    modules: ["Core HR", "Attendance", "Leave", "Payroll", "Recruitment"],
+    modules: [
+      {
+        code: "core-hr",
+
+        name: "Core HR",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "employee-directory",
+
+            name: "Employee Directory",
+
+            enabled: true,
+          },
+
+          {
+            code: "departments",
+
+            name: "Departments",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "attendance",
+
+        name: "Attendance",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "check-in-out",
+
+            name: "Check In / Out",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "payroll",
+
+        name: "Payroll",
+
+        enabled: false,
+
+        features: [],
+      },
+    ],
 
     monthlyPrice: 15000,
 
@@ -85,14 +192,59 @@ export const mockPackageBuilders: PackageBuilder[] = [
     description: "Enterprise package with full platform access.",
 
     modules: [
-      "Core HR",
-      "Attendance",
-      "Leave",
-      "Payroll",
-      "Recruitment",
-      "Performance",
-      "Assets",
-      "Analytics",
+      {
+        code: "core-hr",
+
+        name: "Core HR",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "employee-directory",
+
+            name: "Employee Directory",
+
+            enabled: true,
+          },
+
+          {
+            code: "departments",
+
+            name: "Departments",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "attendance",
+
+        name: "Attendance",
+
+        enabled: true,
+
+        features: [
+          {
+            code: "check-in-out",
+
+            name: "Check In / Out",
+
+            enabled: true,
+          },
+        ],
+      },
+
+      {
+        code: "payroll",
+
+        name: "Payroll",
+
+        enabled: false,
+
+        features: [],
+      },
     ],
 
     monthlyPrice: 40000,
@@ -120,81 +272,171 @@ export const mockPackageBuilders: PackageBuilder[] = [
 export const mockPackageModules: PackageModuleAccess[] = [
   {
     code: "core-hr",
+
     name: "Core HR",
+
     enabled: true,
+
+    features: [
+      {
+        code: "employee-directory",
+
+        name: "Employee Directory",
+
+        enabled: true,
+      },
+
+      {
+        code: "departments",
+
+        name: "Departments",
+
+        enabled: true,
+      },
+
+      {
+        code: "designations",
+
+        name: "Designations",
+
+        enabled: true,
+      },
+
+      {
+        code: "organization-chart",
+
+        name: "Organization Chart",
+
+        enabled: false,
+      },
+    ],
   },
 
   {
     code: "attendance",
+
     name: "Attendance",
+
     enabled: true,
+
+    features: [
+      {
+        code: "check-in-out",
+
+        name: "Check In / Out",
+
+        enabled: true,
+      },
+
+      {
+        code: "shift-management",
+
+        name: "Shift Management",
+
+        enabled: true,
+      },
+
+      {
+        code: "attendance-report",
+
+        name: "Attendance Reports",
+
+        enabled: false,
+      },
+    ],
   },
 
   {
     code: "leave",
+
     name: "Leave Management",
+
     enabled: true,
+
+    features: [
+      {
+        code: "leave-request",
+
+        name: "Leave Request",
+
+        enabled: true,
+      },
+
+      {
+        code: "leave-balance",
+
+        name: "Leave Balance",
+
+        enabled: true,
+      },
+
+      {
+        code: "leave-approval",
+
+        name: "Leave Approval",
+
+        enabled: false,
+      },
+    ],
   },
 
   {
     code: "payroll",
+
     name: "Payroll",
+
     enabled: false,
+
+    features: [
+      {
+        code: "salary-processing",
+
+        name: "Salary Processing",
+
+        enabled: false,
+      },
+
+      {
+        code: "payslip-generation",
+
+        name: "Payslip Generation",
+
+        enabled: false,
+      },
+
+      {
+        code: "tax-management",
+
+        name: "Tax Management",
+
+        enabled: false,
+      },
+    ],
   },
 
   {
     code: "recruitment",
+
     name: "Recruitment",
+
     enabled: false,
-  },
 
-  {
-    code: "performance",
-    name: "Performance",
-    enabled: false,
-  },
+    features: [
+      {
+        code: "job-posting",
 
-  {
-    code: "assets",
-    name: "Assets",
-    enabled: false,
-  },
+        name: "Job Posting",
 
-  {
-    code: "analytics",
-    name: "Reports & Analytics",
-    enabled: false,
-  },
-];
+        enabled: false,
+      },
 
-export const mockPackageFeatures: PackageFeatureAccess[] = [
-  {
-    code: "employee-self-service",
-    name: "Employee Self Service",
-    enabled: true,
-  },
+      {
+        code: "candidate-pipeline",
 
-  {
-    code: "mobile-app",
-    name: "Mobile Application",
-    enabled: true,
-  },
+        name: "Candidate Pipeline",
 
-  {
-    code: "workflow-approval",
-    name: "Workflow Approval",
-    enabled: false,
-  },
-
-  {
-    code: "advanced-reports",
-    name: "Advanced Reports",
-    enabled: false,
-  },
-
-  {
-    code: "api-access",
-    name: "API Access",
-    enabled: false,
+        enabled: false,
+      },
+    ],
   },
 ];

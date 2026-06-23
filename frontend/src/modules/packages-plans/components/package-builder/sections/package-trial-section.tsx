@@ -9,8 +9,12 @@ import { Label } from "@/shared/ui/label";
 import type { PackageBuilderFormValues } from "../../../types/package-builder.types";
 
 function PackageTrialSection() {
-  const { watch, setValue, register } =
-    useFormContext<PackageBuilderFormValues>();
+  const {
+    watch,
+    setValue,
+    register,
+    formState: { errors },
+  } = useFormContext<PackageBuilderFormValues>();
 
   const trialEnabled = watch("trialEnabled");
 
@@ -43,6 +47,10 @@ function PackageTrialSection() {
             valueAsNumber: true,
           })}
         />
+
+        {errors.trialDays && (
+          <p className="text-sm text-destructive">{errors.trialDays.message}</p>
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,52 @@
+import { useEffect, useState } from "react";
+
 import { useFormContext } from "react-hook-form";
 
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Textarea } from "@/shared/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/select";
 
 import type { PackageBuilderFormValues } from "../../../types/package-builder.types";
 
 function PackageBasicInformationSection() {
   const {
     register,
+    watch,
+    setValue,
     formState: { errors },
   } = useFormContext<PackageBuilderFormValues>();
 
+  const status = watch("status");
+
+  const packageName = watch("packageName");
+
+  const packageCode = watch("packageCode");
+
+  const [isCodeManuallyEdited, setIsCodeManuallyEdited] = useState(false);
+
+  useEffect(() => {
+    if (isCodeManuallyEdited) return;
+
+    if (!packageName) {
+      setValue("packageCode", "");
+
+      return;
+    }
+
+    const generatedCode = `PKG-${packageName}`
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    setValue("packageCode", generatedCode);
+  }, [packageName, isCodeManuallyEdited, setValue]);
   return (
     <div className="rounded-[32px] border border-border bg-card p-8">
       <div>
@@ -38,7 +73,15 @@ function PackageBasicInformationSection() {
         <div className="space-y-2">
           <Label>Package Code</Label>
 
-          <Input {...register("packageCode")} placeholder="PKG-GROWTH" />
+          <Input
+            {...register("packageCode")}
+            placeholder="PKG-GROWTH"
+            onChange={(e) => {
+              setIsCodeManuallyEdited(true);
+
+              setValue("packageCode", e.target.value);
+            }}
+          />
 
           {errors.packageCode && (
             <p className="text-sm text-destructive">
@@ -46,6 +89,27 @@ function PackageBasicInformationSection() {
             </p>
           )}
         </div>
+      </div>
+
+      <div className="mt-6 space-y-2">
+        <Label>Status</Label>
+
+        <Select
+          value={status}
+          onValueChange={(value) =>
+            setValue("status", value as "Draft" | "Published")
+          }
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="Draft">Draft</SelectItem>
+
+            <SelectItem value="Published">Published</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="mt-6 space-y-2">

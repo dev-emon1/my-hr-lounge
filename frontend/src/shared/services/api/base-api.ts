@@ -1,12 +1,14 @@
 import {
   BaseQueryFn,
   FetchArgs,
-  fetchBaseQuery,
-  createApi,
   FetchBaseQueryError,
+  createApi,
+  fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
 import { tokenStorage } from "@/modules/auth/utils/token-storage";
+
+import { API_ENDPOINTS } from "./constants/api-endpoints";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: "http://127.0.0.1:8000/api/v1",
@@ -35,7 +37,7 @@ const baseQueryWithRefresh: BaseQueryFn<
     const refreshToken = tokenStorage.getRefreshToken();
 
     if (!refreshToken) {
-      tokenStorage.clear();
+      tokenStorage.clearTokens();
 
       window.location.href = "/login";
 
@@ -44,7 +46,7 @@ const baseQueryWithRefresh: BaseQueryFn<
 
     const refreshResult = await rawBaseQuery(
       {
-        url: "/sa/auth/refresh",
+        url: API_ENDPOINTS.AUTH.REFRESH,
 
         method: "POST",
 
@@ -67,15 +69,13 @@ const baseQueryWithRefresh: BaseQueryFn<
         };
       };
 
-      tokenStorage.setTokens({
-        accessToken: data.data.access_token,
+      tokenStorage.setAccessToken(data.data.access_token);
 
-        refreshToken: data.data.refresh_token,
-      });
+      tokenStorage.setRefreshToken(data.data.refresh_token);
 
       result = await rawBaseQuery(args, api, extraOptions);
     } else {
-      tokenStorage.clear();
+      tokenStorage.clearTokens();
 
       window.location.href = "/login";
     }
