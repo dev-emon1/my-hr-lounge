@@ -1,5 +1,7 @@
 import type { TrialPlan } from "../types/trial-plan.types";
 
+import { mockTrialModules } from "./mock-trial-modules";
+
 export const mockTrialPlans: TrialPlan[] = [
   {
     id: "1",
@@ -14,47 +16,7 @@ export const mockTrialPlans: TrialPlan[] = [
 
     employeeLimit: 25,
 
-    modules: [
-      {
-        code: "core-hr",
-        name: "Core HR",
-        enabled: true,
-
-        features: [
-          {
-            code: "employee-management",
-            name: "Employee Management",
-            enabled: true,
-          },
-
-          {
-            code: "organization-setup",
-            name: "Organization Setup",
-            enabled: true,
-          },
-        ],
-      },
-
-      {
-        code: "attendance",
-        name: "Attendance",
-        enabled: true,
-
-        features: [
-          {
-            code: "attendance-tracking",
-            name: "Attendance Tracking",
-            enabled: true,
-          },
-
-          {
-            code: "shift-management",
-            name: "Shift Management",
-            enabled: true,
-          },
-        ],
-      },
-    ],
+    modules: mockTrialModules,
 
     status: "Active",
 
@@ -75,47 +37,8 @@ export const mockTrialPlans: TrialPlan[] = [
     durationDays: 30,
 
     employeeLimit: 100,
-    modules: [
-      {
-        code: "core-hr",
-        name: "Core HR",
-        enabled: true,
 
-        features: [
-          {
-            code: "employee-management",
-            name: "Employee Management",
-            enabled: true,
-          },
-
-          {
-            code: "organization-setup",
-            name: "Organization Setup",
-            enabled: true,
-          },
-        ],
-      },
-
-      {
-        code: "attendance",
-        name: "Attendance",
-        enabled: true,
-
-        features: [
-          {
-            code: "attendance-tracking",
-            name: "Attendance Tracking",
-            enabled: true,
-          },
-
-          {
-            code: "shift-management",
-            name: "Shift Management",
-            enabled: true,
-          },
-        ],
-      },
-    ],
+    modules: mockTrialModules,
 
     status: "Active",
 
