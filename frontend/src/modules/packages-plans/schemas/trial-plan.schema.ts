@@ -9,15 +9,27 @@ export const trialPlanSchema = z.object({
 
   status: z.enum(["Draft", "Published"]),
 
-  durationDays: z.number().min(1),
+  durationDays: z.number().min(1, "Duration is required"),
 
   employeeLimit: z.number().nullable(),
 
   modules: z.array(
     z.object({
       code: z.string(),
+
       name: z.string(),
+
       enabled: z.boolean(),
+
+      features: z.array(
+        z.object({
+          code: z.string(),
+
+          name: z.string(),
+
+          enabled: z.boolean(),
+        }),
+      ),
     }),
   ),
 });
