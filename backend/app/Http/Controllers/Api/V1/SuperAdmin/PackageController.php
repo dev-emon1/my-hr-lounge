@@ -21,43 +21,38 @@ class PackageController extends Controller
      */
     public function index(): JsonResponse
     {
-        $packages = Package::orderBy('created_at', 'desc')->get();
-        return $this->success($packages);
+        $packages = Package::latest()->get();
+
+        return $this->success(
+            PackageResource::collection($packages)
+        );
     }
 
     /**
      * POST /api/v1/sa/packages
      */
-    public function store(PackageRequest $request)
+    public function store(PackageRequest $request): JsonResponse
     {
-        // Log::info('package received', $request->all());
-
         $validated = $request->validated();
 
-        $packages = [
-            [
-                'name' => $validated['name'],
-                'slug' => Str::slug($validated['name']),
-                'description' => $validated['description'] ?? null,
-                'price_monthly' => $validated['price_monthly'] ?? 0,
-                'price_yearly' => $validated['price_yearly'] ?? 0,
-                'modules' => $validated['modules'] ?? [],
-                'limits' => $validated['limits'] ?? [],
-                'integrations' => $validated['integrations'] ?? [],
-                'is_active' => $validated['is_active'] ?? true,
-            ]
-        ];
+        $package = Package::create([
+            'name'           => $validated['name'],
+            'slug'           => Str::slug($validated['name']),
+            'description'    => $validated['description'] ?? null,
+            'price_monthly'  => $validated['price_monthly'] ?? 0,
+            'price_yearly'   => $validated['price_yearly'] ?? 0,
+            'modules'        => $validated['modules'] ?? [],
+            'limits'         => $validated['limits'] ?? [],
+            'integrations'   => $validated['integrations'] ?? [],
+            'is_trial'       => $validated['is_trial'] ?? false,
+            'trial_period'   => $validated['trial_period'] ?? null,
+            'is_active'      => $validated['is_active'] ?? true,
+        ]);
 
-        foreach ($packages as $package) {
-            // Log::info('Creating package', $package);
-            Package::create($package);
-        }
-
-        return (new PackageResource($package))
-            ->additional([
-                'success' => true,
-                'message' => 'Package created successfully.'
-            ]);
+        return $this->created(
+            new PackageResource($package),
+            'Package created successfully.'
+        );
     }
 
     /**
@@ -71,35 +66,27 @@ class PackageController extends Controller
             return $this->notFound('Package not found');
         }
 
-        return $this->success($package);
+        return $this->success(
+            new PackageResource($package)
+        );
     }
 
-    /**
+    /** 
      * PUT /api/v1/sa/packages/{id}
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(PackageRequest $request, Package $package): JsonResponse
     {
-        $package = Package::find($id);
+        $validated = $request->validated();
 
-        if (!$package) {
-            return $this->notFound('Package not found');
-        }
-
-        $validated = $request->validate([
-            'name'           => 'required|string|max:100',
-            'slug'           => 'nullable|string|max:100|unique:packages,slug,' . $id,
-            'description'    => 'nullable|string',
-            'price_monthly'  => 'required|numeric|min:0',
-            'price_yearly'   => 'required|numeric|min:0',
-            'modules'        => 'nullable|array',
-            'limits'         => 'nullable|array',
-            'integrations'   => 'nullable|array',
-            'is_active'      => 'boolean',
+        $package->update([
+            ...$validated,
+            'slug' => $validated['slug'] ?? Str::slug($validated['name']),
         ]);
 
-        $package->update($validated);
-
-        return $this->success($package, 'Package updated successfully');
+        return $this->success(
+            new PackageResource($package->fresh()),
+            'Package updated successfully'
+        );
     }
 
     /**

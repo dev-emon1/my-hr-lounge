@@ -3,6 +3,8 @@
 namespace App\Models\Central;
 
 use App\Enums\TenantStatusEnum;
+use App\Models\Central\TenantFile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -83,5 +85,30 @@ class Tenant extends SpatieTenant
         return $this->hasOne(Subscription::class)
             ->where('status', 'active')
             ->latestOfMany();
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(TenantFile::class);
+    }
+
+    public function owner()
+    {
+        return $this->hasOne(User::class)->where('is_owner', true);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['trial', 'active']);
+    }
+
+    public function scopeTrial($query)
+    {
+        return $query->where('status', 'trial');
     }
 }

@@ -30,9 +30,15 @@ class Subscription extends Model
         'amount'               => 'decimal:2',
     ];
 
-    public function isActive(): bool
+    // public function isActive(): bool
+    // {
+    //     return $this->status === 'active';
+    // }
+
+    public function scopeActive($query)
     {
-        return $this->status === 'active';
+        return $query->where('status', 'active')
+            ->where('current_period_end', '>', now());
     }
 
     // ── Relationships ──────────────────────────────────────────

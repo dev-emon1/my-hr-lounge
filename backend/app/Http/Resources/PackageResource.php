@@ -27,6 +27,10 @@ class PackageResource extends JsonResource
             'limits' => $this->limits,
             'integrations' => $this->integrations,
             'is_active' => $this->is_active,
+            'is_trial' => $this->is_trial,
+            'trial_period' => $this->trial_period,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

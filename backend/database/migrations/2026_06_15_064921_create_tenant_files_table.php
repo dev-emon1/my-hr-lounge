@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    protected $connection = 'pgsql';
+
     /**
      * Run the migrations.
      */
@@ -13,13 +16,15 @@ return new class extends Migration
     {
         Schema::create('tenant_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('tenant_id')->constrained('tenants')->cascadeOnDelete();
+            $table->foreignUuid('tenant_id')
+                  ->constrained('tenants')
+                  ->cascadeOnDelete();
             $table->string('file_name');
             $table->string('file_path');
             $table->string('file_type')->nullable();
             $table->unsignedBigInteger('file_size')->nullable();
             $table->boolean('is_enabled')->default(true);
-            $table->string('uploaded_by')->nullable();
+            $table->string('uploaded_by')->nullable(); // user id or name
             $table->timestamp('uploaded_at')->nullable();
             $table->timestamps();
         });

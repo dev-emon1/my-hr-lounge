@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    
+    protected $connection = 'pgsql';
+
     /**
      * Run the migrations.
      */
@@ -13,25 +16,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-
             $table->foreignUuid('tenant_id')
-                ->constrained()
+                ->constrained('tenants')
                 ->cascadeOnDelete();
 
             $table->string('name');
-
             $table->string('email');
-
             $table->string('phone')->nullable();
-
             $table->string('password');
-
             $table->boolean('is_owner')->default(false);
-
             $table->boolean('is_active')->default(true);
-
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
-
             $table->timestamps();
 
             $table->unique(['tenant_id', 'email']);
