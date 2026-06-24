@@ -9,7 +9,7 @@ class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        SuperAdmin::create([
+        SuperAdmin::updateOrCreate([
             'name'     => 'Super Admin',
             'email'    => 'admin@myhrlounge.com',
             'password' => bcrypt('Admin@12345'),

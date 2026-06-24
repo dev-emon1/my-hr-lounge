@@ -22,6 +22,8 @@ return new class extends Migration
             $table->jsonb('modules')->default('{}');
             $table->jsonb('limits')->default('{}');
             $table->jsonb('integrations')->default('{}');
+            $table->boolean('is_trial')->default(false);
+            $table->string('trial_period')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

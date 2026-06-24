@@ -31,6 +31,8 @@ class PackageRequest extends FormRequest
             'limits'         => 'nullable|array',
             'integrations'   => 'nullable|array',
             'is_active'      => 'boolean',
+            'is_trial'       => 'boolean',
+            'trial_period'   => 'nullable|string|max:50',
         ];
     }
 
@@ -51,6 +53,9 @@ class PackageRequest extends FormRequest
             'limits.array' => 'The limits field must be an array.',
             'integrations.array' => 'The integrations field must be an array.',
             'is_active.boolean' => 'The is_active field must be true or false.',
+            'is_trial.boolean' => 'The is_trial field must be true or false.',
+            'trial_period.string' => 'The trial period must be a string.',
+            'trial_period.max' => 'The trial period may not be greater than 50 characters.',
         ];
     }   
 }
