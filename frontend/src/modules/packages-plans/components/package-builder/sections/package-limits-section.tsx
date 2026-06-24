@@ -1,10 +1,8 @@
 import { useFormContext } from "react-hook-form";
 
-import { Input } from "@/shared/ui/input";
-
-import { Label } from "@/shared/ui/label";
-
 import { Checkbox } from "@/shared/ui/checkbox";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 
 import type { PackageBuilderFormValues } from "../../../types/package-builder.types";
 
@@ -16,13 +14,11 @@ function PackageLimitsSection() {
     formState: { errors },
   } = useFormContext<PackageBuilderFormValues>();
 
-  const employeeLimit = watch("employeeLimit");
+  const limits = watch("limits");
 
-  const branchLimit = watch("branchLimit");
+  const unlimitedEmployees = limits.employees === null;
 
-  const unlimitedEmployees = employeeLimit === null;
-
-  const unlimitedBranches = branchLimit === null;
+  const unlimitedBranches = limits.branches === null;
 
   return (
     <div className="rounded-[32px] border border-border bg-card p-8">
@@ -35,13 +31,15 @@ function PackageLimitsSection() {
       </div>
 
       <div className="mt-8 grid gap-8 md:grid-cols-2">
+        {/* Employees */}
+
         <div className="space-y-4">
           <Label>Employee Limit</Label>
 
           <Input
             type="number"
             disabled={unlimitedEmployees}
-            {...register("employeeLimit", {
+            {...register("limits.employees", {
               valueAsNumber: true,
             })}
           />
@@ -50,7 +48,7 @@ function PackageLimitsSection() {
             <Checkbox
               checked={unlimitedEmployees}
               onCheckedChange={(checked) => {
-                setValue("employeeLimit", checked ? null : 100);
+                setValue("limits.employees", checked ? null : 100);
               }}
             />
 
@@ -58,13 +56,15 @@ function PackageLimitsSection() {
           </div>
         </div>
 
+        {/* Branches */}
+
         <div className="space-y-4">
           <Label>Branch Limit</Label>
 
           <Input
             type="number"
             disabled={unlimitedBranches}
-            {...register("branchLimit", {
+            {...register("limits.branches", {
               valueAsNumber: true,
             })}
           />
@@ -73,7 +73,7 @@ function PackageLimitsSection() {
             <Checkbox
               checked={unlimitedBranches}
               onCheckedChange={(checked) => {
-                setValue("branchLimit", checked ? null : 5);
+                setValue("limits.branches", checked ? null : 5);
               }}
             />
 
@@ -82,15 +82,58 @@ function PackageLimitsSection() {
         </div>
       </div>
 
-      <div className="mt-8 space-y-2">
-        <Label>Storage Limit</Label>
+      {/* Additional Limits */}
 
-        <Input placeholder="100 GB" {...register("storageLimit")} />
-        {errors.storageLimit && (
-          <p className="text-sm text-destructive">
-            {errors.storageLimit.message}
-          </p>
-        )}
+      <div className="mt-8 grid gap-8 md:grid-cols-2">
+        <div className="space-y-2">
+          <Label>Admin Limit</Label>
+
+          <Input
+            type="number"
+            {...register("limits.admins", {
+              valueAsNumber: true,
+            })}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Department Limit</Label>
+
+          <Input
+            type="number"
+            {...register("limits.departmentLimit", {
+              valueAsNumber: true,
+            })}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Storage (GB)</Label>
+
+          <Input
+            type="number"
+            {...register("limits.storageGb", {
+              valueAsNumber: true,
+            })}
+          />
+
+          {errors.limits?.storageGb && (
+            <p className="text-sm text-destructive">
+              {errors.limits.storageGb.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label>Device Limit</Label>
+
+          <Input
+            type="number"
+            {...register("limits.deviceLimit", {
+              valueAsNumber: true,
+            })}
+          />
+        </div>
       </div>
     </div>
   );

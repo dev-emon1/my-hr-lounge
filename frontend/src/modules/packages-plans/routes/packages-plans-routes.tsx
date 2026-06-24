@@ -67,7 +67,19 @@ export const packagesPlansRoutes: RouteObject[] = [
   },
   {
     path: "trial-plans/create",
-    element: "<TrialPlanBuilderPage />",
+
+    // element: <CreateTrialPlanPage />,
+  },
+  {
+    path: "trial-plans/:trialCode/edit",
+
+    // element: <EditTrialPlanPage />,
+  },
+
+  {
+    path: "trial-plans/:trialCode",
+
+    // element: <TrialPlanDetailsPage />,
   },
   {
     path: "trial-plans/:trialCode",

@@ -8,35 +8,33 @@ export type PackageResponse = {
   };
 };
 
-export type PackagePayload = {
-  packageName: string;
-  packageCode: string;
+export interface PackagePayload {
+  name: string;
+  slug: string;
   description: string;
-  status: "Draft" | "Published";
+  price_monthly: number;
+  price_yearly: number;
 
-  pricing: {
-    monthlyPrice: number;
-    yearlyPrice: number;
-  };
+  modules: Record<string, boolean>;
 
   limits: {
-    employeeLimit: number | null;
-    branchLimit: number | null;
-    storageLimit: string;
+    employees: number | null;
+    admins: number | null;
+    department_limit: number | null;
+    branches: number | null;
+    storage_gb: number | null;
+    device_limit: number | null;
   };
 
-  trial: {
-    enabled: boolean;
-    trialDays: number;
+  integrations: {
+    zkteco: boolean;
+    api_access: boolean;
+    whatsapp: boolean;
   };
 
-  modules: {
-    code: string;
-    enabled: boolean;
+  trial_enabled: boolean;
 
-    features: {
-      code: string;
-      enabled: boolean;
-    }[];
-  }[];
-};
+  trial_duration_days: number;
+
+  is_active: boolean;
+}
