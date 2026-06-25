@@ -58,18 +58,15 @@ class PackageController extends Controller
     /**
      * GET /api/v1/sa/packages/{id}
      */
-    public function show(string $id): JsonResponse
-    {
-        $package = Package::find($id);
-
-        if (!$package) {
-            return $this->notFound('Package not found');
-        }
-
-        return $this->success(
-            new PackageResource($package)
-        );
-    }
+    /**
+ * GET /api/v1/sa/packages/{package}
+ */
+public function show(Package $package): JsonResponse
+{
+    return $this->success(
+        new PackageResource($package)
+    );
+}
 
     /** 
      * PUT /api/v1/sa/packages/{id}

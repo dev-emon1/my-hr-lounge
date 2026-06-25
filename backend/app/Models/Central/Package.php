@@ -31,13 +31,24 @@ class Package extends Model
     ];
 
     protected $casts = [
-        'modules'      => 'array',
-        'limits'       => 'array',
-        'integrations' => 'array',
-        'is_active'     => 'boolean',
-        'price_monthly' => 'decimal:2',
-        'price_yearly'  => 'decimal:2',
+        'modules'        => 'array',
+        'limits'         => 'array',
+        'integrations'   => 'array',
+        'is_active'      => 'boolean',
+        'price_monthly'  => 'decimal:2',
+        'price_yearly'   => 'decimal:2',
     ];
+
+    /**
+     * Route Model Binding
+     *
+     * /packages/starter
+     * starter = slug
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     public function getModules(): array
     {
@@ -49,13 +60,15 @@ class Package extends Model
         return in_array($moduleKey, $this->getModules());
     }
 
-    // ── Relationships ──────────────────────────────────────────
+    // Relationships
+
     public function tenants(): HasMany
     {
         return $this->hasMany(Tenant::class);
     }
 
-    // ── Scopes ────────────────────────────────────────────────
+    // Scopes
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
