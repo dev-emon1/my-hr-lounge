@@ -40,7 +40,7 @@ function PackagesTable({ packages, onClone, onArchive }: Props) {
 
             <TableHead>Yearly</TableHead>
 
-            <TableHead>Employee Limit</TableHead>
+            {/* <TableHead>Employee Limit</TableHead> */}
 
             <TableHead>Clients</TableHead>
 
@@ -70,7 +70,7 @@ function PackagesTable({ packages, onClone, onArchive }: Props) {
                   ৳ {Number(pkg.price_yearly).toLocaleString()}
                 </TableCell>
 
-                <TableCell>{pkg.limits.employees ?? "Unlimited"}</TableCell>
+                {/* <TableCell>{pkg.limits.employees ?? "Unlimited"}</TableCell> */}
 
                 <TableCell>-</TableCell>
 

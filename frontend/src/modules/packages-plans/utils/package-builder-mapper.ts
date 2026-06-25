@@ -33,7 +33,6 @@ export function mapPackageToBuilder(pkg: Package): PackageBuilder {
     },
 
     trialEnabled: pkg.is_trial ?? false,
-
     trialDays: pkg.trial_period ?? 14,
 
     status: pkg.is_active ? "Published" : "Draft",
@@ -41,7 +40,6 @@ export function mapPackageToBuilder(pkg: Package): PackageBuilder {
     modules: [],
 
     createdAt: pkg.created_at,
-
     updatedAt: pkg.updated_at,
   };
 }

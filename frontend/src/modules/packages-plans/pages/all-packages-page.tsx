@@ -24,6 +24,7 @@ function AllPackagesPage() {
 
   const { data, isLoading, isError } = useGetPackagesQuery();
   const packages = data?.data ?? [];
+  console.log(data);
 
   const filteredPackages = packages.filter((pkg) => {
     const matchesSearch =
