@@ -4,7 +4,7 @@ import PackagesStats from "../components/all-packages/packages-stats";
 import PackagesToolbar from "../components/all-packages/packages-toolbar";
 import PackagesTable from "../components/all-packages/packages-table";
 
-import { mockPackages } from "../constants/mock-packages";
+import { useGetPackagesQuery } from "../api/package-builder-api";
 
 import type { Package } from "../types/package.types";
 import ClonePackageDialog from "../components/all-packages/dialogs/clone-package-dialog";
@@ -15,6 +15,37 @@ function AllPackagesPage() {
 
   const [archiveOpen, setArchiveOpen] = useState(false);
   const [cloneOpen, setCloneOpen] = useState(false);
+
+  const [search, setSearch] = useState("");
+
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const [trialFilter, setTrialFilter] = useState("all");
+
+  const { data, isLoading, isError } = useGetPackagesQuery();
+  const packages = data?.data ?? [];
+
+  const filteredPackages = packages.filter((pkg) => {
+    const matchesSearch =
+      pkg.name.toLowerCase().includes(search.toLowerCase()) ||
+      pkg.slug.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all"
+        ? true
+        : statusFilter === "active"
+          ? pkg.is_active
+          : !pkg.is_active;
+
+    const matchesTrial =
+      trialFilter === "all"
+        ? true
+        : trialFilter === "available"
+          ? pkg.is_trial
+          : !pkg.is_trial;
+
+    return matchesSearch && matchesStatus && matchesTrial;
+  });
 
   return (
     <>
@@ -29,7 +60,7 @@ function AllPackagesPage() {
         </div>
 
         {/* STATS */}
-        <PackagesStats />
+        <PackagesStats packages={packages} />
 
         {/* DIRECTORY */}
         <div className="rounded-[32px] border border-border bg-card/60 p-6 shadow-2xl backdrop-blur-xl lg:p-8">
@@ -43,21 +74,40 @@ function AllPackagesPage() {
             </p>
           </div>
 
-          <PackagesToolbar />
+          <PackagesToolbar
+            search={search}
+            onSearchChange={setSearch}
+            statusFilter={statusFilter}
+            onStatusChange={setStatusFilter}
+            trialFilter={trialFilter}
+            onTrialChange={setTrialFilter}
+          />
 
-          <div className="mt-8">
-            <PackagesTable
-              packages={mockPackages}
-              onClone={(pkg) => {
-                setSelectedPackage(pkg);
-                setCloneOpen(true);
-              }}
-              onArchive={(pkg) => {
-                setSelectedPackage(pkg);
-                setArchiveOpen(true);
-              }}
-            />
-          </div>
+          {isError && (
+            <div className="rounded-[32px] border border-border p-8">
+              Failed to load packages.
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="rounded-[32px] border border-border p-8">
+              Loading packages...
+            </div>
+          ) : (
+            <div className="mt-8">
+              <PackagesTable
+                packages={filteredPackages}
+                onClone={(pkg) => {
+                  setSelectedPackage(pkg);
+                  setCloneOpen(true);
+                }}
+                onArchive={(pkg) => {
+                  setSelectedPackage(pkg);
+                  setArchiveOpen(true);
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
 

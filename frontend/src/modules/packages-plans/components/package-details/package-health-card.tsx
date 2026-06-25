@@ -12,25 +12,19 @@ function PackageHealthCard({ pkg }: Props) {
       <div className="mt-6 space-y-4">
         <HealthRow
           label="Package Status"
-          value={pkg.status}
-          color={
-            pkg.status === "Active"
-              ? "text-emerald-600"
-              : pkg.status === "Draft"
-                ? "text-amber-600"
-                : "text-slate-600"
-          }
+          value={pkg.is_active ? "Active" : "Inactive"}
+          color={pkg.is_active ? "text-emerald-600" : "text-amber-600"}
         />
 
         <HealthRow
-          label="Trial Available"
-          value={pkg.trialAvailable ? "Enabled" : "Disabled"}
-          color={pkg.trialAvailable ? "text-blue-600" : "text-slate-600"}
+          label="Trial"
+          value={pkg.is_trial ? "Enabled" : "Disabled"}
+          color={pkg.is_trial ? "text-blue-600" : "text-slate-600"}
         />
 
         <HealthRow
-          label="Active Clients"
-          value={String(pkg.activeClients)}
+          label="Last Update"
+          value={new Date(pkg.updated_at).toLocaleDateString()}
           color="text-primary"
         />
       </div>

@@ -2,30 +2,32 @@ export type PackageStatus = "Active" | "Draft" | "Archived";
 
 export interface Package {
   id: string;
-
-  packageCode: string;
-
-  packageName: string;
-
+  name: string;
+  slug: string;
   description: string;
+  price_monthly: string;
+  price_yearly: string;
+  modules: Record<string, boolean>;
 
-  monthlyPrice: number;
+  limits: {
+    employees: number | null;
+    admins: number | null;
+    department_limit: number | null;
+    branches: number | null;
+    storage_gb: number | null;
+    device_limit: number | null;
+  };
 
-  yearlyPrice: number;
+  integrations: {
+    zkteco: boolean;
+    api_access: boolean;
+    whatsapp: boolean;
+  };
 
-  employeeLimit: number | "Unlimited";
+  is_active: boolean;
+  is_trial: boolean | null;
+  trial_period: number | null;
 
-  branchLimit: number | "Unlimited";
-
-  storageLimit: string;
-
-  activeClients: number;
-
-  status: PackageStatus;
-
-  trialAvailable: boolean;
-
-  createdAt: string;
-
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }

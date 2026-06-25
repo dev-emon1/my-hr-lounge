@@ -22,7 +22,7 @@ type Props = {
 function PackagesRowActions({ pkg, onClone, onArchive }: Props) {
   const navigate = useNavigate();
 
-  const isArchived = pkg.status === "Archived";
+  const isArchived = !pkg.is_active;
 
   return (
     <DropdownMenu>
@@ -35,7 +35,11 @@ function PackagesRowActions({ pkg, onClone, onArchive }: Props) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() =>
-            navigate(`/packages-plans/packages/${pkg.packageCode}`)
+            navigate(`/packages-plans/packages/${pkg.slug}`, {
+              state: {
+                package: pkg,
+              },
+            })
           }
         >
           <Eye size={16} />
@@ -46,7 +50,7 @@ function PackagesRowActions({ pkg, onClone, onArchive }: Props) {
           <>
             <DropdownMenuItem
               onClick={() =>
-                navigate(`/packages-plans/package-builder/${pkg.packageCode}`)
+                navigate(`/packages-plans/package-builder/${pkg.slug}`)
               }
             >
               <Pencil size={16} />
