@@ -11,22 +11,45 @@ return new class extends Migration
 
     public function up(): void
     {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS pgcrypto');
+        DB::statement('CREATE EXTENSION IF NOT EXISTS pg_trgm');
         // ── Packages ──────────────────────────────────────────
         Schema::create('packages', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+
             $table->string('name');
             $table->string('slug')->unique();
+
             $table->text('description')->nullable();
+
             $table->decimal('price_monthly', 10, 2)->nullable();
             $table->decimal('price_yearly', 10, 2)->nullable();
+
             $table->jsonb('modules')->default('{}');
             $table->jsonb('limits')->default('{}');
             $table->jsonb('integrations')->default('{}');
+
             $table->boolean('is_trial')->default(false);
             $table->string('trial_period')->nullable();
-            $table->boolean('is_active')->default(true);
+
+            $table->string('status')->default('active');
+
             $table->timestamps();
         });
+
+        // Table create হওয়ার পরে
+
+        DB::statement("
+                CREATE INDEX packages_name_gin
+                ON packages
+                USING gin (name gin_trgm_ops)
+            ");
+
+        DB::statement("
+                CREATE INDEX packages_slug_gin
+                ON packages
+                USING gin (slug gin_trgm_ops)
+            ");
 
         // ── Tenants ───────────────────────────────────────────
         Schema::create('tenants', function (Blueprint $table) {
@@ -41,7 +64,7 @@ return new class extends Migration
             $table->integer('total_employees')->default(0);
             $table->integer('employee_count')->default(0);
             // $table->string('database')->unique();
-            $table->enum('status', ['pending','trial', 'active', 'suspended', 'cancelled', 'expired'])->default('trial');
+            $table->enum('status', ['pending', 'trial', 'active', 'suspended', 'cancelled', 'expired'])->default('trial');
             $table->timestamp('trial_ends_at')->nullable();
             $table->jsonb('settings')->default('{}');
             $table->string('timezone')->default('Asia/Dhaka');
@@ -57,7 +80,7 @@ return new class extends Migration
             $table->foreignUuid('package_id')->nullable()->constrained('packages')->nullOnDelete();
             $table->string('billing_cycle')->default('monthly');
             $table->decimal('amount', 10, 2);
-            $table->enum('status', ['pending','trial','active','suspended','cancelled','expired'])->default('trial');
+            $table->enum('status', ['pending', 'trial', 'active', 'suspended', 'cancelled', 'expired'])->default('trial');
             $table->timestamp('current_period_start')->nullable();
             $table->timestamp('current_period_end')->nullable();
             $table->timestamp('cancelled_at')->nullable();
