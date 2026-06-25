@@ -21,6 +21,19 @@ function PackageBuilderSummarySidebar({
 
   const modules = watch("modules") ?? [];
 
+  const limits = watch("limits");
+
+  const packageName = watch("packageName");
+  const packageCode = watch("packageCode");
+
+  const monthlyPrice = watch("monthlyPrice");
+  const yearlyPrice = watch("yearlyPrice");
+
+  const status = watch("status");
+
+  const trialEnabled = watch("trialEnabled");
+  const trialDays = watch("trialDays");
+
   const enabledModules = modules.filter((module) => module.enabled).length;
 
   const enabledFeatures = modules.reduce(
@@ -28,15 +41,6 @@ function PackageBuilderSummarySidebar({
       count + module.features.filter((feature) => feature.enabled).length,
     0,
   );
-
-  const packageName = watch("packageName");
-  const packageCode = watch("packageCode");
-  const monthlyPrice = watch("monthlyPrice");
-  const yearlyPrice = watch("yearlyPrice");
-  const employeeLimit = watch("employeeLimit");
-  const branchLimit = watch("branchLimit");
-  const storageLimit = watch("storageLimit");
-  const status = watch("status");
 
   return (
     <div className="space-y-6">
@@ -56,19 +60,60 @@ function PackageBuilderSummarySidebar({
 
           <SummaryRow
             label="Employees"
-            value={employeeLimit === null ? "Unlimited" : String(employeeLimit)}
+            value={
+              limits?.employees === null
+                ? "Unlimited"
+                : String(limits?.employees ?? "-")
+            }
+          />
+
+          <SummaryRow
+            label="Admins"
+            value={
+              limits?.admins === null ? "-" : String(limits?.admins ?? "-")
+            }
+          />
+
+          <SummaryRow
+            label="Departments"
+            value={
+              limits?.departmentLimit === null
+                ? "-"
+                : String(limits?.departmentLimit ?? "-")
+            }
           />
 
           <SummaryRow
             label="Branches"
-            value={branchLimit === null ? "Unlimited" : String(branchLimit)}
+            value={
+              limits?.branches === null
+                ? "Unlimited"
+                : String(limits?.branches ?? "-")
+            }
           />
 
-          <SummaryRow label="Storage" value={storageLimit || "-"} />
+          <SummaryRow
+            label="Storage"
+            value={limits?.storageGb ? `${limits.storageGb} GB` : "-"}
+          />
+
+          <SummaryRow
+            label="Devices"
+            value={
+              limits?.deviceLimit === null
+                ? "-"
+                : String(limits?.deviceLimit ?? "-")
+            }
+          />
 
           <SummaryRow label="Modules" value={String(enabledModules)} />
 
           <SummaryRow label="Features" value={String(enabledFeatures)} />
+
+          <SummaryRow
+            label="Trial"
+            value={trialEnabled ? `${trialDays} Days` : "Disabled"}
+          />
 
           <SummaryRow label="Status" value={status} />
         </div>

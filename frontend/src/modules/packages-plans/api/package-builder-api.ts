@@ -6,6 +6,7 @@ import type {
   PackagePayload,
   PackageResponse,
 } from "../types/package-builder-api.types";
+import { PackageBuilder } from "../types/package-builder.types";
 
 export const packageBuilderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -43,10 +44,11 @@ export const packageBuilderApi = baseApi.injectEndpoints({
       providesTags: ["Packages"],
     }),
 
-    getPackageByCode: builder.query({
+    getPackageByCode: builder.query<PackageBuilder, string>({
       query: (packageCode) => ({
         url: API_ENDPOINTS.PACKAGES.DETAILS(packageCode),
       }),
+
       providesTags: ["Packages"],
     }),
   }),

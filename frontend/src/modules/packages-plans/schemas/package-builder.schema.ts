@@ -14,11 +14,19 @@ export const packageBuilderSchema = z
 
     yearlyPrice: z.number().min(1, "Yearly price must be greater than 0"),
 
-    employeeLimit: z.number().nullable(),
+    limits: z.object({
+      employees: z.number().nullable(),
 
-    branchLimit: z.number().nullable(),
+      admins: z.number().nullable(),
 
-    storageLimit: z.string().min(1, "Storage limit is required"),
+      departmentLimit: z.number().nullable(),
+
+      branches: z.number().nullable(),
+
+      storageGb: z.number().nullable(),
+
+      deviceLimit: z.number().nullable(),
+    }),
 
     trialEnabled: z.boolean(),
 
@@ -43,6 +51,14 @@ export const packageBuilderSchema = z
         ),
       }),
     ),
+
+    integrations: z.object({
+      zkteco: z.boolean(),
+
+      apiAccess: z.boolean(),
+
+      whatsapp: z.boolean(),
+    }),
   })
   .superRefine((data, ctx) => {
     const enabledModules = data.modules.filter((module) => module.enabled);

@@ -1,41 +1,55 @@
+import type { PackagePayload } from "../types/package-builder-api.types";
 import type { PackageBuilderFormValues } from "../types/package-builder.types";
 
-import type { PackagePayload } from "../types/package-builder-api.types";
-
-export const transformPackagePayload = (
+export function transformPackagePayload(
   values: PackageBuilderFormValues,
-): PackagePayload => {
+): PackagePayload {
   return {
-    packageName: values.packageName,
-    packageCode: values.packageCode,
+    name: values.packageName,
+
+    slug: values.packageCode.trim().toLowerCase(),
+
     description: values.description,
 
-    status: values.status,
+    price_monthly: values.monthlyPrice,
 
-    pricing: {
-      monthlyPrice: values.monthlyPrice,
-      yearlyPrice: values.yearlyPrice,
-    },
+    price_yearly: values.yearlyPrice,
+
+    modules: values.modules.reduce(
+      (acc, module) => {
+        acc[module.code] = module.enabled;
+
+        return acc;
+      },
+      {} as Record<string, boolean>,
+    ),
 
     limits: {
-      employeeLimit: values.employeeLimit,
-      branchLimit: values.branchLimit,
-      storageLimit: values.storageLimit,
+      employees: values.limits.employees,
+
+      admins: values.limits.admins,
+
+      department_limit: values.limits.departmentLimit,
+
+      branches: values.limits.branches,
+
+      storage_gb: values.limits.storageGb,
+
+      device_limit: values.limits.deviceLimit,
     },
 
-    trial: {
-      enabled: values.trialEnabled,
-      trialDays: values.trialDays,
+    integrations: {
+      zkteco: values.integrations.zkteco,
+
+      api_access: values.integrations.apiAccess,
+
+      whatsapp: values.integrations.whatsapp,
     },
 
-    modules: values.modules.map((module) => ({
-      code: module.code,
-      enabled: module.enabled,
+    trial_enabled: values.trialEnabled,
 
-      features: module.features.map((feature) => ({
-        code: feature.code,
-        enabled: feature.enabled,
-      })),
-    })),
+    trial_duration_days: values.trialDays,
+
+    is_active: values.status === "Published",
   };
-};
+}

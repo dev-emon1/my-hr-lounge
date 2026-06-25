@@ -1,13 +1,11 @@
 import { useEffect } from "react";
-
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { packageBuilderSchema } from "../../schemas/package-builder.schema";
-
-import { toast } from "sonner";
 
 import { mockPackageModules } from "../../constants/mock-package-builder";
 
@@ -15,6 +13,7 @@ import PackageBasicInformationSection from "./sections/package-basic-information
 import PackagePricingSection from "./sections/package-pricing-section";
 import PackageLimitsSection from "./sections/package-limits-section";
 import PackageModuleAccessSection from "./sections/package-module-access-section";
+import PackageIntegrationsSection from "./sections/package-integrations-section";
 import PackageTrialSection from "./sections/package-trial-section";
 import PackageBuilderSummarySidebar from "./package-builder-summary-sidebar";
 
@@ -24,7 +23,8 @@ import type {
   PackageBuilder,
   PackageBuilderFormValues,
 } from "../../types/package-builder.types";
-import { PackagePayload } from "../../types/package-builder-api.types";
+
+import type { PackagePayload } from "../../types/package-builder-api.types";
 
 import {
   useCreatePackageMutation,
@@ -44,10 +44,11 @@ function PackageBuilderForm({
   initialData,
   onSubmit,
 }: Props) {
-  const [createPackage, { isLoading: isCreating }] = useCreatePackageMutation();
-  const [updatePackage, { isLoading: isUpdating }] = useUpdatePackageMutation();
-
   const navigate = useNavigate();
+
+  const [createPackage, { isLoading: isCreating }] = useCreatePackageMutation();
+
+  const [updatePackage, { isLoading: isUpdating }] = useUpdatePackageMutation();
 
   const isCreate = mode === "create";
 
@@ -59,14 +60,30 @@ function PackageBuilderForm({
       packageCode: "",
       description: "",
       status: "Draft",
+
       monthlyPrice: 0,
       yearlyPrice: 0,
-      employeeLimit: null,
-      branchLimit: null,
-      storageLimit: "",
+
+      limits: {
+        employees: null,
+        admins: null,
+        departmentLimit: null,
+        branches: null,
+        storageGb: null,
+        deviceLimit: null,
+      },
+
       trialEnabled: false,
-      trialDays: 0,
-      modules: initialData?.modules ?? mockPackageModules,
+      trialDays: 14,
+
+      modules: mockPackageModules,
+
+      integrations: {
+        zkteco: false,
+        apiAccess: false,
+        whatsapp: false,
+      },
+
       ...defaultValues,
     },
   });
@@ -78,17 +95,34 @@ function PackageBuilderForm({
 
     reset({
       packageName: initialData.packageName,
+
       packageCode: initialData.packageCode,
+
       description: initialData.description ?? "",
+
       monthlyPrice: initialData.monthlyPrice,
       yearlyPrice: initialData.yearlyPrice,
-      employeeLimit: initialData.employeeLimit,
-      branchLimit: initialData.branchLimit,
-      storageLimit: initialData.storageLimit,
+
+      limits: initialData.limits ?? {
+        employees: null,
+        admins: null,
+        departmentLimit: null,
+        branches: null,
+        storageGb: null,
+        deviceLimit: null,
+      },
+
       trialEnabled: initialData.trialEnabled ?? false,
-      trialDays: initialData.trialDays ?? 0,
+      trialDays: initialData.trialDays ?? 14,
+
       status: initialData.status === "Archived" ? "Draft" : initialData.status,
       modules: initialData.modules,
+
+      integrations: initialData.integrations ?? {
+        zkteco: false,
+        apiAccess: false,
+        whatsapp: false,
+      },
     });
   }, [initialData, reset]);
 
@@ -100,6 +134,13 @@ function PackageBuilderForm({
         ...values,
         status,
       });
+
+      console.log("PACKAGE PAYLOAD", payload);
+
+      if (onSubmit) {
+        onSubmit(payload);
+        return;
+      }
 
       let response;
 
@@ -113,7 +154,10 @@ function PackageBuilderForm({
         }).unwrap();
       }
 
-      toast.success(response.message);
+      toast.success(
+        response?.message ??
+          `Package ${mode === "create" ? "created" : "updated"} successfully`,
+      );
 
       navigate("/packages-plans/all-packages");
     } catch (error: any) {
@@ -144,8 +188,8 @@ function PackageBuilderForm({
           </h1>
 
           <p className="mt-2 text-muted-foreground">
-            Configure package information, pricing, limits, modules and feature
-            access.
+            Configure package information, pricing, limits, modules,
+            integrations and trial access.
           </p>
         </div>
 
@@ -162,6 +206,8 @@ function PackageBuilderForm({
             <PackageLimitsSection />
 
             <PackageModuleAccessSection />
+
+            <PackageIntegrationsSection />
 
             <PackageTrialSection />
           </div>
