@@ -22,27 +22,6 @@ class Package extends Model
     ];
 
     protected $casts = [
-<<<<<<< HEAD
-        'modules'        => 'array',
-        'limits'         => 'array',
-        'integrations'   => 'array',
-        'is_active'      => 'boolean',
-        'price_monthly'  => 'decimal:2',
-        'price_yearly'   => 'decimal:2',
-    ];
-
-    /**
-     * Route Model Binding
-     *
-     * /packages/starter
-     * starter = slug
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
-=======
         'modules'       => 'array',
         'limits'        => 'array',
         'integrations'  => 'array',
@@ -54,7 +33,6 @@ class Package extends Model
 
     protected $hidden = ['modules', 'limits', 'integrations']; // Default hide heavy fields
     
->>>>>>> 4866632beaa95c45da8df7c1876280bcc6a49875
     public function getModules(): array
     {
         return $this->modules ?? [];
