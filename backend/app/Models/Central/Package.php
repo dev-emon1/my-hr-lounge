@@ -31,8 +31,19 @@ class Package extends Model
         'status'        => PackageStatusEnum::class,
     ];
 
-    protected $hidden = ['modules', 'limits', 'integrations']; // Default hide heavy fields
-    
+    protected $hidden = ['modules', 'integrations']; // Default hide heavy fields
+
+    /**
+     * Route Model Binding
+     *
+     * /packages/starter
+     * starter = slug
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function getModules(): array
     {
         return $this->modules ?? [];
