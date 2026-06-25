@@ -10,11 +10,17 @@ function PackageLimitsCard({ pkg }: Props) {
       <h3 className="text-xl font-black">Package Limits</h3>
 
       <div className="mt-6 grid gap-6 md:grid-cols-3">
-        <LimitItem label="Employee Limit" value={String(pkg.employeeLimit)} />
+        <LimitItem
+          label="Employees"
+          value={String(pkg.limits.employees ?? "Unlimited")}
+        />
 
-        <LimitItem label="Branch Limit" value={String(pkg.branchLimit)} />
+        <LimitItem
+          label="Branches"
+          value={String(pkg.limits.branches ?? "Unlimited")}
+        />
 
-        <LimitItem label="Storage" value={pkg.storageLimit} />
+        <LimitItem label="Storage" value={`${pkg.limits.storage_gb ?? 0} GB`} />
       </div>
     </div>
   );

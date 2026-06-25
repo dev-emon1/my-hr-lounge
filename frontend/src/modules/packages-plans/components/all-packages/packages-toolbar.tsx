@@ -12,34 +12,55 @@ import {
 
 import SearchFilter from "@/shared/components/data-table/search-filter";
 import { useNavigate } from "react-router-dom";
+type Props = {
+  search: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: string;
+  onStatusChange: (value: string) => void;
+  trialFilter: string;
+  onTrialChange: (value: string) => void;
+};
 
-function PackagesToolbar() {
+function PackagesToolbar({
+  search,
+  onSearchChange,
+  statusFilter,
+  onStatusChange,
+  trialFilter,
+  onTrialChange,
+}: Props) {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
       <div className="flex flex-1 flex-col gap-4 lg:flex-row">
-        <SearchFilter placeholder="Search packages..." />
+        <SearchFilter
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search packages..."
+        />
 
-        <Select>
+        <Select value={statusFilter} onValueChange={onStatusChange}>
           <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[180px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
 
           <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+
             <SelectItem value="active">Active</SelectItem>
 
-            <SelectItem value="draft">Draft</SelectItem>
-
-            <SelectItem value="archived">Archived</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
           </SelectContent>
         </Select>
 
-        <Select>
+        <Select value={trialFilter} onValueChange={onTrialChange}>
           <SelectTrigger className="h-12 w-full rounded-2xl lg:w-[180px]">
             <SelectValue placeholder="Trial" />
           </SelectTrigger>
 
           <SelectContent>
+            <SelectItem value="all">All Trial Types</SelectItem>
+
             <SelectItem value="available">Trial Available</SelectItem>
 
             <SelectItem value="not-available">No Trial</SelectItem>

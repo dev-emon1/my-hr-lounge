@@ -10,20 +10,26 @@ function PackageInformationCard({ pkg }: Props) {
       <h3 className="text-xl font-black">Package Information</h3>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <InfoItem label="Package Name" value={pkg.packageName} />
+        <InfoItem label="Package Name" value={pkg.name} />
 
-        <InfoItem label="Package Code" value={pkg.packageCode} />
-
-        <InfoItem label="Status" value={pkg.status} />
+        <InfoItem label="Slug" value={pkg.slug} />
 
         <InfoItem
-          label="Trial Available"
-          value={pkg.trialAvailable ? "Yes" : "No"}
+          label="Status"
+          value={pkg.is_active ? "Active" : "Inactive"}
         />
 
-        <InfoItem label="Created" value={pkg.createdAt} />
+        <InfoItem label="Trial" value={pkg.is_trial ? "Enabled" : "Disabled"} />
 
-        <InfoItem label="Updated" value={pkg.updatedAt} />
+        <InfoItem
+          label="Created"
+          value={new Date(pkg.created_at).toLocaleDateString()}
+        />
+
+        <InfoItem
+          label="Updated"
+          value={new Date(pkg.updated_at).toLocaleDateString()}
+        />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ type Props = {
 function QuickActionsCard({ pkg, onClone, onArchive }: Props) {
   const navigate = useNavigate();
 
-  const isArchived = pkg.status === "Archived";
+  const isArchived = !pkg.is_active;
 
   return (
     <div className="rounded-[28px] border border-border p-6">
@@ -27,7 +27,7 @@ function QuickActionsCard({ pkg, onClone, onArchive }: Props) {
             <Button
               className="w-full justify-start"
               onClick={() =>
-                navigate(`/packages-plans/package-builder/${pkg.packageCode}`)
+                navigate(`/packages-plans/package-builder/${pkg.slug}`)
               }
             >
               <Pencil size={16} />

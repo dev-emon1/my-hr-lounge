@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { mockPackages } from "../constants/mock-packages";
-
 import PackageHeroSection from "../components/package-details/package-hero-section";
 import PackageInformationCard from "../components/package-details/package-information-card";
 import PackagePricingCard from "../components/package-details/package-pricing-card";
 import PackageLimitsCard from "../components/package-details/package-limits-card";
 import PackageHealthCard from "../components/package-details/package-health-card";
 import QuickActionsCard from "../components/package-details/quick-actions-card";
+
 import ArchivePackageDialog from "../components/all-packages/dialogs/archive-package-dialog";
 import ClonePackageDialog from "../components/all-packages/dialogs/clone-package-dialog";
+
+import { useGetPackageBySlugQuery } from "../api/package-builder-api";
 
 function PackageDetailsPage() {
   const [cloneOpen, setCloneOpen] = useState(false);
@@ -18,7 +19,27 @@ function PackageDetailsPage() {
 
   const { packageCode } = useParams();
 
-  const pkg = mockPackages.find((item) => item.packageCode === packageCode);
+  const { data, isLoading, isError } = useGetPackageBySlugQuery(
+    packageCode ?? "",
+  );
+
+  const pkg = data?.data;
+
+  if (isLoading) {
+    return (
+      <div className="rounded-[28px] border border-border p-8">
+        Loading Package...
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="rounded-[28px] border border-border p-8">
+        Failed to load package.
+      </div>
+    );
+  }
 
   if (!pkg) {
     return (

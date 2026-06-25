@@ -5,6 +5,9 @@ type Props = {
 };
 
 function PackagePricingCard({ pkg }: Props) {
+  const monthly = Number(pkg.price_monthly);
+  const yearly = Number(pkg.price_yearly);
+
   return (
     <div className="rounded-[28px] border border-border p-6">
       <h3 className="text-xl font-black">Pricing Information</h3>
@@ -12,18 +15,15 @@ function PackagePricingCard({ pkg }: Props) {
       <div className="mt-6 space-y-4">
         <PriceRow
           label="Monthly Price"
-          value={`৳ ${pkg.monthlyPrice.toLocaleString()}`}
+          value={`৳ ${monthly.toLocaleString()}`}
         />
 
-        <PriceRow
-          label="Yearly Price"
-          value={`৳ ${pkg.yearlyPrice.toLocaleString()}`}
-        />
+        <PriceRow label="Yearly Price" value={`৳ ${yearly.toLocaleString()}`} />
 
         <div className="border-t border-border pt-4">
           <PriceRow
             label="Annual Savings"
-            value={`৳ ${(pkg.monthlyPrice * 12 - pkg.yearlyPrice).toLocaleString()}`}
+            value={`৳ ${(monthly * 12 - yearly).toLocaleString()}`}
             strong
           />
         </div>

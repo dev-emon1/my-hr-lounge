@@ -53,6 +53,32 @@ Route::middleware('auth:super_admin')->group(function () {
     Route::post('tenants/{id}/suspend',  [TenantController::class, 'suspend']);
     Route::post('tenants/{id}/activate', [TenantController::class, 'activate']);
 
-    // Dashboard
-    Route::get('dashboard', [TenantController::class, 'dashboard']);
+    Route::apiResource('packages', PackageController::class)
+        ->except(['index']);
+
+    Route::apiResource('subscriptions', SubscriptionController::class)
+        ->only(['index', 'show']);
+
+    Route::get(
+        'permissions',
+        [PermissionController::class, 'index']
+    )->name('sa.permissions.index');
+
+    Route::apiResource('tenants', TenantController::class)
+        ->except(['destroy']);
+
+    Route::post(
+        'tenants/{id}/suspend',
+        [TenantController::class, 'suspend']
+    );
+
+    Route::post(
+        'tenants/{id}/activate',
+        [TenantController::class, 'activate']
+    );
+
+    Route::get(
+        'dashboard',
+        [TenantController::class, 'dashboard']
+    );
 });

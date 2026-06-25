@@ -1,3 +1,5 @@
+import type { Package } from "./package.types";
+
 export type PackageResponse = {
   success: boolean;
   message: string;
@@ -33,8 +35,19 @@ export interface PackagePayload {
   };
 
   trial_enabled: boolean;
-
   trial_duration_days: number;
 
   is_active: boolean;
 }
+
+export type PackagesListResponse = {
+  success: boolean;
+  message: string;
+  data: Package[];
+};
+
+export type PackageDetailsResponse = {
+  success: boolean;
+  message: string;
+  data: Package;
+};
