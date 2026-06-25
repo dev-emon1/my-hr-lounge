@@ -159,7 +159,7 @@ function PackageBuilderForm({
           `Package ${mode === "create" ? "created" : "updated"} successfully`,
       );
 
-      navigate("/packages-plans/all-packages");
+      navigate("/packages");
     } catch (error: any) {
       toast.error(error?.data?.message ?? "Something went wrong");
 

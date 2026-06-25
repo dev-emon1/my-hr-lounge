@@ -59,13 +59,15 @@ class Package extends Model
         return data_get($this->modules, $module, false);
     }
 
-    // ── Relationships ──────────────────────────────────────────
+    // Relationships
+
     public function tenants(): HasMany
     {
         return $this->hasMany(Tenant::class);
     }
 
-    // ── Scopes ────────────────────────────────────────────────
+    // Scopes
+
     public function scopeActive($query)
     {
         return $query->where('status', PackageStatusEnum::ACTIVE->value);

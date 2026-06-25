@@ -1,22 +1,24 @@
 import { Boxes, CircleCheckBig, Archive, Users } from "lucide-react";
 
-import { mockPackages } from "../../constants/mock-packages";
+import { Package } from "../../types/package.types";
 
-function PackagesStats() {
-  const totalPackages = mockPackages.length;
+type Props = {
+  packages: Package[];
+};
 
-  const activePackages = mockPackages.filter(
-    (item) => item.status === "Active",
-  ).length;
+function PackagesStats({ packages }: Props) {
+  const totalPackages = packages.length;
 
-  const archivedPackages = mockPackages.filter(
-    (item) => item.status === "Archived",
-  ).length;
+  const activePackages = packages.filter((item) => item.is_active).length;
 
-  const totalClients = mockPackages.reduce(
-    (acc, item) => acc + item.activeClients,
-    0,
-  );
+  const archivedPackages = packages.filter((item) => !item.is_active).length;
+
+  // const totalClients = mockPackages.reduce(
+  //   (acc, item) => acc + item.activeClients,
+  //   0,
+  // );
+
+  const totalClients = 0;
 
   const stats = [
     {

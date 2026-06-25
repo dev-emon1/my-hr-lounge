@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   },
 
   PACKAGES: {
-    LIST: "/sa/packages",
+    LIST: "/sa/public/packages",
 
     CREATE: "/sa/packages",
 
