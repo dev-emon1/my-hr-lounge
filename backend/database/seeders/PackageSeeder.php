@@ -43,7 +43,7 @@ class PackageSeeder extends Seeder
                     'whatsapp' => false,
                 ],
 
-                'is_active' => true,
+                'status' => 'active',
             ],
 
             [
@@ -78,7 +78,7 @@ class PackageSeeder extends Seeder
                     'whatsapp' => false,
                 ],
 
-                'is_active' => true,
+                'status' => 'active',
             ],
 
             [
@@ -113,7 +113,7 @@ class PackageSeeder extends Seeder
                     'whatsapp' => true,
                 ],
 
-                'is_active' => true,
+                'status' => 'active',
             ],
         ];
 
