@@ -51,6 +51,7 @@ class PackageController extends Controller
                     'slug',
                     'price_monthly',
                     'price_yearly',
+                    'limits',
                     'is_trial',
                     'status',
                     'created_at'
@@ -180,6 +181,24 @@ class PackageController extends Controller
         $this->clearPackageCache();
 
         return $this->success(null, 'Package deleted successfully');
+    }
+
+    public function status(Package $package, Request $request): JsonResponse
+    {
+        $request->validate([
+            'status' => 'required|in:active,inactive,archived,draft',
+        ]);
+
+        $package->update([
+            'status' => $request->string('status'),
+        ]);
+
+        $this->clearPackageCache();
+
+        return $this->success(
+            new PackageResource($package->fresh()),
+            'Package status updated successfully.'
+        );
     }
 
     /**

@@ -23,7 +23,7 @@ class LightPackageResource extends JsonResource
                 'monthly' => $this->price_monthly,
                 'yearly'  => $this->price_yearly,
             ],
-
+            'limits' => $this->limits['employees'] ?? null,
             'is_trial' => $this->is_trial,
             'status'   => [
                 'value' => $this->status?->value,
