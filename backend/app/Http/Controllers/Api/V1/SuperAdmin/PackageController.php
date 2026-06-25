@@ -183,15 +183,16 @@ class PackageController extends Controller
         return $this->success(null, 'Package deleted successfully');
     }
 
+    /**
+     * PATCH /api/v1/sa/packages/{package}/status
+     */
     public function status(Package $package, Request $request): JsonResponse
     {
-        $request->validate([
-            'status' => 'required|in:active,inactive,archived,draft',
+        $validated = $request->validate([
+            'status' => 'required|in:active,draft,archived,inactive',
         ]);
 
-        $package->update([
-            'status' => $request->string('status'),
-        ]);
+        $package->update(['status' => $validated['status']]);
 
         $this->clearPackageCache();
 
