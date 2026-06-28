@@ -1,5 +1,6 @@
 import type { PackageDetails } from "../types/package-details.types";
 import type { PackageBuilder } from "../types/package-builder.types";
+import { mockPackageModules } from "../constants/mock-package-builder";
 
 export function mapPackageToBuilder(pkg: PackageDetails): PackageBuilder {
   return {
@@ -11,7 +12,7 @@ export function mapPackageToBuilder(pkg: PackageDetails): PackageBuilder {
 
     packageCode: pkg.slug,
 
-    description: pkg.description,
+    description: pkg.description ?? "",
 
     monthlyPrice: Number(pkg.pricing.monthly),
 
@@ -37,7 +38,7 @@ export function mapPackageToBuilder(pkg: PackageDetails): PackageBuilder {
 
     status: pkg.status.value === "active" ? "Published" : "Draft",
 
-    modules: [],
+    modules: mockPackageModules,
 
     createdAt: pkg.created_at,
     updatedAt: pkg.updated_at,
