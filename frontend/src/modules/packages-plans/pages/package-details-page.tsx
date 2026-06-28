@@ -23,6 +23,8 @@ function PackageDetailsPage() {
     packageCode ?? "",
   );
 
+  console.log(data);
+
   const pkg = data?.data;
 
   if (isLoading) {

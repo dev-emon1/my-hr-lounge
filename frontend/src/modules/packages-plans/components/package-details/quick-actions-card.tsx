@@ -4,10 +4,10 @@ import { Pencil, Copy, Archive } from "lucide-react";
 
 import { Button } from "@/shared/ui/button";
 
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
   onClone?: () => void;
   onArchive?: () => void;
 };
@@ -15,7 +15,7 @@ type Props = {
 function QuickActionsCard({ pkg, onClone, onArchive }: Props) {
   const navigate = useNavigate();
 
-  const isArchived = !pkg.is_active;
+  const isArchived = pkg.status.value === "archived";
 
   return (
     <div className="rounded-[28px] border border-border p-6">

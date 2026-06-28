@@ -9,15 +9,15 @@ import {
 
 import { Badge } from "@/shared/ui/badge";
 
-import type { Package } from "../../types/package.types";
+import type { PackageListItem } from "../../types/package-list.types";
 
 import PackagesRowActions from "./packages-row-actions";
 import EmptyState from "@/shared/components/data-display/empty-state";
 
 type Props = {
-  packages: Package[];
-  onClone?: (pkg: Package) => void;
-  onArchive?: (pkg: Package) => void;
+  packages: PackageListItem[];
+  onClone?: (pkg: PackageListItem) => void;
+  onArchive?: (pkg: PackageListItem) => void;
 };
 
 function PackagesTable({ packages, onClone, onArchive }: Props) {
@@ -40,7 +40,7 @@ function PackagesTable({ packages, onClone, onArchive }: Props) {
 
             <TableHead>Yearly</TableHead>
 
-            {/* <TableHead>Employee Limit</TableHead> */}
+            <TableHead>Employee Limit</TableHead>
 
             <TableHead>Clients</TableHead>
 
@@ -63,19 +63,19 @@ function PackagesTable({ packages, onClone, onArchive }: Props) {
                 </TableCell>
 
                 <TableCell>
-                  ৳ {Number(pkg.price_monthly).toLocaleString()}
+                  ৳ {Number(pkg.pricing.monthly).toLocaleString()}
                 </TableCell>
 
                 <TableCell>
-                  ৳ {Number(pkg.price_yearly).toLocaleString()}
+                  ৳ {Number(pkg.pricing.yearly).toLocaleString()}
                 </TableCell>
 
-                {/* <TableCell>{pkg.limits.employees ?? "Unlimited"}</TableCell> */}
+                <TableCell>{pkg.limits.employees ?? "Unlimited"}</TableCell>
 
                 <TableCell>-</TableCell>
 
                 <TableCell>
-                  <PackageStatusBadge isActive={pkg.is_active} />
+                  <PackageStatusBadge status={pkg.status} />
                 </TableCell>
 
                 <TableCell>
@@ -114,15 +114,31 @@ function PackagesTable({ packages, onClone, onArchive }: Props) {
 }
 
 type BadgeProps = {
-  isActive: boolean;
+  status: PackageListItem["status"];
 };
 
-function PackageStatusBadge({ isActive }: BadgeProps) {
-  if (isActive) {
-    return <Badge className="bg-emerald-500/10 text-emerald-600">Active</Badge>;
-  }
+function PackageStatusBadge({ status }: BadgeProps) {
+  switch (status.value) {
+    case "active":
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-600">
+          {status.label}
+        </Badge>
+      );
 
-  return <Badge className="bg-amber-500/10 text-amber-600">Inactive</Badge>;
+    case "draft":
+      return (
+        <Badge className="bg-amber-500/10 text-amber-600">{status.label}</Badge>
+      );
+
+    case "archived":
+      return (
+        <Badge className="bg-slate-500/10 text-slate-600">{status.label}</Badge>
+      );
+
+    default:
+      return <Badge>{status.label}</Badge>;
+  }
 }
 
 export default PackagesTable;

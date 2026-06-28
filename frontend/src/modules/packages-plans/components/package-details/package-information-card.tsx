@@ -1,7 +1,7 @@
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackageInformationCard({ pkg }: Props) {
@@ -14,10 +14,7 @@ function PackageInformationCard({ pkg }: Props) {
 
         <InfoItem label="Slug" value={pkg.slug} />
 
-        <InfoItem
-          label="Status"
-          value={pkg.is_active ? "Active" : "Inactive"}
-        />
+        <InfoItem label="Status" value={pkg.status ? "Active" : "Inactive"} />
 
         <InfoItem label="Trial" value={pkg.is_trial ? "Enabled" : "Disabled"} />
 

@@ -9,12 +9,12 @@ import {
 
 import { Button } from "@/shared/ui/button";
 
-import type { Package } from "../../../types/package.types";
+import type { PackageListItem } from "../../../types/package-list.types";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  pkg: Package | null;
+  pkg: PackageListItem | null;
 };
 
 function ArchivePackageDialog({ open, onOpenChange, pkg }: Props) {
@@ -32,8 +32,8 @@ function ArchivePackageDialog({ open, onOpenChange, pkg }: Props) {
         <div className="p-8">
           <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
             <p className="text-sm text-amber-600">
-              {pkg?.packageName} will be archived. Existing clients can continue
-              using it, but new subscriptions will be blocked.
+              {pkg?.name} will be archived. Existing clients can continue using
+              it, but new subscriptions will be blocked.
             </p>
           </div>
         </div>

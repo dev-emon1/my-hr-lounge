@@ -1,7 +1,7 @@
-import type { Package } from "../types/package.types";
+import type { PackageDetails } from "../types/package-details.types";
 import type { PackageBuilder } from "../types/package-builder.types";
 
-export function mapPackageToBuilder(pkg: Package): PackageBuilder {
+export function mapPackageToBuilder(pkg: PackageDetails): PackageBuilder {
   return {
     id: pkg.id,
 
@@ -13,9 +13,9 @@ export function mapPackageToBuilder(pkg: Package): PackageBuilder {
 
     description: pkg.description,
 
-    monthlyPrice: Number(pkg.price_monthly),
+    monthlyPrice: Number(pkg.pricing.monthly),
 
-    yearlyPrice: Number(pkg.price_yearly),
+    yearlyPrice: Number(pkg.pricing.yearly),
 
     limits: {
       employees: pkg.limits.employees,
@@ -35,7 +35,7 @@ export function mapPackageToBuilder(pkg: Package): PackageBuilder {
     trialEnabled: pkg.is_trial ?? false,
     trialDays: pkg.trial_period ?? 14,
 
-    status: pkg.is_active ? "Published" : "Draft",
+    status: pkg.status.value === "active" ? "Published" : "Draft",
 
     modules: [],
 

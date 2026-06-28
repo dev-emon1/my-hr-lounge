@@ -1,7 +1,7 @@
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackageHealthCard({ pkg }: Props) {
@@ -12,8 +12,8 @@ function PackageHealthCard({ pkg }: Props) {
       <div className="mt-6 space-y-4">
         <HealthRow
           label="Package Status"
-          value={pkg.is_active ? "Active" : "Inactive"}
-          color={pkg.is_active ? "text-emerald-600" : "text-amber-600"}
+          value={pkg.status ? "Active" : "Inactive"}
+          color={pkg.status ? "text-emerald-600" : "text-amber-600"}
         />
 
         <HealthRow

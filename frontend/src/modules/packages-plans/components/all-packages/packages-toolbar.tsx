@@ -49,7 +49,9 @@ function PackagesToolbar({
 
             <SelectItem value="active">Active</SelectItem>
 
-            <SelectItem value="inactive">Inactive</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+
+            <SelectItem value="archived">Archived</SelectItem>
           </SelectContent>
         </Select>
 
@@ -70,7 +72,7 @@ function PackagesToolbar({
 
       <Button
         className="h-12 rounded-2xl"
-        onClick={() => navigate("/packages-plans/package-builder/create")}
+        onClick={() => navigate("/packages-plans/package-builder")}
       >
         Create Package
       </Button>

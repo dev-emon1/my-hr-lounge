@@ -2,8 +2,6 @@ import { baseApi } from "@/shared/services/api/base-api";
 
 import { API_ENDPOINTS } from "@/shared/services/api/constants/api-endpoints";
 
-import { Package } from "../types/package.types";
-
 import type {
   PackagePayload,
   PackageResponse,

@@ -1,12 +1,17 @@
-export type PackageStatus = "Active" | "Draft" | "Archived";
-
-export interface Package {
+export interface PackageDetails {
   id: string;
+
   name: string;
+
   slug: string;
+
   description: string;
-  price_monthly: string;
-  price_yearly: string;
+
+  pricing: {
+    monthly: string;
+    yearly: string;
+  };
+
   modules: Record<string, boolean>;
 
   limits: {
@@ -24,10 +29,16 @@ export interface Package {
     whatsapp: boolean;
   };
 
-  is_active: boolean;
-  is_trial: boolean | null;
+  status: {
+    value: string;
+    label: string;
+  };
+
+  is_trial: boolean;
+
   trial_period: number | null;
 
   created_at: string;
+
   updated_at: string;
 }

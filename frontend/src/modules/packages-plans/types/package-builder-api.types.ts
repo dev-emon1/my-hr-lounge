@@ -1,4 +1,5 @@
-import type { Package } from "./package.types";
+import type { PackageListItem } from "./package-list.types";
+import type { PackageDetails } from "./package-details.types";
 
 export type PackageResponse = {
   success: boolean;
@@ -43,11 +44,11 @@ export interface PackagePayload {
 export type PackagesListResponse = {
   success: boolean;
   message: string;
-  data: Package[];
+  data: PackageListItem[];
 };
 
 export type PackageDetailsResponse = {
   success: boolean;
   message: string;
-  data: Package;
+  data: PackageDetails;
 };

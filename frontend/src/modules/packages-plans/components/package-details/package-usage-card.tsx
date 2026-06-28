@@ -1,7 +1,7 @@
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackageUsageCard({ pkg }: Props) {
@@ -13,25 +13,25 @@ function PackageUsageCard({ pkg }: Props) {
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Active Clients</span>
 
-          <span className="font-bold">{pkg.activeClients}</span>
+          <span className="font-bold">-</span>
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Trial Available</span>
 
-          <span className="font-bold">{pkg.trialAvailable ? "Yes" : "No"}</span>
+          <span className="font-bold">{pkg.is_trial ? "Yes" : "No"}</span>
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Status</span>
 
-          <span className="font-bold">{pkg.status}</span>
+          <span className="font-bold">{pkg.status.value}</span>
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Last Updated</span>
 
-          <span className="font-bold">{pkg.updatedAt}</span>
+          <span className="font-bold">{pkg.updated_at}</span>
         </div>
       </div>
     </div>

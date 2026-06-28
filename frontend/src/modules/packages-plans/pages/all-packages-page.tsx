@@ -6,12 +6,14 @@ import PackagesTable from "../components/all-packages/packages-table";
 
 import { useGetPackagesQuery } from "../api/package-builder-api";
 
-import type { Package } from "../types/package.types";
+import type { PackageListItem } from "../types/package-list.types";
+
 import ClonePackageDialog from "../components/all-packages/dialogs/clone-package-dialog";
 import ArchivePackageDialog from "../components/all-packages/dialogs/archive-package-dialog";
 
 function AllPackagesPage() {
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
+  const [selectedPackage, setSelectedPackage] =
+    useState<PackageListItem | null>(null);
 
   const [archiveOpen, setArchiveOpen] = useState(false);
   const [cloneOpen, setCloneOpen] = useState(false);
@@ -24,7 +26,6 @@ function AllPackagesPage() {
 
   const { data, isLoading, isError } = useGetPackagesQuery();
   const packages = data?.data ?? [];
-  console.log(data);
 
   const filteredPackages = packages.filter((pkg) => {
     const matchesSearch =
@@ -32,18 +33,14 @@ function AllPackagesPage() {
       pkg.slug.toLowerCase().includes(search.toLowerCase());
 
     const matchesStatus =
-      statusFilter === "all"
-        ? true
-        : statusFilter === "active"
-          ? pkg.is_active
-          : !pkg.is_active;
+      statusFilter === "all" ? true : pkg.status.value === statusFilter;
 
     const matchesTrial =
       trialFilter === "all"
         ? true
         : trialFilter === "available"
-          ? pkg.is_trial
-          : !pkg.is_trial;
+          ? Boolean(pkg.is_trial)
+          : !Boolean(pkg.is_trial);
 
     return matchesSearch && matchesStatus && matchesTrial;
   });

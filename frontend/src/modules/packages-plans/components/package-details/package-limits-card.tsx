@@ -1,7 +1,7 @@
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackageLimitsCard({ pkg }: Props) {

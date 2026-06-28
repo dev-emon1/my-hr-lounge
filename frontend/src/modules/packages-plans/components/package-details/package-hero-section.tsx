@@ -1,8 +1,8 @@
 import { Badge } from "@/shared/ui/badge";
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackageHeroSection({ pkg }: Props) {
@@ -20,8 +20,14 @@ function PackageHeroSection({ pkg }: Props) {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Badge className="bg-emerald-500/10 text-emerald-600">
-            {pkg.is_active ? "Active" : "Inactive"}
+          <Badge
+            className={
+              pkg.status.value === "active"
+                ? "bg-emerald-500/10 text-emerald-600"
+                : "bg-amber-500/10 text-amber-600"
+            }
+          >
+            {pkg.status.label}
           </Badge>
 
           {pkg.is_trial && (

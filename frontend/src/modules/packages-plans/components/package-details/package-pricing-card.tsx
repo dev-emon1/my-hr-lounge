@@ -1,12 +1,12 @@
-import type { Package } from "../../types/package.types";
+import type { PackageDetails } from "../../types/package-details.types";
 
 type Props = {
-  pkg: Package;
+  pkg: PackageDetails;
 };
 
 function PackagePricingCard({ pkg }: Props) {
-  const monthly = Number(pkg.price_monthly);
-  const yearly = Number(pkg.price_yearly);
+  const monthly = Number(pkg.pricing.monthly);
+  const yearly = Number(pkg.pricing.yearly);
 
   return (
     <div className="rounded-[28px] border border-border p-6">

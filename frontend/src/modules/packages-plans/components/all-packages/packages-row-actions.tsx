@@ -11,18 +11,18 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 
-import type { Package } from "../../types/package.types";
+import type { PackageListItem } from "../../types/package-list.types";
 
 type Props = {
-  pkg: Package;
-  onClone?: (pkg: Package) => void;
-  onArchive?: (pkg: Package) => void;
+  pkg: PackageListItem;
+  onClone?: (pkg: PackageListItem) => void;
+  onArchive?: (pkg: PackageListItem) => void;
 };
 
 function PackagesRowActions({ pkg, onClone, onArchive }: Props) {
   const navigate = useNavigate();
 
-  const isArchived = !pkg.is_active;
+  const isArchived = pkg.status.value === "archived";
 
   return (
     <DropdownMenu>
@@ -34,13 +34,7 @@ function PackagesRowActions({ pkg, onClone, onArchive }: Props) {
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() =>
-            navigate(`/packages-plans/packages/${pkg.slug}`, {
-              state: {
-                package: pkg,
-              },
-            })
-          }
+          onClick={() => navigate(`/packages-plans/packages/${pkg.slug}`)}
         >
           <Eye size={16} />
           View Details

@@ -11,12 +11,12 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 
-import type { Package } from "../../../types/package.types";
+import type { PackageListItem } from "../../../types/package-list.types";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  pkg: Package | null;
+  pkg: PackageListItem | null;
 };
 
 function ClonePackageDialog({ open, onOpenChange, pkg }: Props) {
@@ -36,7 +36,7 @@ function ClonePackageDialog({ open, onOpenChange, pkg }: Props) {
             <div className="space-y-2">
               <Label>Source Package</Label>
 
-              <Input disabled value={pkg?.packageName ?? ""} />
+              <Input disabled value={pkg?.name ?? ""} />
             </div>
 
             <div className="space-y-2">
