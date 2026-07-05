@@ -3,59 +3,286 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PackageRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Authorize
+    |--------------------------------------------------------------------------
+    */
+
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
-    {
-        return [
-            'name'           => 'required|string|max:100',
-            'slug'           => 'nullable|string|max:100|unique:packages,slug',
-            'description'    => 'nullable|string',
-            'price_monthly'  => 'required|numeric|min:0',
-            'price_yearly'   => 'required|numeric|min:0',
-            'modules'        => 'nullable|array',
-            'limits'         => 'nullable|array',
-            'integrations'   => 'nullable|array',
-            'is_active'      => 'boolean',
-            'is_trial'       => 'boolean',
-            'trial_period'   => 'nullable|string|max:50',
-        ];
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | Validation Rules
+    |--------------------------------------------------------------------------
+    */
+
+  public function rules(): array
+{
+    $package = $this->route('package');
+
+    $packageId = $package?->id;
+
+    return [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Basic Information
+        |--------------------------------------------------------------------------
+        */
+
+        'name' => [
+            'required',
+            'string',
+            'max:100',
+        ],
+
+        'slug' => [
+
+            'nullable',
+
+            'string',
+
+            'max:100',
+
+            Rule::unique('packages', 'slug')
+                ->ignore($packageId),
+
+        ],
+
+        'description' => [
+            'nullable',
+            'string',
+            'max:5000',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pricing
+        |--------------------------------------------------------------------------
+        */
+
+        'price_monthly' => [
+            'required',
+            'numeric',
+            'min:0',
+        ],
+
+        'price_yearly' => [
+            'required',
+            'numeric',
+            'min:0',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Package Builder
+        |--------------------------------------------------------------------------
+        */
+
+        'modules' => [
+            'required',
+            'array',
+        ],
+
+        'modules.*' => [
+            'required',
+            'array',
+        ],
+
+        'modules.*.enabled' => [
+            'required',
+            'boolean',
+        ],
+
+        'modules.*.features' => [
+            'nullable',
+            'array',
+        ],
+
+        'modules.*.features.*' => [
+            'boolean',
+        ],
+
+        'limits' => [
+            'nullable',
+            'array',
+        ],
+
+        'integrations' => [
+            'nullable',
+            'array',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trial
+        |--------------------------------------------------------------------------
+        */
+
+        'is_trial' => [
+            'required',
+            'boolean',
+        ],
+
+        'trial_period' => [
+
+            Rule::requiredIf(
+                $this->boolean('is_trial')
+            ),
+
+            'nullable',
+
+            'integer',
+
+            'min:1',
+
+            'max:365',
+
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status
+        |--------------------------------------------------------------------------
+        */
+
+        'status' => [
+
+            'required',
+
+            Rule::in([
+
+                'draft',
+
+                'active',
+
+                'inactive',
+
+                'archived',
+
+            ]),
+
+        ],
+
+    ];
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Messages
+    |--------------------------------------------------------------------------
+    */
 
     public function messages(): array
     {
         return [
-            'name.required' => 'The package name is required.',
-            'name.string' => 'The package name must be a string.',
-            'name.max' => 'The package name may not be greater than 100 characters.',
-            'description.string' => 'The description must be a string.',
-            'price_monthly.required' => 'The monthly price is required.',
-            'price_monthly.numeric' => 'The monthly price must be a number.',
-            'price_monthly.min' => 'The monthly price must be at least 0.',
-            'price_yearly.required' => 'The yearly price is required.',
-            'price_yearly.numeric' => 'The yearly price must be a number.',
-            'price_yearly.min' => 'The yearly price must be at least 0.',
-            'modules.array' => 'The modules field must be an array.',
-            'limits.array' => 'The limits field must be an array.',
-            'integrations.array' => 'The integrations field must be an array.',
-            'is_active.boolean' => 'The is_active field must be true or false.',
-            'is_trial.boolean' => 'The is_trial field must be true or false.',
-            'trial_period.string' => 'The trial period must be a string.',
-            'trial_period.max' => 'The trial period may not be greater than 50 characters.',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Basic Information
+            |--------------------------------------------------------------------------
+            */
+
+            'name.required' =>
+                'Package name is required.',
+
+            'name.max' =>
+                'Package name may not exceed 100 characters.',
+
+            'slug.unique' =>
+                'Package slug already exists.',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Pricing
+            |--------------------------------------------------------------------------
+            */
+
+            'price_monthly.required' =>
+                'Monthly price is required.',
+
+            'price_monthly.numeric' =>
+                'Monthly price must be numeric.',
+
+            'price_yearly.required' =>
+                'Yearly price is required.',
+
+            'price_yearly.numeric' =>
+                'Yearly price must be numeric.',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Builder
+            |--------------------------------------------------------------------------
+            */
+
+            'modules.required' =>
+                'Please select at least one module.',
+
+            'modules.array' =>
+                'Modules must be an array.',
+
+            'limits.array' =>
+                'Limits must be an array.',
+
+            'integrations.array' =>
+                'Integrations must be an array.',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Trial
+            |--------------------------------------------------------------------------
+            */
+
+            'trial_period.required' =>
+                'Trial period is required.',
+
+            'trial_period.integer' =>
+                'Trial period must be an integer.',
+
+            'trial_period.min' =>
+                'Trial period must be at least 1 day.',
+
+            'trial_period.max' =>
+                'Trial period may not exceed 365 days.',
+
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
+
+            'status.required' =>
+                'Package status is required.',
+
+            'status.in' =>
+                'Invalid package status.',
+
         ];
-    }   
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prepare Validation
+    |--------------------------------------------------------------------------
+    */
+
+   protected function prepareForValidation(): void
+{
+    $this->merge([
+
+        'description' => filled($this->description)
+            ? trim($this->description)
+            : null,
+
+    ]);
+}
 }

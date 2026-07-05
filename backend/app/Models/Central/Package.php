@@ -3,6 +3,7 @@
 namespace App\Models\Central;
 
 use App\Enums\PackageStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,88 +11,295 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Package extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
+    use HasUuids;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Connection
+    |--------------------------------------------------------------------------
+    */
 
     protected $connection = 'pgsql';
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mass Assignment
+    |--------------------------------------------------------------------------
+    */
+
     protected $fillable = [
-        'name', 'slug', 'description',
-        'price_monthly', 'price_yearly',
-        'modules', 'limits', 'integrations',
-        'is_trial', 'trial_period', 'status',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Basic Information
+        |--------------------------------------------------------------------------
+        */
+
+        'name',
+
+        'slug',
+
+        'description',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pricing
+        |--------------------------------------------------------------------------
+        */
+
+        'price_monthly',
+
+        'price_yearly',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Package Builder
+        |--------------------------------------------------------------------------
+        */
+
+        'modules',
+
+        'limits',
+
+        'integrations',
+
+        'registry_snapshot',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trial
+        |--------------------------------------------------------------------------
+        */
+
+        'is_trial',
+
+        'trial_period',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status
+        |--------------------------------------------------------------------------
+        */
+
+        'status',
+
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attribute Casting
+    |--------------------------------------------------------------------------
+    */
 
     protected $casts = [
-        'modules'       => 'array',
-        'limits'        => 'array',
-        'integrations'  => 'array',
-        'is_trial'      => 'boolean',
+
+        'modules' => 'array',
+
+        'limits' => 'array',
+
+        'integrations' => 'array',
+
+        'registry_snapshot' => 'array',
+
+        'is_trial' => 'boolean',
+
         'price_monthly' => 'decimal:2',
-        'price_yearly'  => 'decimal:2',
-        'status'        => PackageStatusEnum::class,
+
+        'price_yearly' => 'decimal:2',
+
+        'status' => PackageStatusEnum::class,
+
     ];
 
-    protected $hidden = ['modules', 'integrations']; // Default hide heavy fields
+    /*
+    |--------------------------------------------------------------------------
+    | Route Model Binding
+    |--------------------------------------------------------------------------
+    */
 
-    /**
-     * Route Model Binding
-     *
-     * /packages/starter
-     * starter = slug
-     */
     public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    public function getModules(): array
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(
+            Subscription::class
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeActive(
+        Builder $query
+    ): Builder {
+
+        return $query->where(
+
+            'status',
+
+            PackageStatusEnum::ACTIVE
+
+        );
+    }
+
+    public function scopeSearch(
+        Builder $query,
+        ?string $keyword
+    ): Builder {
+
+        if (! filled($keyword)) {
+            return $query;
+        }
+
+        $keyword = trim($keyword);
+
+        return $query->where(function ($query) use (
+            $keyword
+        ) {
+
+            $query
+
+                ->where(
+                    'name',
+                    'ILIKE',
+                    "%{$keyword}%"
+                )
+
+                ->orWhere(
+                    'slug',
+                    'ILIKE',
+                    "%{$keyword}%"
+                )
+
+                ->orWhereRaw(
+                    'price_monthly::text ILIKE ?',
+                    ["%{$keyword}%"]
+                )
+
+                ->orWhereRaw(
+                    'price_yearly::text ILIKE ?',
+                    ["%{$keyword}%"]
+                );
+
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helper Methods
+    |--------------------------------------------------------------------------
+    */
+
+    public function hasModule(
+        string $module
+    ): bool {
+
+        return data_get(
+
+            $this->modules,
+
+            "{$module}.enabled",
+
+            false
+
+        );
+    }
+
+    public function hasFeature(
+        string $module,
+        string $feature
+    ): bool {
+
+        return data_get(
+
+            $this->modules,
+
+            "{$module}.children.{$feature}.enabled",
+
+            false
+
+        );
+    }
+
+    public function hasPermission(
+        string $module,
+        string $feature,
+        string $permission
+    ): bool {
+
+        return in_array(
+
+            $permission,
+
+            data_get(
+
+                $this->registry_snapshot,
+
+                "modules.{$module}.children.{$feature}.permissions",
+
+                []
+
+            ),
+
+            true
+
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Registry Snapshot
+    |--------------------------------------------------------------------------
+    */
+
+    public function registrySnapshot(): array
+    {
+        return $this->registry_snapshot ?? [];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modules
+    |--------------------------------------------------------------------------
+    */
+
+    public function modules(): array
     {
         return $this->modules ?? [];
     }
 
-    // public function hasModule(string $moduleKey): bool
-    // {
-    //     return in_array($moduleKey, $this->getModules());
-    // }
+    /*
+    |--------------------------------------------------------------------------
+    | Limits
+    |--------------------------------------------------------------------------
+    */
 
-    public function hasModule(string $module): bool
+    public function limits(): array
     {
-        return data_get($this->modules, $module, false);
+        return $this->limits ?? [];
     }
 
-    // Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Integrations
+    |--------------------------------------------------------------------------
+    */
 
-    public function tenants(): HasMany
+    public function integrations(): array
     {
-        return $this->hasMany(Tenant::class);
+        return $this->integrations ?? [];
     }
-
-    // Scopes
-
-    public function scopeActive($query)
-    {
-        return $query->where('status', PackageStatusEnum::ACTIVE->value);
-    }
-
-    public function scopeSearch($query, string $term)
-    {
-        $term = trim($term);
-        if (empty($term)) return $query;
-
-        return $query->where(function ($q) use ($term) {
-            $q->where('name', 'ILIKE', "%{$term}%")
-                ->orWhere('slug', 'ILIKE', "%{$term}%")
-                ->orWhereRaw('price_monthly::text ILIKE ?', ["%{$term}%"])
-                ->orWhereRaw('price_yearly::text ILIKE ?', ["%{$term}%"]);
-
-            if (is_numeric($term)) {
-                $price = (float) $term;
-                $q->orWhere('price_monthly', $price)
-                  ->orWhere('price_yearly', $price);
-            }
-        });
-    }
-
-    // Optional: Limit visible attributes for index
-    // protected $appends = []; // remove if not needed
 }

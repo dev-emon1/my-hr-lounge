@@ -22,37 +22,168 @@ return new class extends Migration
         throw_if(empty($tableNames), Exception::class, 'Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
         throw_if($teams && empty($columnNames['team_foreign_key'] ?? null), Exception::class, 'Error: team_foreign_key on config/permission.php not loaded. Run [php artisan config:clear] and try again.');
 
-        Schema::create($tableNames['permissions'], static function (Blueprint $table) {
-            // $table->engine('InnoDB');
-            $table->bigIncrements('id'); // permission id
-            $table->string('module');    // For MyISAM use string('module', 225);
-            $table->string('feature');   // For MyISAM use string('feature', 225);
-            $table->string('name');       // For MyISAM use string('name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
-            $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
-            $table->timestamps();
+       Schema::create($tableNames['permissions'], static function (Blueprint $table) {
 
-            $table->unique(['name', 'guard_name']);
-        });
+    /*
+    |--------------------------------------------------------------------------
+    | Primary Key
+    |--------------------------------------------------------------------------
+    */
 
-        Schema::create($tableNames['roles'], static function (Blueprint $table) use ($teams, $columnNames) {
-            // $table->engine('InnoDB');
-            $table->bigIncrements('id'); // role id
-            if ($teams || config('permission.testing')) { // permission.testing is a fix for sqlite testing
-                $table->foreignUuid($columnNames['team_foreign_key'])
-                    ->nullable()
-                    ->constrained('tenants')
-                    ->cascadeOnDelete();
-                $table->index($columnNames['team_foreign_key'], 'roles_team_foreign_key_index');
-            }
-            $table->string('name');       // For MyISAM use string('name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
-            $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
-            $table->timestamps();
-            if ($teams || config('permission.testing')) {
-                $table->unique([$columnNames['team_foreign_key'], 'name', 'guard_name']);
-            } else {
-                $table->unique(['tenant_id', 'name', 'guard_name']);
-            }
-        });
+    $table->bigIncrements('id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Permission
+    |--------------------------------------------------------------------------
+    */
+
+    $table->string('name');
+
+    $table->string('guard_name');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Registry Metadata
+    |--------------------------------------------------------------------------
+    */
+
+    $table->string('module_key');
+
+    $table->string('feature_key');
+
+    $table->string('template_key');
+
+    $table->string('action');
+
+    /*
+    |--------------------------------------------------------------------------
+    | System
+    |--------------------------------------------------------------------------
+    */
+
+    $table->boolean('is_system')
+
+        ->default(true);
+
+    $table->timestamps();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Indexes
+    |--------------------------------------------------------------------------
+    */
+
+    $table->unique([
+
+        'name',
+
+        'guard_name',
+
+    ]);
+
+    $table->index('module_key');
+
+    $table->index('feature_key');
+
+    $table->index('template_key');
+
+    $table->index('action');
+
+});
+
+     Schema::create($tableNames['roles'], static function (Blueprint $table) use ($teams, $columnNames) {
+
+    $table->bigIncrements('id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tenant
+    |--------------------------------------------------------------------------
+    */
+
+    if ($teams || config('permission.testing')) {
+
+        $table->foreignUuid($columnNames['team_foreign_key'])
+
+            ->nullable()
+
+            ->constrained('tenants')
+
+            ->cascadeOnDelete();
+
+        $table->index(
+
+            $columnNames['team_foreign_key'],
+
+            'roles_team_foreign_key_index'
+
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role
+    |--------------------------------------------------------------------------
+    */
+
+    $table->string('name');
+
+    $table->string('guard_name');
+
+    $table->text('description')
+
+        ->nullable();
+
+    /*
+    |--------------------------------------------------------------------------
+    | System
+    |--------------------------------------------------------------------------
+    */
+
+    $table->boolean('is_system')
+
+        ->default(false);
+
+    $table->boolean('is_active')
+
+        ->default(true);
+
+    $table->timestamps();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Unique
+    |--------------------------------------------------------------------------
+    */
+
+    if ($teams || config('permission.testing')) {
+
+        $table->unique([
+
+            $columnNames['team_foreign_key'],
+
+            'name',
+
+            'guard_name',
+
+        ]);
+
+    } else {
+
+        $table->unique([
+
+            'tenant_id',
+
+            'name',
+
+            'guard_name',
+
+        ]);
+
+    }
+
+});
 
         Schema::create($tableNames['model_has_permissions'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
             $table->unsignedBigInteger($pivotPermission);

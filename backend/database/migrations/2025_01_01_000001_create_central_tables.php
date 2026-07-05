@@ -28,16 +28,17 @@ return new class extends Migration
             $table->jsonb('modules')->default('{}');
             $table->jsonb('limits')->default('{}');
             $table->jsonb('integrations')->default('{}');
+            $table->jsonb('registry_snapshot')->nullable();
 
             $table->boolean('is_trial')->default(false);
-            $table->string('trial_period')->nullable();
+            $table->unsignedSmallInteger('trial_period')->nullable();
 
             $table->string('status')->default('active');
 
             $table->timestamps();
         });
 
-        // Table create হওয়ার পরে
+        // After create Table
 
         DB::statement("
                 CREATE INDEX packages_name_gin
@@ -125,21 +126,54 @@ return new class extends Migration
         });
 
         // ── Super Admin Roles ─────────────────────────────────
-        // Super Admin নিজের team এর জন্য dynamic roles বানাতে পারবে
-        Schema::create('super_admin_roles', function (Blueprint $table) {
-            $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->jsonb('permissions')->default('[]');
-            $table->text('description')->nullable();
-            $table->timestamps();
-        });
+    //   Schema::create('super_admin_roles', function (Blueprint $table) {
 
-        Schema::create('super_admin_role_user', function (Blueprint $table) {
-            $table->foreignUuid('super_admin_id')->constrained('super_admins')->cascadeOnDelete();
-            $table->foreignUuid('role_id')->constrained('super_admin_roles')->cascadeOnDelete();
-            $table->primary(['super_admin_id', 'role_id']);
-        });
+    //         $table->uuid('id')
+    //         ->primary()
+    //         ->default(DB::raw('gen_random_uuid()'));
+
+    //         $table->string('name');
+
+    //         $table->string('slug')->unique();
+
+    //         $table->text('description')->nullable();
+
+    //         $table->boolean('is_system')
+    //         ->default(false);
+
+    //         $table->boolean('is_active')
+    //         ->default(true);
+
+    //         $table->timestamps();
+    //     });
+
+        // Schema::create('super_admin_role_permissions', function (Blueprint $table) {
+
+        //     $table->uuid('role_id');
+
+        //     $table->unsignedBigInteger('permission_id');
+
+        //     $table->foreign('role_id')
+        //     ->references('id')
+        //     ->on('super_admin_roles')
+        //     ->cascadeOnDelete();
+
+        //     $table->foreign('permission_id')
+        //     ->references('id')
+        //     ->on('permissions')
+        //     ->cascadeOnDelete();
+
+        //     $table->primary([
+        //     'role_id',
+        //     'permission_id',
+        //     ]);
+        // });
+
+        // Schema::create('super_admin_role_user', function (Blueprint $table) {
+        //     $table->foreignUuid('super_admin_id')->constrained('super_admins')->cascadeOnDelete();
+        //     $table->foreignUuid('role_id')->constrained('super_admin_roles')->cascadeOnDelete();
+        //     $table->primary(['super_admin_id', 'role_id']);
+        // });
 
         // ── System Audit Log ──────────────────────────────────
         Schema::create('system_audit_logs', function (Blueprint $table) {
@@ -172,8 +206,9 @@ return new class extends Migration
     {
         Schema::dropIfExists('personal_access_tokens');
         Schema::dropIfExists('system_audit_logs');
-        Schema::dropIfExists('super_admin_role_user');
-        Schema::dropIfExists('super_admin_roles');
+        // Schema::dropIfExists('super_admin_role_permissions');
+        // Schema::dropIfExists('super_admin_role_user');
+        // Schema::dropIfExists('super_admin_roles');
         Schema::dropIfExists('super_admin_sessions');
         Schema::dropIfExists('super_admins');
         Schema::dropIfExists('subscriptions');

@@ -4,19 +4,45 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes — v1
+| API Routes
 |--------------------------------------------------------------------------
+|
+| All API routes are versioned under /api/v1
+|
 */
 
 Route::prefix('v1')->group(function () {
 
-    // ── Super Admin ───────────────────────────────────────────
-    // Central schema — tenant middleware নেই
-    Route::prefix('sa')->group(base_path('routes/api/superadmin.php'));
+    /*
+    |--------------------------------------------------------------------------
+    | Health Check
+    |--------------------------------------------------------------------------
+    */
 
-    // ── Health Check ──────────────────────────────────────────
-    Route::get('health', fn() => response()->json([
+    Route::get('/health', fn () => response()->json([
+        'success'   => true,
         'status'    => 'ok',
         'timestamp' => now()->toISOString(),
     ]));
+
+    /*
+    |--------------------------------------------------------------------------
+    | Super Admin APIs
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('sa')->group(
+        base_path('routes/api/superadmin.php')
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Client APIs
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('client')->group(
+        base_path('routes/api/client.php')
+    );
+
 });

@@ -25,8 +25,10 @@ class TenantController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $tenants = Tenant::with('package')
-            ->orderBy('created_at', 'desc')
+      $tenants = Tenant::with([
+    'subscriptions.package',
+])
+            ->latest()
             ->paginate(20);
 
         return $this->paginated($tenants);
@@ -35,18 +37,12 @@ class TenantController extends Controller
     /**
      * POST /api/v1/sa/tenants
      */
-    public function store(TenantRequest $request)
+    public function store(TenantRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        DB::transaction(function () use ($validated) {
 
-            // Database schema name তৈরি করো
-            // $validated['database'] = 'tenant_' . $validated['slug'];
-            // $validated['status']   = 'trial';
-            // $validated['trial_ends_at'] = now()->addDays(14);
-            if ($validated['status'] === 'trial') {
-                $validated['trial_ends_at'] = now()->addDays(14);
-            }
+        return DB::transaction(function () use ($validated) {
+
             $tenantData = Arr::only($validated, [
                 'company_name',
                 'owner_name',
@@ -60,35 +56,50 @@ class TenantController extends Controller
                 'country',
             ]);
 
-            $tenantData['slug'] = Str::slug($validated['company_name']) . '-' . Str::lower(Str::random(5));
+            $tenantData['slug'] = Str::slug($validated['company_name'])
+                . '-' . Str::lower(Str::random(5));
+
             $tenantData['status'] = $validated['status'];
-            $tenantData['trial_ends_at'] = $validated['status'] === 'trial'
+
+            $tenantData['trial_ends_at'] =
+                $validated['status'] === 'trial'
                 ? now()->addDays(14)
                 : null;
 
             $tenant = Tenant::create($tenantData);
 
+            $package = Package::findOrFail($validated['package_id']);
+
             Subscription::create([
                 'tenant_id' => $tenant->id,
-                'package_id' => $validated['package_id'],
+                'package_id' => $package->id,
                 'billing_cycle' => $validated['billing_cycle'],
-                'amount' => Package::find($validated['package_id'])->price_monthly ?? 0,
-                'status' => $validated['status'] === 'trial' ? 'trial' : 'active',
+                'amount' => $package->price_monthly ?? 0,
+                'status' => $validated['status'] === 'trial'
+                    ? 'trial'
+                    : 'active',
                 'current_period_start' => now(),
-                'current_period_end' => now()->addDays(14),
+                'current_period_end' => $validated['status'] === 'trial'
+                    ? now()->addDays(14)
+                    : now()->addMonth(),
             ]);
 
             User::create([
                 'tenant_id' => $tenant->id,
-                'name' => $validated['company_name'],
+                'name' => $validated['owner_name'],
                 'email' => $validated['email'],
-                'password' => Hash::make($validated['password'] ?? 'password'),
+                'password' => Hash::make($validated['password']),
                 'is_owner' => true,
             ]);
 
-            return $this->created([
-                'tenant' => $tenant->load('package'),
-            ], 'Tenant created successfully');
+          $tenant->load([
+    'subscriptions.package',
+    'users',
+]);
+
+return $this->created([
+    'tenant' => $tenant,
+], 'Tenant created successfully.');
         });
     }
 
@@ -97,10 +108,15 @@ class TenantController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $tenant = Tenant::with(['package', 'subscriptions'])->find($id);
+        $tenant = Tenant::with([
+            'subscriptions.package',
+            'activeSubscription.package',
+            'users',
+            'files',
+        ])->find($id);
 
-        if (!$tenant) {
-            return $this->notFound('Tenant not found');
+        if (! $tenant) {
+            return $this->notFound('Tenant not found.');
         }
 
         return $this->success($tenant);
@@ -113,21 +129,25 @@ class TenantController extends Controller
     {
         $tenant = Tenant::find($id);
 
-        if (!$tenant) {
-            return $this->notFound('Tenant not found');
+        if (! $tenant) {
+            return $this->notFound('Tenant not found.');
         }
 
         $validated = $request->validate([
-            'name'       => 'sometimes|string|max:255',
-            'package_id' => 'sometimes|uuid|exists:packages,id',
-            'timezone'   => 'nullable|string',
-            'country'    => 'nullable|string|max:10',
-            'settings'   => 'nullable|array',
+            'company_name' => 'sometimes|string|max:255',
+            'timezone' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'settings' => 'nullable|array',
         ]);
 
         $tenant->update($validated);
 
-        return $this->success($tenant->load('package'), 'Tenant updated successfully');
+       return $this->success(
+    $tenant->load([
+        'subscriptions.package',
+    ]),
+    'Tenant updated successfully.'
+);
     }
 
     /**
@@ -137,13 +157,18 @@ class TenantController extends Controller
     {
         $tenant = Tenant::find($id);
 
-        if (!$tenant) {
-            return $this->notFound('Tenant not found');
+        if (! $tenant) {
+            return $this->notFound('Tenant not found.');
         }
 
-        $tenant->update(['status' => 'suspended']);
+        $tenant->update([
+            'status' => 'suspended',
+        ]);
 
-        return $this->success(null, 'Tenant suspended successfully');
+        return $this->success(
+            null,
+            'Tenant suspended successfully.'
+        );
     }
 
     /**
@@ -153,13 +178,18 @@ class TenantController extends Controller
     {
         $tenant = Tenant::find($id);
 
-        if (!$tenant) {
-            return $this->notFound('Tenant not found');
+        if (! $tenant) {
+            return $this->notFound('Tenant not found.');
         }
 
-        $tenant->update(['status' => 'active']);
+        $tenant->update([
+            'status' => 'active',
+        ]);
 
-        return $this->success(null, 'Tenant activated successfully');
+        return $this->success(
+            null,
+            'Tenant activated successfully.'
+        );
     }
 
     /**
@@ -168,12 +198,12 @@ class TenantController extends Controller
     public function dashboard(): JsonResponse
     {
         return $this->success([
-            'total_tenants'     => Tenant::count(),
-            'active_tenants'    => Tenant::where('status', 'active')->count(),
-            'trial_tenants'     => Tenant::where('status', 'trial')->count(),
+            'total_tenants' => Tenant::count(),
+            'active_tenants' => Tenant::where('status', 'active')->count(),
+            'trial_tenants' => Tenant::where('status', 'trial')->count(),
             'suspended_tenants' => Tenant::where('status', 'suspended')->count(),
-            'total_packages'    => Package::count(),
-            'active_packages'   => Package::where('is_active', true)->count(),
+            'total_packages' => Package::count(),
+            'active_packages' => Package::where('is_active', true)->count(),
         ]);
     }
 }

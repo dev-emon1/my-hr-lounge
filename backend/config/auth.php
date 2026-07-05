@@ -35,17 +35,24 @@ return [
     |
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+   'guards' => [
 
-        'super_admin' => [
-        'driver'   => 'sanctum',
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+
+    'super_admin' => [
+        'driver' => 'sanctum',
         'provider' => 'super_admins',
     ],
+
+    'client' => [
+        'driver' => 'sanctum',
+        'provider' => 'clients',
     ],
+
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -65,16 +72,23 @@ return [
     */
 
     'providers' => [
-        // 'users' => [
-        //     'driver' => 'eloquent',
-        //     'model' => env('AUTH_MODEL', App\Models\User::class),
-        // ],
 
-       'super_admins' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model'  => App\Models\User::class,
+    ],
+
+    'super_admins' => [
         'driver' => 'eloquent',
         'model'  => App\Models\Central\SuperAdmin::class,
     ],
+
+    'clients' => [
+        'driver' => 'eloquent',
+        'model'  => App\Models\User::class,
     ],
+
+],
 
     /*
     |--------------------------------------------------------------------------

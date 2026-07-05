@@ -9,36 +9,101 @@ class PackageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'slug'        => $this->slug,
+
+            /*
+            |--------------------------------------------------------------------------
+            | Identity
+            |--------------------------------------------------------------------------
+            */
+
+            'id' => $this->id,
+
+            'name' => $this->name,
+
+            'slug' => $this->slug,
+
             'description' => $this->description,
 
+            /*
+            |--------------------------------------------------------------------------
+            | Pricing
+            |--------------------------------------------------------------------------
+            */
+
             'pricing' => [
+
                 'monthly' => $this->price_monthly,
-                'yearly'  => $this->price_yearly,
+
+                'yearly' => $this->price_yearly,
+
             ],
 
-            'is_trial'     => $this->is_trial,
-            'trial_period' => $this->trial_period,
+            /*
+            |--------------------------------------------------------------------------
+            | Trial
+            |--------------------------------------------------------------------------
+            */
+
+            'trial' => [
+
+                'enabled' => (bool) $this->is_trial,
+
+                'period' => $this->trial_period,
+
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
 
             'status' => [
-                'value' => $this->status?->value,
-                'label' => $this->status?->label(),
+
+                'value' => is_object($this->status)
+                    ? $this->status->value
+                    : $this->status,
+
+                'label' => method_exists($this->status, 'label')
+                    ? $this->status->label()
+                    : ucfirst((string) $this->status),
+
             ],
 
-            'modules'      => $this->modules,
-            'limits'       => $this->limits,
-            'integrations' => $this->integrations,
+            /*
+            |--------------------------------------------------------------------------
+            | Package Builder
+            |--------------------------------------------------------------------------
+            */
 
-            'created_at'   => $this->created_at?->toIso8601String(),
-            'updated_at'   => $this->updated_at?->toIso8601String(),
+            'modules' => $this->modules ?? [],
+
+            'limits' => $this->limits ?? [],
+
+            'integrations' => $this->integrations ?? [],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Registry Snapshot
+            |--------------------------------------------------------------------------
+            */
+
+            'registry_snapshot' => $this->registry_snapshot,
+
+            /*
+            |--------------------------------------------------------------------------
+            | Timestamps
+            |--------------------------------------------------------------------------
+            */
+
+            'created_at' => $this->created_at?->toIso8601String(),
+
+            'updated_at' => $this->updated_at?->toIso8601String(),
+
         ];
     }
 }

@@ -2,126 +2,212 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Central\Package;
+use App\Services\Package\PackageSnapshotService;
+use Illuminate\Database\Seeder;
 
 class PackageSeeder extends Seeder
 {
+    public function __construct(
+        protected PackageSnapshotService $snapshot
+    ) {}
+
     public function run(): void
     {
-        $packages = [
-
-            [
-                'name' => 'Starter',
-                'slug' => 'starter',
-                'description' => 'Suitable for small businesses and startups.',
-
-                'price_monthly' => 9.99,
-                'price_yearly'  => 99.99,
-
-                'modules' => [
-                    'Employee_management' => true,
-                    'Attendance' => true,
-                    'Leave_management' => true,
-                    'Payroll' => false,
-                    'Recruitment' => false,
-                    'Performance_management' => false,
-                ],
-
-                'limits' => [
-                    'employees' => 15,
-                    'admins' => 2,
-                    'department_limit' => 4,
-                    'branches' => 1,
-                    'storage_gb' => 50,
-                    'device_limit' => 2,
-                ],
-
-                'integrations' => [
-                    'zkteco' => true,
-                    'api_access' => false,
-                    'whatsapp' => false,
-                ],
-
-                'status' => 'active',
-            ],
-
-            [
-                'name' => 'Business',
-                'slug' => 'business',
-                'description' => 'Ideal for growing companies.',
-
-                'price_monthly' => 29.99,
-                'price_yearly'  => 299.99,
-
-                'modules' => [
-                    'Employee_management' => true,
-                    'Attendance' => true,
-                    'Leave_management' => true,
-                    'Payroll' => true,
-                    'Recruitment' => true,
-                    'Performance_management' => false,
-                ],
-
-                'limits' => [
-                    'employees' => 100,
-                    'admins' => 5,
-                    'department_limit' => 10,
-                    'branches' => 5,
-                    'storage_gb' => 100,
-                    'device_limit' => 10,
-                ],
-
-                'integrations' => [
-                    'zkteco' => true,
-                    'api_access' => true,
-                    'whatsapp' => false,
-                ],
-
-                'status' => 'active',
-            ],
-
-            [
-                'name' => 'Enterprise',
-                'slug' => 'enterprise',
-                'description' => 'Full-featured enterprise HRM package.',
-
-                'price_monthly' => 99.99,
-                'price_yearly'  => 999.99,
-
-                'modules' => [
-                    'Employee_management' => true,
-                    'Attendance' => true,
-                    'Leave_management' => true,
-                    'Payroll' => true,
-                    'Recruitment' => true,
-                    'Performance_management' => true,
-                ],
-
-                'limits' => [
-                    'employees' => 1000,
-                    'admins' => 50,
-                    'department_limit' => 30,
-                    'branches' => 50,
-                    'storage_gb' => 500,
-                    'device_limit' => 100,
-                ],
-
-                'integrations' => [
-                    'zkteco' => true,
-                    'api_access' => true,
-                    'whatsapp' => true,
-                ],
-
-                'status' => 'active',
-            ],
-        ];
+        $packages = config('hr-lounge.packages');
 
         foreach ($packages as $package) {
-            Package::updateOrCreate(
-                ['slug' => $package['slug']],
-                $package
+
+            /*
+            |--------------------------------------------------------------------------
+            | Resolve Modules
+            |--------------------------------------------------------------------------
+            */
+
+            $modules = $this->resolveModules(
+                $package['modules']
             );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Registry Snapshot
+            |--------------------------------------------------------------------------
+            */
+
+            $snapshot = $this->snapshot->build(
+                $modules
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Save
+            |--------------------------------------------------------------------------
+            */
+
+            Package::updateOrCreate(
+
+                [
+                    'slug' => $package['slug'],
+                ],
+
+                [
+                    'name' => $package['name'],
+
+                    'description' => $package['description'],
+
+                    'price_monthly' => $package['price_monthly'],
+
+                    'price_yearly' => $package['price_yearly'],
+
+                    'modules' => $modules,
+
+                    'limits' => $package['limits'],
+
+                    'integrations' => [],
+
+                    'registry_snapshot' => $snapshot,
+
+                    'is_trial' => $package['trial']['enabled'],
+
+                    'trial_period' => $package['trial']['days'],
+
+                    'status' => $package['status'],
+                ]
+
+            );
+
         }
+    }
+        /*
+    |--------------------------------------------------------------------------
+    | Resolve Package Modules
+    |--------------------------------------------------------------------------
+    */
+
+    protected function resolveModules(
+        array|string $enabledGroups
+    ): array {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Registry
+        |--------------------------------------------------------------------------
+        */
+
+        $registry = config('hr-lounge.modules');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Enterprise
+        |--------------------------------------------------------------------------
+        */
+
+        if ($enabledGroups === '*') {
+
+            return $this->enableAllModules(
+                $registry
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Build
+        |--------------------------------------------------------------------------
+        */
+
+        $modules = [];
+
+        foreach ($registry as $key => $module) {
+
+            $modules[$key] = [
+
+                'enabled' => in_array(
+
+                    $module['group'],
+
+                    $enabledGroups,
+
+                    true
+
+                ),
+
+                'features' => [],
+
+            ];
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Features
+        |--------------------------------------------------------------------------
+        */
+
+        return $this->attachFeatures(
+            $modules
+        );
+
+    }
+       /*
+    |--------------------------------------------------------------------------
+    | Attach Features
+    |--------------------------------------------------------------------------
+    */
+
+    protected function attachFeatures(
+        array $modules
+    ): array {
+
+        $features = config('hr-lounge.features');
+
+        foreach ($features as $featureKey => $feature) {
+
+            $group = $feature['group'];
+
+            if (! isset($modules[$group])) {
+                continue;
+            }
+
+            $modules[$group]['features'][$featureKey] = [
+
+                'enabled' => $modules[$group]['enabled'],
+
+                'permissions' => [],
+
+            ];
+
+        }
+
+        return $modules;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable All Registered Modules
+    |--------------------------------------------------------------------------
+    */
+
+    protected function enableAllModules(
+        array $registry
+    ): array {
+
+        $modules = [];
+
+        foreach ($registry as $key => $module) {
+
+            $modules[$key] = [
+
+                'enabled' => true,
+
+                'features' => [],
+
+            ];
+
+        }
+
+        return $this->attachFeatures(
+            $modules
+        );
     }
 }

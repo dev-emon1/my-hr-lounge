@@ -3,10 +3,8 @@
 namespace App\Models\Central;
 
 use App\Enums\TenantStatusEnum;
-use App\Models\Central\TenantFile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
@@ -41,72 +39,99 @@ class Tenant extends SpatieTenant
         'trial_ends_at' => 'datetime',
     ];
 
-    // Spatie multitenancy এই method দিয়ে schema নাম বের করে
+    /**
+     * Future scope.
+     * Currently we use a shared database.
+     * This method exists for future database-per-tenant architecture.
+     */
     public function getDatabaseName(): string
     {
-        return $this->database;
+        return config('database.default');
     }
 
+    /**
+     * Check tenant accessibility.
+     */
     public function isAccessible(): bool
     {
         return $this->status->isAccessible();
     }
 
-    // Package এর কোন modules আছে সেটা locked/unlocked সহ return করে
-    // Frontend sidebar এ কাজে লাগবে
+    /**
+     * Return enabled modules from active package.
+     */
     public function getModulesWithAccess(): array
     {
-        $allModules     = config('hr-lounge.modules');
-        $packageModules = $this->package?->modules ?? [];
+        $allModules = config('hr-lounge.modules');
 
-        return collect($allModules)->map(function ($module) use ($packageModules) {
-            return [
-                'key'    => $module['key'],
-                'label'  => $module['label'],
-                'group'  => $module['group'],
-                'locked' => !in_array($module['key'], $packageModules),
-            ];
-        })->toArray();
+        $packageModules = $this
+            ->activeSubscription?->package?->modules ?? [];
+
+        return collect($allModules)
+            ->map(function ($module) use ($packageModules) {
+                return [
+                    'key'    => $module['key'],
+                    'label'  => $module['label'],
+                    'group'  => $module['group'],
+                    'locked' => ! in_array($module['key'], $packageModules),
+                ];
+            })
+            ->toArray();
     }
 
-    // ── Relationships ──────────────────────────────────────────
-    public function package(): BelongsTo
-    {
-        return $this->belongsTo(Package::class, 'activeSubscription.package_id');
-        // $tenant->load(['activeSubscription.package']);
-    }
+    /**
+     * All subscriptions.
+     */
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
     }
 
-    public function activeSubscription(): HasOne
-    {
-        return $this->hasOne(Subscription::class)
-            ->where('status', 'active')
-            ->latestOfMany();
-    }
-
-    public function users()
+    /**
+     * Current active subscription.
+     */
+public function activeSubscription(): HasOne
+{
+    return $this->hasOne(Subscription::class)
+        ->where('status', 'active')
+        ->latest('current_period_end');
+}
+    /**
+     * Tenant users.
+     */
+    public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    public function files()
+    /**
+     * Tenant files.
+     */
+    public function files(): HasMany
     {
         return $this->hasMany(TenantFile::class);
     }
 
-    public function owner()
+    /**
+     * Company owner.
+     */
+    public function owner(): HasOne
     {
-        return $this->hasOne(User::class)->where('is_owner', true);
+        return $this->hasOne(User::class)
+            ->where('is_owner', true);
     }
 
+    /**
+     * Active tenants.
+     */
     public function scopeActive($query)
     {
         return $query->whereIn('status', ['trial', 'active']);
     }
 
+    /**
+     * Trial tenants.
+     */
     public function scopeTrial($query)
     {
         return $query->where('status', 'trial');
